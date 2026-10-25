@@ -1,15 +1,3 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "builds": [
-    {
-      "src": "Dockerfile.vercel",
-      "use": "@vercel/docker"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/Dockerfile.vercel"
-    }
-  ]
+  "$schema": "https://openapi.vercel.sh/vercel.json"
 }

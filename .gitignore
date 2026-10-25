@@ -97,3 +97,5 @@ Plant Disease Detection/plant-disease-model-complete.pth
 !Plant\ Disease\ Detection/*.png
 
 *.bak
+.vercel
+.env*

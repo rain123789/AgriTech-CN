@@ -3573,8 +3573,9 @@
     })();
   </script>
 
+  <script src="./vendor/three/three.min.js"></script>
   <script type="module">
-    import * as THREE from "./vendor/three/three.module.js";
+    const THREE = window.THREE;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(

@@ -1165,3 +1165,510 @@ window.CN_EXTRA_TEXT = Object.assign(window.CN_EXTRA_TEXT || {}, {
   "save stock": "保存库存",
   "iot monitoring": "物联网监测"
 });
+
+/* ===== 工作台（main.html）补充词条（2026-10-25） ===== */
+window.CN_EXTRA_TEXT = Object.assign(window.CN_EXTRA_TEXT || {}, {
+  "agritech dashboard": "工作台｜农智云",
+  "ai powered": "AI 驱动",
+  "ml analytics": "机器学习分析",
+  "early detection": "早发现",
+  "expert tips": "专家建议",
+  "local network": "本地网络",
+  "market data": "行情数据",
+  "strategic": "科学规划",
+  "sustainable": "绿色可持续",
+  "calendar": "农事日历",
+  "community": "社区",
+  "crop tools": "种植工具",
+  "planning": "生产规划",
+  "crop recommendation": "作物种植推荐",
+  "yield prediction": "产量预测",
+  "disease prediction": "病害识别",
+  "organic farming guide": "有机种植指南",
+  "weather check": "天气查询",
+  "farmer connection": "农户互助网络",
+  "shopkeeper listings": "农资与服务门店",
+  "ai chatbot": "AI 农业助手",
+  "plantation guidance": "种植指南",
+  "plantation guide": "种植指南",
+  "crop planning": "种植计划",
+  "labour scheduling & alerts": "用工调度与提醒",
+  "farmer forum": "农户论坛",
+  "crop price tracker": "农产品价格追踪",
+  "schemes": "惠农政策",
+  "farmer network": "农户互助网络",
+  "labour alerts": "用工提醒",
+  "comprehensive agricultural solutions": "一站式农业服务",
+  "explore our cutting-edge tools designed to revolutionize your farming experience with ai-powered insights and community collaboration.":
+    "这里汇集了以 AI 洞察与社区协作为核心的实用工具，让生产经营更高效。",
+  "find the best crop to cultivate based on your soil and weather conditions using advanced ai algorithms.":
+    "基于土壤与气象条件，由 AI 算法推荐最适宜种植的作物。",
+  "predict the expected yield for different crops using advanced machine learning models and historical data.":
+    "结合机器学习模型与历史数据，预测不同作物的预期产量。",
+  "detect plant diseases early and get preventive measures and treatment advice to protect your crops.":
+    "及早发现植物病害，获取预防措施与处置建议，保护作物安全。",
+  "learn sustainable organic practices—from soil preparation to eco-friendly pest control and certification processes.":
+    "学习可持续有机种植：从土壤准备、生态防虫到认证流程。",
+  "check current weather of your place and weather for upcoming hours and days to plan your farming practices.":
+    "查询所在地实时天气与未来数小时、数天的天气趋势，更好地安排农事。",
+  "connect with fellow farmers, share experiences, and access resources to improve your farming practices.":
+    "与农户互帮互助，交流经验、共享资源，持续改进种植管理。",
+  "discover local shopkeepers offering quality agricultural products and services tailored to your needs.":
+    "发现本地农资门店，获取贴近需求的优质农资与服务。",
+  "get instant answers to your farming questions with our intelligent chatbot. cultivating knowledge, harvesting growth.":
+    "智能助手即时解答农业问题。种有所学，收有所获。",
+  "receive expert advice on plantation techniques, crop selection, and sustainable farming methods.":
+    "获取种植技术、品种选择与可持续耕作方面的专业建议。",
+  "plan your season with confidence and unlock your farm's true potential for a more profitable and sustainable future.":
+    "从容规划种植季，释放农场潜力，迈向更盈利、更可持续的未来。",
+  "receive real-world updates related to weather, jobs, government subsidies and more to optimize your operations.":
+    "获取天气、用工、惠农补贴等实时资讯，优化生产经营安排。",
+  "connect with other farmers, share advice, and discuss tips for improving yields and efficiency.":
+    "与其他农户交流取经，讨论提升产量与效率的实用技巧。",
+  "track real-time mandi prices for crops across states and markets to make informed selling decisions.":
+    "跟踪各产地市场实时行情，把握更好的销售时机。",
+  "government schemes provide farmers with financial support, subsidies, insurance, and resources to boost productivity, sustainability, and income.":
+    "汇总惠农政策：财政支持、补贴、保险等资源，助力增产增收与可持续发展。",
+  "smart loan guide for farmers": "农户惠农贷款指引",
+  "select the type of loan you want to apply for:": "请选择要申请的贷款类型：",
+  "crop cultivation": "种植经营",
+  "farm equipment": "农机购置",
+  "water source development": "水利设施",
+  "land purchase": "土地经营",
+  "smart loan eligibility guide": "惠农贷款条件自查",
+  "get step-by-step assistance for applying for agricultural loans.":
+    "提供涉农贷款申请的分步指引。",
+  "go to smart loan guide": "进入智能贷款指引",
+  "language change applies only to smart loan guide": "语言切换仅对智能贷款指引页面生效",
+  "try searching for: crop, weather, chat, disease, loan, etc.":
+    "试试搜索：作物、天气、助手、病害、贷款等关键词。",
+  "confirm logout": "确认退出登录",
+  "are you sure you want to logout?": "确定要退出登录吗？",
+  "yes, logout": "确认退出",
+  "logged out!": "已退出登录！",
+  "error!": "出错了！",
+  "agritech | empowering india's farming future 🇮🇳": "农智云 | 用科技赋能中国农业"
+});
+
+/* ===== 种植指南（plantation.html）补充词条（2026-10-25） ===== */
+window.CN_EXTRA_TEXT = Object.assign(window.CN_EXTRA_TEXT || {}, {
+  "% complete": "% 已完成",
+  "your progress": "学习进度",
+  "quick navigation": "快速导航",
+  "resources": "相关资源",
+  "video tutorials": "视频教程",
+  "bookmark guide": "收藏本指南",
+  "complete farming cycle guide": "全周期种植指南",
+  "navigate through each stage of modern agriculture with expert guidance":
+    "跟随专业指引，走好现代农业的每一个环节",
+  "7 stages": "7 个阶段",
+  "45 min read": "约 45 分钟读完",
+  "complete guide": "完整指南",
+  "research": "调研选种",
+  "soil prep": "整地备耕",
+  "sowing": "播种育苗",
+  "pest mgmt": "病虫防治",
+  "post-harvest": "采后处理",
+  "2026 agritech. all rights reserved.": "农智云 版权所有。",
+  "empowering india's farming future.": "用科技连接农业生产与市场。",
+
+  // 调研选种
+  "research and development": "调研与选种",
+  "selecting the right crops for cultivation is a critical step in agricultural planning. it involves analyzing various factors such as climate, soil characteristics, and market demand to ensure optimal yield and profitability.":
+    "选对种植品种是生产规划的关键一步：综合分析气候、土壤特性与市场需求，才能实现高产与良好收益。",
+  "1. assessing climate conditions": "1. 评估气候条件",
+  "climate plays a pivotal role in determining which crops can thrive in a particular region.":
+    "气候是决定一个地区适宜种植哪些作物的关键因素。",
+  "key climatic factors to consider include:": "需要重点关注以下气候要素：",
+  "temperature ranges:": "温度区间：",
+  "understanding the average temperatures helps in selecting crops that can withstand local heat or cold.":
+    "了解当地平均气温，有助于选择耐热或耐寒的作物。",
+  "rainfall patterns:": "降雨规律：",
+  "analyzing annual precipitation and its distribution is essential, especially for rain-fed agriculture.":
+    "分析年降水量及其分布十分关键，对雨养农业尤为重要。",
+  "growing season length:": "生长期长度：",
+  "the duration between the last and first frost dates influences the types of crops that can be grown.":
+    "终霜期至初霜期的间隔决定了可种作物的类型。",
+  "for instance, in regions like vidarbha, maharashtra, farmers are shifting from traditional crops like cotton and soybean to maize due to its higher yield and better market prices, despite challenges like wildlife intrusion.":
+    "例如不少传统棉区、豆区的农户，正因玉米产量更高、行情更好而改种玉米，即便需要应对野生动物侵扰等挑战。",
+  "2. analyzing soil characteristics": "2. 分析土壤特性",
+  "soil health is fundamental to crop productivity.": "土壤健康是产量之本。",
+  "key soil factors include:": "需要重点关注以下土壤要素：",
+  "soil type:": "土壤类型：",
+  "sandy, loamy, or clay soils have different water retention and nutrient profiles.":
+    "砂土、壤土与黏土的保水性和养分状况各不相同。",
+  "ph levels:": "pH 水平：",
+  "certain crops require specific ph ranges for optimal nutrient uptake.":
+    "部分作物需要特定 pH 区间才能高效吸收养分。",
+  "nutrient content:": "养分含量：",
+  "assessing levels of nitrogen, phosphorus, potassium, and other micronutrients is crucial.":
+    "评估氮、磷、钾及中微量元素含量至关重要。",
+  "regular soil testing can guide amendments and crop selection. for example, legumes like beans and peas can enrich nitrogen-deficient soils.":
+    "定期测土可指导培肥与选种；例如豆类作物能改善缺氮土壤。",
+  "3. evaluating market demand": "3. 评估市场需求",
+  "understanding market trends ensures profitable pricing.": "把握市场行情，才能卖出好价钱。",
+  "understanding market trends ensures that the cultivated crops meet consumer needs and fetch profitable prices. considerations include:":
+    "把握市场趋势，让种出来的作物符合消费需求并卖出好价，需考虑：",
+  "local consumption patterns:": "本地消费习惯：",
+  "growing crops that are staples in the local diet can ensure steady demand.":
+    "种植当地大宗消费的作物，需求更有保障。",
+  "export potential:": "出口潜力：",
+  "some crops may have higher value in international markets.": "部分作物在国际市场附加值更高。",
+  "price volatility:": "价格波动：",
+  "analyzing historical price data can help in choosing crops with stable returns.":
+    "分析历史价格数据，有助于选择收益稳定的作物。",
+  "incorporating market research into crop planning can enhance profitability.":
+    "把市场调研纳入种植规划，有助于提升收益。",
+  "4. leveraging technology and data": "4. 善用技术与数据",
+  "modern tools assist in making data-driven decisions.": "现代工具助力数据化决策。",
+  "modern tools can assist in making informed decisions:": "现代工具可辅助科学决策：",
+  "machine learning models:": "机器学习模型：",
+  "these can predict suitable crops based on historical data, climate forecasts, and soil conditions.":
+    "基于历史数据、气候预报与土壤条件预测适宜种植的作物。",
+  "geographic information systems (gis):": "地理信息系统（GIS）：",
+  "gis can map soil types, rainfall patterns, and other variables to aid in crop selection.":
+    "GIS 可绘制土壤类型、降雨分布等图层，辅助选种决策。",
+  "mobile applications:": "手机应用：",
+  "apps can provide real-time data on weather, market prices, and best practices.":
+    "手机应用可提供天气、行情与农技要点的实时数据。",
+  "by integrating these technologies, farmers can optimize crop choices and enhance resilience to climate variability.":
+    "综合运用这些技术，农户可以优化种植选择，增强应对气候波动的能力。",
+
+  // 整地备耕
+  "soil preparation": "土壤准备",
+  "proper soil preparation is essential for successful crop cultivation. it involves several key steps to ensure the soil is fertile, well-structured, and ready to support healthy plant growth.":
+    "土壤准备是种植成功的基础：通过多个关键步骤，让土壤肥沃、结构良好，为健壮生长打好基础。",
+  "1. soil testing and analysis": "1. 土壤检测与分析",
+  "test soil to determine ph, nutrients, and texture.": "检测土壤 pH、养分与质地。",
+  "begin by testing the soil to determine its ph level, nutrient content, and texture. this information helps in identifying necessary amendments to optimize soil fertility.":
+    "首先检测土壤的 pH、养分含量与质地，据此确定改良措施、优化土壤肥力。",
+  "2. clearing the land": "2. 清理田块",
+  "remove vegetation, rocks, and debris from the field.": "清除田间植被、石块与杂物。",
+  "remove any existing vegetation, rocks, and debris from the field. this can be done manually or with the help of machinery, depending on the size of the land.":
+    "清除田间植被、石块与杂物；可视地块规模采用人工或机械方式。",
+  "3. ploughing": "3. 翻耕",
+  "turn over soil to loosen it and improve aeration.": "翻松土壤，改善通气。",
+  "ploughing involves turning over the top layer of soil to loosen it, improve aeration, and incorporate organic matter. this process also helps in controlling weeds and pests.":
+    "翻耕是将表层土壤翻转，疏松耕层、改善通气并混入有机质，同时有助于控草防虫。",
+  "4. harrowing": "4. 耙地",
+  "break up soil clumps and create fine tilth.": "破碎土块，形成细碎耕层。",
+  "after ploughing, harrowing is performed to break up large soil clumps and create a fine tilth suitable for planting. it also aids in leveling the soil surface.":
+    "翻耕后进行耙地，破碎大土块，形成细碎适宜播种的耕层，同时有助平整田面。",
+  "5. levelling": "5. 平整土地",
+  "level field for uniform water distribution.": "平整田面，确保灌水均匀。",
+  "level the field to ensure uniform water distribution during irrigation and prevent waterlogging. this can be achieved using leveling tools or machinery.":
+    "平整田块，保证灌溉时水分分布均匀并防止积水，可使用平田工具或机械完成。",
+  "6. incorporating organic matter": "6. 增施有机质",
+  "add compost and manure to enrich soil nutrients.": "增施堆肥与厩肥，提升土壤养分。",
+  "add compost, aged manure, or other organic materials to enrich the soil with nutrients, enhance its structure, and promote beneficial microbial activity.":
+    "施入堆肥、腐熟厩肥等有机物料，补充土壤养分、改善结构，并促进有益微生物活动。",
+  "7. moisture management": "7. 墒情管理",
+  "ensure adequate soil moisture before planting.": "播种前确保土壤墒情充足。",
+  "ensure the soil has adequate moisture content before planting. overly dry or waterlogged soils can hinder seed germination and root development.":
+    "播种前保持土壤墒情适宜。过干或过涝都会妨碍种子发芽与根系发育。",
+  "8. final soil preparation": "8. 播前终检",
+  "perform final check before sowing seeds.": "播种前做最后检查。",
+  "before sowing seeds, perform a final check to ensure the soil is well-prepared, free of weeds, and has the appropriate structure and moisture levels for planting.":
+    "播种前做最后检查：土壤备耕到位、无杂草，结构与墒情均适宜播种。",
+
+  // 播种育苗
+  "seed sowing": "播种育苗",
+  "proper seed sowing is crucial for successful crop cultivation. it involves selecting appropriate methods and ensuring optimal seed placement to promote healthy germination and growth.":
+    "科学播种是种植成功的关键：选择合适的播种方式、确保种子定位精准，促进发芽齐壮。",
+  "1. choosing the right sowing method": "1. 选择合适的播种方式",
+  "different crops require specific sowing techniques.": "不同作物需要相应的播种方式。",
+  "different crops and field conditions require specific sowing techniques:":
+    "不同作物与田块条件需要相应的播种方式：",
+  "broadcast seeding:": "撒播：",
+  "scattering seeds evenly over the soil surface, suitable for cover crops and lawns. this method is quick but may result in uneven distribution and depth.":
+    "将种子均匀撒于地表，适合绿肥作物与草皮；速度快但分布与深度不易均匀。",
+  "drill seeding:": "条播：",
+  "using a seed drill to place seeds at uniform depth and spacing, enhancing seed-to-soil contact and germination rates.":
+    "用播种机按一致深度与间距落种，改善种土接触、提高发芽率。",
+  "precision seeding:": "精量播种：",
+  "placing individual seeds at exact intervals and depths, reducing seed wastage and ensuring optimal plant spacing.":
+    "按精确间距与深度单粒播种，减少用种浪费，保证合理株距。",
+  "dibbling:": "点播：",
+  "manually placing seeds into holes at specific depths, commonly used for larger seeds or in small-scale farming.":
+    "按设定深度人工点播，常用于大粒种子或小面积种植。",
+  "2. ensuring optimal seed placement": "2. 确保种子定位精准",
+  "proper depth, spacing, and soil contact are critical.": "深度、间距与接土状况缺一不可。",
+  "key factors to consider for effective seed placement:": "影响播种定位效果的关键因素：",
+  "depth:": "深度：",
+  "sow seeds at a depth of 2–3 times their diameter to ensure adequate soil coverage and access to moisture.":
+    "播种深度以种子直径的 2–3 倍为宜，保证覆土充分且利于吸水。",
+  "spacing:": "间距：",
+  "maintain appropriate spacing between seeds to reduce competition for nutrients, light, and water. for example, mark grid lines in the seedbed to guide placement.":
+    "保持合理的株行距，减少养分、光照与水分竞争；可在苗床画格线辅助定位。",
+  "seed-to-soil contact:": "种土密接：",
+  "ensure good contact between seeds and soil to facilitate moisture absorption and germination. firm the soil gently after sowing.":
+    "让种子与土壤紧密接触，便于吸水发芽；播种后轻轻镇压。",
+  "3. tools and equipment": "3. 工具与设备",
+  "appropriate tools enhance sowing efficiency.": "合适的工具可提升播种效率。",
+  "utilizing appropriate tools can enhance sowing efficiency and accuracy:":
+    "合适的工具可提升播种效率与精度：",
+  "manual seeders:": "人力播种器：",
+  "devices that assist in placing seeds at consistent depths and spacing, suitable for small to medium-scale operations.":
+    "辅助按一致深度与株距落种的器具，适合中小规模作业。",
+  "seed drills:": "播种机：",
+  "mechanized equipment that sows seeds in rows at precise depths and intervals, ideal for large-scale farming.":
+    "按设定深度与株距条播的机械设备，适合规模化种植。",
+  "seed trays:": "育苗盘：",
+  "containers used for starting seeds indoors or in controlled environments before transplanting.":
+    "用于在室内或可控环境中育苗、之后再移栽的容器。",
+  "4. best practices": "4. 最佳实践",
+  "maximize germination and crop establishment.": "提高发芽率与成苗质量。",
+  "to maximize germination and crop establishment:": "提高发芽率与成苗质量的要点：",
+  "soil preparation:": "苗床准备：",
+  "ensure the seedbed is well-tilled, free of debris, and has adequate moisture.":
+    "苗床应细整、无杂物、墒情充足。",
+  "timing:": "时机：",
+  "sow seeds during optimal planting seasons and under favorable weather conditions.":
+    "在最适播期与有利天气条件下播种。",
+  "aftercare:": "播后管理：",
+  "monitor soil moisture, protect seedlings from pests, and thin overcrowded areas to promote healthy growth.":
+    "监测墒情、防范虫害，并对过密苗进行间苗，促进健壮生长。",
+
+  // 灌溉与施肥
+  "irrigation and fertilization": "灌溉与施肥",
+  "implementing efficient irrigation systems and applying suitable fertilizers are crucial for optimal crop growth and yield. these practices ensure that plants receive the necessary water and nutrients at the right time and in the right amounts.":
+    "高效的灌溉系统与合理的施肥，是作物良好生长与高产的关键，可确保作物在合适时间获得适量的水分与养分。",
+  "1. efficient irrigation systems": "1. 高效灌溉系统",
+  "select irrigation methods based on crop type and soil.": "按作物与土壤条件选择灌溉方式。",
+  "selecting the appropriate irrigation method depends on factors like crop type, soil characteristics, and water availability. common irrigation systems include:":
+    "灌溉方式的选择取决于作物类型、土壤条件与水源状况，常见系统包括：",
+  "drip irrigation:": "滴灌：",
+  "delivers water directly to the plant's root zone through a network of pipes and emitters, minimizing evaporation and runoff. this method is highly efficient and suitable for various crops.":
+    "通过管网与滴头把水直接送到根系区，大幅减少蒸发与径流，效率高，适用作物广。",
+  "sprinkler irrigation:": "喷灌：",
+  "distributes water through overhead sprinklers, simulating rainfall. it's adaptable to various field conditions and crop types.":
+    "通过喷头模拟降雨均匀洒水，适应多种地形与作物。",
+  "surface irrigation:": "地面灌溉：",
+  "involves the flow of water over the soil surface to irrigate crops. it's commonly used in flat terrains with specific soil types.":
+    "让水沿地表流动灌溉作物，常用于平坦且土壤条件适宜的地块。",
+  "2. fertilization practices": "2. 施肥管理",
+  "fertilizers supply essential nutrients for plant growth.": "肥料为作物生长提供必需养分。",
+  "fertilizers supply essential nutrients required for plant growth. they can be categorized into:":
+    "肥料提供作物生长必需的养分，主要分为：",
+  "organic fertilizers:": "有机肥料：",
+  "derived from natural sources like compost and manure. they release nutrients slowly and improve soil health over time.":
+    "来源于堆肥、厩肥等天然物料，养分释放平缓，长期有助土壤健康。",
+  "inorganic fertilizers:": "无机肥料：",
+  "synthetically manufactured to provide immediate nutrient availability. common types include nitrogen-based, phosphorus-based, and potassium-based fertilizers.":
+    "人工合成、速效性强，常见有氮肥、磷肥与钾肥。",
+  "3. fertilizer application methods": "3. 施肥方式",
+  "application method affects nutrient availability.": "施肥方式影响养分的有效性。",
+  "the method of fertilizer application affects nutrient availability and uptake. common methods include:":
+    "施肥方式影响养分的有效性与吸收，常见方式包括：",
+  "broadcasting:": "全田撒施：",
+  "spreading fertilizer uniformly over the field surface. suitable for pre-planting and top-dressing applications.":
+    "将肥料均匀撒于田面，适合基肥与追肥。",
+  "band placement:": "条施（带状施肥）：",
+  "placing fertilizer in bands near the seed or plant roots to enhance nutrient uptake efficiency.":
+    "在种子或根系附近条状施肥，提高养分利用效率。",
+  "fertigation:": "水肥一体化：",
+  "integrating fertilizer application with irrigation water, allowing precise nutrient delivery.":
+    "将施肥与灌溉结合，实现养分的精准供给。",
+  "maximize benefits of irrigation and fertilization.": "充分发挥水肥效益。",
+  "to maximize the benefits of irrigation and fertilization:": "充分发挥水肥效益的要点：",
+  "regularly monitor soil moisture and nutrient levels.": "定期监测土壤墒情与养分水平。",
+  "adjust irrigation schedules based on weather conditions and crop requirements.":
+    "结合天气与作物需求，动态调整灌溉计划。",
+  "use soil tests to determine nutrient deficiencies and tailor fertilizer applications accordingly.":
+    "通过测土明确养分亏缺，按需施肥。",
+  "implement water-saving techniques like mulching to reduce evaporation.":
+    "采用覆盖保墒等节水措施，减少蒸发。",
+
+  // 病虫害防治
+  "pest and disease management": "病虫害防治",
+  "protecting crops from pests and diseases is crucial for ensuring healthy yields. integrated pest management (ipm) offers a sustainable approach that combines various practices to manage pests effectively while minimizing environmental impact.":
+    "防控病虫害是稳产丰收的关键。病虫害综合治理（IPM）兼顾多种措施，在有效控害的同时最大限度减少环境影响，是一条可持续路径。",
+  "1. understanding integrated pest management (ipm)": "1. 认识病虫害综合治理（IPM）",
+  "ipm focuses on long-term pest prevention through multiple techniques.":
+    "IPM 通过多种手段实现害虫的长期防控。",
+  "ipm is an ecosystem-based strategy that focuses on long-term prevention of pests or their damage through a combination of techniques such as biological control, habitat manipulation, and use of resistant varieties. pesticides are used only after monitoring indicates they are needed, and treatments are made with the goal of removing only the target organism.":
+    "IPM 是基于生态系统的策略：通过生物防治、栖息地调控与抗性品种等组合手段实现长期防控。仅在监测表明确有必要时才用药，且以仅清除目标害虫为目标。",
+  "2. key components of ipm": "2. IPM 的核心环节",
+  "monitoring, prevention, and control are essential.": "监测、预防与治理缺一不可。",
+  "monitoring:": "监测：",
+  "regularly inspect crops to identify pest presence and assess infestation levels.":
+    "定期巡查田间，识别害虫种类并评估发生程度。",
+  "prevention:": "预防：",
+  "implement cultural practices like crop rotation, intercropping, and selecting disease-resistant varieties to reduce pest establishment.":
+    "运用轮作、间作与选用抗病品种等农艺措施，降低害虫定殖风险。",
+  "control:": "治理：",
+  "when necessary, apply targeted control methods, prioritizing biological and physical controls before chemical options.":
+    "必要时采取针对性治理，优先生物与物理手段，再考虑化学防治。",
+  "3. biological control methods": "3. 生物防治方法",
+  "use natural predators to manage pest populations.": "利用天敌控制害虫种群。",
+  "utilize natural predators and parasites to manage pest populations:":
+    "利用天敌与寄生性昆虫控制害虫：",
+  "predators:": "捕食性天敌：",
+  "introduce beneficial insects like ladybugs and lacewings that feed on pests.":
+    "释放瓢虫、草蛉等益虫捕食害虫。",
+  "parasitoids:": "寄生性天敌：",
+  "use wasps that lay eggs in or on pests, leading to their demise.":
+    "利用寄生蜂在害虫体内或体表产卵，消灭害虫。",
+  "pathogens:": "微生物制剂：",
+  "apply microbial agents like bacillus thuringiensis to target specific pests.":
+    "使用苏云金芽孢杆菌（Bt）等微生物制剂，精准针对特定害虫。",
+  "4. cultural and mechanical practices": "4. 农艺与机械防治",
+  "modify farming practices to deter pests naturally.": "调整农艺措施，自然阻控害虫。",
+  "modify farming practices to deter pests:": "通过农艺措施阻控害虫：",
+  "crop rotation:": "轮作：",
+  "change crop species in a field each season to disrupt pest life cycles.":
+    "同一田块逐季轮换作物种类，打断害虫生活史。",
+  "sanitation:": "田园清洁：",
+  "remove plant debris and weeds that can harbor pests.": "清除可能藏匿害虫的植株残体与杂草。",
+  "physical barriers:": "物理阻隔：",
+  "use row covers or nets to prevent pest access.": "使用防虫网或小拱棚阻隔害虫。",
+  "5. chemical controls": "5. 化学防治",
+  "apply pesticides judiciously when needed.": "确需用药时科学谨慎施药。",
+  "when other methods are insufficient, apply pesticides judiciously:":
+    "当其他手段不足时，科学谨慎用药：",
+  "selective pesticides:": "选择性药剂：",
+  "choose products that target specific pests with minimal impact on beneficial organisms.":
+    "选择对天敌影响小、针对特定害虫的药剂。",
+  "application timing:": "施药时机：",
+  "apply treatments during periods when pests are most vulnerable.": "选择害虫最脆弱的时期施药。",
+  "resistance management:": "抗性管理：",
+  "rotate pesticides with different modes of action to prevent resistance development.":
+    "轮换使用不同作用机制的药剂，延缓抗药性产生。",
+  "6. technological innovations": "6. 技术创新应用",
+  "leverage robotics and digital monitoring tools.": "善用机器人与数字化监测工具。",
+  "leverage technology to enhance pest management:": "利用技术手段强化病虫害管理：",
+  "robotics:": "植保机器人：",
+  "utilize robots equipped with sensors to detect and treat pest infestations precisely.":
+    "搭载传感器的机器人可精准识别并处理虫害。",
+  "digital monitoring:": "数字化监测：",
+  "implement tools like pesttrap and filiz sensor stations for real-time pest monitoring.":
+    "借助诱捕器、传感监测站等工具实现害虫实时监测。",
+  "7. case study: mango crops in uttar pradesh": "7. 案例：芒果产区虫害防控",
+  "real-world example of effective pest management.": "虫害防控的实战案例。",
+  "in uttar pradesh, mango crops have faced significant pest infestations, notably from the paired fruit borer and semilooper. rising temperatures have exacerbated the issue, leading to scarring and reduced fruit quality. effective management strategies include targeted insecticide application, tree trunk spraying, and horticultural practices like frequent light irrigation, mulching, and canopy management.":
+    "案例要点：芒果产区受果蛀螟与造桥虫危害，气温升高加剧果面疤痕与品质下降。有效策略包括精准施药、树干喷淋，以及小水勤灌、树盘覆盖与树冠管理等农艺措施。",
+
+  // 收获采收
+  "harvesting": "收获采收",
+  "harvesting crops at the optimal time is crucial to ensure maximum yield, quality, and shelf life. proper techniques and post-harvest handling further preserve the nutritional value and marketability of the produce.":
+    "在最佳时期收获，是保证产量、品质与货架期的关键。规范的采收与采后处理能进一步保留营养价值与商品性。",
+  "1. determining optimal harvest time": "1. 确定最佳收获期",
+  "harvest time varies by crop type and climate.": "收获期因作物类型与气候而异。",
+  "the ideal harvest time varies depending on the crop type, intended use, and local climate conditions. key indicators include:":
+    "最佳收获期取决于作物种类、用途与当地气候，主要指标包括：",
+  "visual cues:": "外观特征：",
+  "changes in color, size, and texture signify maturity. for instance, grains turn from green to golden brown when ready.":
+    "颜色、大小与质地的变化标志成熟，例如谷粒由绿转金黄即告成熟。",
+  "moisture content:": "含水量：",
+  "measuring moisture levels helps determine readiness, especially for grains and legumes.":
+    "测定含水量可判断成熟度，对谷类与豆类尤其重要。",
+  "days after planting:": "播后天数：",
+  "tracking the number of days since planting provides a general guideline for harvest timing.":
+    "记录播后天数为收获安排提供参考。",
+  "2. best time of day to harvest": "2. 一天中的最佳采收时段",
+  "harvest during cooler parts of the day.": "选择一天中较凉爽的时段采收。",
+  "harvesting during the cooler parts of the day helps maintain crop quality:":
+    "在一天中较凉爽的时段采收有助于保持品质：",
+  "early morning:": "清晨：",
+  "ideal for most vegetables and fruits as they are crisp and hydrated.":
+    "多数蔬果清晨最脆嫩饱满，适合采收。",
+  "evening:": "傍晚：",
+  "if morning harvest isn't feasible, evening is the next best option to avoid midday heat stress on produce.":
+    "若清晨不便采收，可选傍晚，避开正午高温对产品的伤害。",
+  "3. harvesting techniques": "3. 采收技术",
+  "proper methods minimize damage and preserve quality.": "规范方法可减少损伤、保持品质。",
+  "employing appropriate harvesting methods minimizes damage and preserves quality:":
+    "采用合适的采收方式可减少损伤、保持品质：",
+  "manual harvesting:": "人工采收：",
+  "suitable for delicate crops; use sharp tools to prevent bruising.":
+    "适合柔嫩作物；使用锋利工具防止碰伤。",
+  "mechanical harvesting:": "机械采收：",
+  "efficient for large-scale operations; ensure machinery is calibrated to reduce crop loss.":
+    "适合大规模作业；需校准机械以降低收获损耗。",
+  "use of harvesting aids:": "采收辅助工具：",
+  "tools like brix meters help assess sugar levels in fruits, indicating ripeness.":
+    "糖度计等工具可测定果实含糖量，判断成熟度。",
+  "4. post-harvest handling": "4. 采后处理",
+  "proper practices maintain quality and extend shelf life.": "规范操作保持品质、延长货架期。",
+  "proper post-harvest practices are essential to maintain quality and extend shelf life:":
+    "规范的采后处理是保持品质、延长货架期的关键：",
+  "cooling:": "预冷：",
+  "rapidly reduce field heat to slow down respiration and decay.":
+    "快速散去田间热，降低呼吸与腐损速度。",
+  "cleaning and sorting:": "清洁与分拣：",
+  "remove debris and sort produce based on size and quality.": "去除杂物，按大小与品质分选。",
+  "packaging:": "包装：",
+  "use appropriate containers to protect against physical damage and contamination.":
+    "选用合适容器，防止机械损伤与污染。",
+  "storage:": "贮藏：",
+  "maintain optimal temperature and humidity levels specific to each crop to prolong freshness.":
+    "按作物要求维持最适温湿度，延长保鲜期。",
+
+  // 采后处理
+  "post-harvest handling": "采后处理",
+  "effective post-harvest handling is crucial to maintain the quality, safety, and shelf life of fruits and vegetables. proper practices reduce losses, preserve nutritional value, and ensure marketability.":
+    "采后处理直接关系果蔬的品质、安全与货架期。规范操作能减少损耗、保留营养，并保证商品性。",
+  "1. cleaning and washing": "1. 清洗与净化",
+  "remove contaminants using clean water and sanitized equipment.":
+    "用洁净水与消毒设备清除污染物。",
+  "remove soil, debris, and potential contaminants from produce:":
+    "去除产品表面的泥土、杂物与潜在污染物：",
+  "use clean water:": "用水洁净：",
+  "employ potable water for washing to prevent microbial contamination.":
+    "使用饮用水级水源清洗，防止微生物污染。",
+  "sanitize equipment:": "设备消毒：",
+  "regularly clean and sanitize tools and surfaces to maintain hygiene standards.":
+    "定期清洁消毒工具与台面，保持卫生标准。",
+  "2. sorting and grading": "2. 分拣与分级",
+  "categorize produce by size, ripeness, and quality.": "按大小、成熟度与品质分级。",
+  "categorize produce based on quality parameters:": "按品质参数对产品分级：",
+  "remove damaged items:": "剔除损伤果：",
+  "discard bruised, overripe, or diseased produce to prevent spoilage.":
+    "剔除碰伤、过熟或染病的果品，防止腐损蔓延。",
+  "grade by size and ripeness:": "按大小与成熟度分级：",
+  "ensure uniformity for market preferences and pricing.": "保证整齐度，符合市场偏好与定价要求。",
+  "3. packaging": "3. 包装",
+  "use appropriate materials with proper labeling.": "选用合适材料并规范标签。",
+  "protect produce during transportation and storage:": "在运输与贮藏中保护产品：",
+  "use appropriate materials:": "选材得当：",
+  "select packaging that allows ventilation and minimizes physical damage.":
+    "选择透气且能减少机械损伤的包装。",
+  "label correctly:": "规范标签：",
+  "include information on product type, grade, and handling instructions.":
+    "标注产品类别、等级与处理说明等信息。",
+  "4. storage": "4. 贮藏",
+  "maintain optimal temperature and humidity levels.": "维持最适温湿度条件。",
+  "maintain optimal conditions to prolong freshness:": "维持最适条件以延长保鲜期：",
+  "temperature control:": "温度控制：",
+  "store produce at temperatures suitable for each type to slow down respiration and decay.":
+    "按品类适温贮存，减缓呼吸与腐损。",
+  "humidity management:": "湿度管理：",
+  "maintain appropriate humidity levels to prevent dehydration or mold growth.":
+    "保持适宜湿度，防止失水或霉变。",
+  "ethylene sensitivity:": "乙烯敏感管理：",
+  "store ethylene-producing fruits separately from sensitive vegetables to avoid premature ripening.":
+    "乙烯释放型水果与敏感蔬菜分开存放，避免催熟。",
+  "5. transportation": "5. 运输",
+  "use refrigerated vehicles and careful handling.": "使用冷藏运输并规范操作。",
+  "ensure safe and efficient movement of produce:": "确保产品安全高效流通：",
+  "use refrigerated vehicles:": "冷藏运输：",
+  "maintain cold chain during transit to preserve quality.": "运输全程保持冷链，保障品质。",
+  "handle with care:": "轻装轻卸：",
+  "minimize mechanical damage by proper loading and unloading practices.":
+    "规范装卸作业，减少机械损伤。",
+  "6. innovative storage solutions": "6. 创新贮藏方案",
+  "cost-effective methods for small-scale farmers.": "适合小农户的高性价比方法。",
+  "explore cost-effective methods for small-scale farmers:": "为小农户探索高性价比的贮藏方法：",
+  "zero energy cool chambers (zecc):": "零能耗冷藏窖（ZECC）：",
+  "utilize evaporative cooling techniques to store produce without electricity.":
+    "利用蒸发降温原理，无需电力即可贮藏。",
+  "24/7 support": "全天候支持",
+  "back to top": "返回顶部",
+  "switch theme": "切换主题",
+  "toggle menu": "切换菜单",
+  "connect with us on linkedin": "在 LinkedIn 上联系我们",
+  "follow us on instagram": "在 Instagram 上关注我们",
+  "view our github repositories": "查看我们的 GitHub 仓库"
+});
+
+
