@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Labour Scheduling & Alerts</title>
+    <link rel="stylesheet" href="../static/style.css" />
+    <link rel="icon" type="image/png" href="/images/logo.png">
+    <script>
+      (function () {
+        const saved = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        document.documentElement.setAttribute(
+          "data-theme",
+          saved || (prefersDark ? "dark" : "light"),
+        );
+      })();
+    </script>
+    <link rel="stylesheet" href="../../theme.css" />
+    <link
+      href=
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../vendor/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="../../footer.css" />
+  <link rel="stylesheet" href="../../cn-i18n.css" />
+</head>
+
+  <body>
+
+    <header>
+      <div class="header-content">
+        <i class="fas fa-users header-icon"></i>
+        <h1>Labour Scheduling & Alerts</h1>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <a href="/main.html" class="back-button"> ← Back to Main </a>
+          <button class="theme-toggle" type="button" id="themeToggle" title="Switch theme" aria-label="Switch theme">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon" aria-hidden="true">
+            <i class="fas fa-sun"></i>
+          </span>
+          <span class="theme-toggle-icon moon-icon" aria-hidden="true">
+            <i class="fas fa-moon"></i>
+          </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="tabs">
+        <div class="tab active" data-tab="schedule">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Labour Scheduling</span>
+        </div>
+        <div class="tab" data-tab="alerts">
+          <i class="fas fa-bell"></i>
+          <span>Alerts</span>
+        </div>
+      </div>
+
+      <div id="schedule" class="content active">
+        <div class="card form-card">
+          <div class="card-header">
+            <h2><i class="fas fa-plus-circle"></i> Post Labour Requirement</h2>
+            <p>Fill in the details to post your labour requirement</p>
+          </div>
+
+          <form id="labourForm" class="enhanced-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="workType">
+                  <i class="fas fa-hammer"></i>
+                  Type of Work
+                </label>
+                <select id="workType" required>
+                  <option value="">Select Work Type</option>
+                  <option value="Harvesting">🌾 Harvesting</option>
+                  <option value="Ploughing">🚜 Ploughing</option>
+                  <option value="Weeding">🌱 Weeding</option>
+                  <option value="Sowing">🌿 Sowing</option>
+                  <option value="Irrigation">💧 Irrigation</option>
+                  <option value="Fertilizing">🧪 Fertilizing</option>
+                  <option value="Pest Control">🐛 Pest Control</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="peopleCount">
+                  <i class="fas fa-users"></i>
+                  Number of People Required
+                </label>
+                <input
+                  type="number"
+                  id="peopleCount"
+                  placeholder="e.g., 5"
+                  min="1"
+                  max="50"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="date">
+                  <i class="fas fa-calendar"></i>
+                  Date Needed
+                </label>
+                <input type="date" id="date" required />
+              </div>
+
+              <div class="form-group">
+                <label for="duration">
+                  <i class="fas fa-clock"></i>
+                  Duration (Days)
+                </label>
+                <input
+                  type="number"
+                  id="duration"
+                  placeholder="e.g., 3"
+                  min="1"
+                  max="30"
+                  value="1"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="village">
+                  <i class="fas fa-map-marker-alt"></i>
+                  Village Name
+                </label>
+                <input
+                  type="text"
+                  id="village"
+                  placeholder="Enter village name"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="location">
+                  <i class="fas fa-map"></i>
+                  Taluka / District
+                </label>
+                <input
+                  type="text"
+                  id="location"
+                  placeholder="Enter Taluka/District"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">
+                <i class="fas fa-home"></i>
+                Full Address (Optional)
+              </label>
+              <textarea
+                id="address"
+                rows="3"
+                placeholder="House no, street, landmark, etc."
+              ></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="wage">
+                  <i class="fas fa-rupee-sign"></i>
+                  Wage per Day (in Rs.)
+                </label>
+                <input
+                  type="number"
+                  id="wage"
+                  placeholder="e.g., 300"
+                  min="100"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="contact">
+                  <i class="fas fa-phone"></i>
+                  Contact Number
+                </label>
+                <input
+                  type="tel"
+                  id="contact"
+                  placeholder="e.g., 9876543210"
+                  pattern="[0-9]{10}"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="additionalInfo">
+                <i class="fas fa-info-circle"></i>
+                Additional Information
+              </label>
+              <textarea
+                id="additionalInfo"
+                rows="2"
+                placeholder="Any specific requirements or details..."
+              ></textarea>
+            </div>
+
+            <button type="submit" id="postJobBtn" class="enhanced-btn">
+              <i class="fas fa-paper-plane"></i>
+              Post Requirement
+            </button>
+          </form>
+        </div>
+
+        <div class="section-header">
+          <h3><i class="fas fa-briefcase"></i> Posted Jobs</h3>
+          <div class="job-stats">
+            <span class="stat-badge"
+              >Active: <span id="activeJobCount">0</span></span
+            >
+          </div>
+        </div>
+        <div id="postedJobs" class="cards-list enhanced-grid"></div>
+
+        <div id="noJobsMessage" class="no-content-message">
+          <i class="fas fa-briefcase"></i>
+          <h4>No jobs posted yet</h4>
+          <p>Post your first labour requirement to get started!</p>
+        </div>
+      </div>
+
+      <div id="alerts" class="content">
+        <div class="section-header">
+          <h2><i class="fas fa-newspaper"></i> Live News & Updates</h2>
+          <button id="refreshNewsBtn" class="icon-btn">
+            <i class="fas fa-sync-alt"></i>
+          </button>
+        </div>
+        <div id="newsList" class="cards-list enhanced-grid">
+          <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading latest news...</p>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h2><i class="fas fa-exclamation-triangle"></i> Job Alerts</h2>
+          <div class="alert-stats">
+            <span class="stat-badge urgent"
+              >Urgent: <span id="urgentAlertCount">0</span></span
+            >
+            <span class="stat-badge normal"
+              >Normal: <span id="normalAlertCount">0</span></span
+            >
+          </div>
+        </div>
+        <div id="dynamicJobAlerts" class="cards-list enhanced-grid"></div>
+
+        <div id="noAlertsMessage" class="no-content-message">
+          <i class="fas fa-bell-slash"></i>
+          <h4>No active alerts</h4>
+          <p>
+            Job alerts will appear here when posted jobs are expiring or need
+            attention.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+      <div class="loading-content">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Processing...</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+      <style>
+    .site-footer {background: linear-gradient(135deg,#2e7d32,#66bb6a); color:#fff; margin-top:auto; padding: 2rem 1.25rem;}
+    .site-footer .footer-inner {max-width:1200px;margin:0 auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:1.5rem; align-items:flex-start;}
+    .footer-brand {display:flex;flex-direction:column;gap:.5rem}
+    .footer-logo {width:48px;height:48px;border-radius:8px;object-fit:cover;background:#fff;padding:4px}
+    .site-footer h3,.site-footer h4{margin:0 0 .5rem 0}
+    .site-footer p {margin:0;opacity:.9}
+    .site-footer ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.4rem}
+    .site-footer a{color:#fff;text-decoration:none;opacity:.9;transition:opacity .2s}
+    .site-footer a:hover{opacity:1;text-decoration:underline}
+    .footer-bottom{max-width:1200px;margin:1rem auto 0; padding-top:1rem; border-top:1px solid rgba(255,255,255,.25); text-align:center; font-size:.9rem; opacity:.9}
+    .social-media {display:flex;gap:1rem;margin-top:.5rem}
+    .social-media a{display:flex;align-items:center;justify-content:center;width:40px;height:40px;background:rgba(255,255,255,.1);border-radius:50%;transition:all .3s ease;font-size:1.2rem}
+    .social-media a:hover{background:rgba(255,255,255,.2);transform:translateY(-2px)}
+  </style>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="/images/logo.png" alt="AgriTech logo" class="footer-logo">
+          <h3>AgriTech</h3>
+          <p>Empowering India's Farming Future</p>
+          <div class="social-media">
+            <a href="https://instagram.com" target="_blank" aria-label="Follow us on Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://github.com/omroy07" target="_blank" aria-label="View our GitHub repositories">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/om-roy-3b809628a/" target="_blank" aria-label="Connect with us on LinkedIn">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="main.html">Dashboard</a></li>
+            <li><a href="feed-back.html">Feedback</a></li>
+            <li><a href="chat.html">AI Assistant</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Tools</h4>
+          <ul>
+            <li><a href="Crop Recommendation/templates/index.html">Crop Recommendation</a></li>
+            <li><a href="Crop Yield Prediction/crop_yield_app/templates/index.html">Yield Prediction</a></li>
+            <li><a href="Disease prediction/template/index.html">Disease Detector</a></li>
+            <li><a href="Crop_Planning/templates/cropplan.html">Crop Planner</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2026 AgriTech • Made for farmers
+        <div class="footer-section footer-newsletter">
+          <h4>Newsletter</h4>
+          <p class="newsletter-desc">
+            Subscribe to get the latest farming insights, tips, and updates.
+          </p>
+          <form class="newsletter-form" onsubmit="return handleNewsletterSubmit(event, this)">
+            <div class="newsletter-input-group">
+              <input
+                type="email"
+                class="newsletter-input"
+                placeholder="Enter your email to get the latest updates..."
+                required
+                aria-label="Email address for newsletter"
+              />
+              <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
+                <span>Subscribe</span>
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            <div class="newsletter-feedback" style="display:none;" role="status" aria-live="polite"></div>
+            <div class="newsletter-footer-optout">
+              <small>No spam. <a href="javascript:void(0)" onclick="openUnsubscribeModal(event)">Unsubscribe</a> anytime.</small>
+            </div>
+          </form>
+        </div>
+</div>
+    </footer>
+<!-- Cursor Trail -->
+<div class="circle-container" id="cursorTrail"></div>
+    <script src="../static/script.js"></script>
+    <script src="../../theme.js"></script>
+    <script src="../../footer.js"></script>
+    <script src="../../translations.js" defer></script>
+  <script src="../../scripts/locales/zh-CN-extra.js" defer></script>
+<script src="../../scripts/i18n.js" defer></script>
+</body>
+</html>

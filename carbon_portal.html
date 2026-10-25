@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="IPCC Tier 1/2 Carbon Sequestration Calculator, Green Credits Wallet, and Regenerative Eco-Rewards Portal.">
+  <title>Regenerative Agriculture & Carbon Sequestration Credit Portal | AgriTech</title>
+  
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+  <link href= rel="stylesheet">
+  
+  <script src="vendor/chartjs/chart.umd.min.js"></script>
+  <script src="vendor/sweetalert2/sweetalert2.all.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --accent: #0ea5e9;
+      --warning: #f59e0b;
+      --bg: #030712;
+      --sidebar-bg: #0f172a;
+      --card-bg: #0f172a;
+      --surface-bg: rgba(30, 41, 59, 0.7);
+      --border-color: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --sidebar-bg: #ffffff;
+      --card-bg: #ffffff;
+      --surface-bg: rgba(241, 245, 249, 0.9);
+      --border-color: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #475569;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .portal-container {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 1024px) {
+      .portal-container { grid-template-columns: 1fr; }
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: var(--sidebar-bg);
+      padding: 2.2rem 1.8rem;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .brand-block i {
+      color: var(--primary);
+      font-size: 1.6rem;
+    }
+
+    /* WALLET SUMMARY CARD */
+    .wallet-card {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 8px 25px rgba(6, 78, 59, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .wallet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #a7f3d0;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .wallet-balance {
+      font-size: 32px;
+      font-weight: 800;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .wallet-unit {
+      font-size: 14px;
+      color: #a7f3d0;
+      font-weight: 600;
+    }
+    .wallet-value-sub {
+      font-size: 13px;
+      color: #d1fae5;
+    }
+    .btn-mint {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-mint:hover {
+      background: #059669;
+    }
+
+    /* SIDEBAR METRICS */
+    .side-metric-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+    .side-metric-item strong {
+      color: var(--text);
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      padding: 2.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .top-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .top-header p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    /* TABS */
+    .tab-bar {
+      display: flex;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .tab-btn:hover {
+      color: var(--text);
+      background: var(--surface-bg);
+    }
+    .tab-btn.active {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--primary);
+    }
+
+    /* KPI STATS BAR */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .kpi-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .kpi-info h4 {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .kpi-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      margin-top: 2px;
+    }
+
+    /* WORKSPACE GRIDS */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 960px) {
+      .two-col-grid { grid-template-columns: 1fr; }
+    }
+
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .panel-title {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    /* CALCULATOR FORM */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .form-control {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--surface-bg);
+      color: var(--text);
+      font-size: 13.5px;
+      outline: none;
+      font-family: inherit;
+    }
+    .practices-checkbox-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .practice-check-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface-bg);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+
+    .btn-calc {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+    }
+
+    /* REWARDS CATALOG GRID */
+    .rewards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .reward-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.25s ease;
+    }
+    .reward-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+    }
+    .reward-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .reward-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+    .reward-cost-tag {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .reward-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 4px 0;
+    }
+    .reward-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+    .btn-claim {
+      background: var(--surface-bg);
+      color: var(--text);
+      border: 1px solid var(--border-color);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-claim:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* LEADERBOARD TABLE */
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    .leaderboard-table th {
+      text-align: left;
+      padding: 10px 12px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .leaderboard-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .rank-badge {
+      display: inline-flex;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .rank-1 { background: #f59e0b; color: #78350f; }
+    .rank-2 { background: #94a3b8; color: #0f172a; }
+    .rank-3 { background: #b45309; color: #fef3c7; }
+    .rank-other { background: var(--surface-bg); color: var(--text-muted); }
+  </style>
+  <link rel="stylesheet" href="cn-i18n.css" />
+</head>
+
+<body>
+
+  <div class="portal-container">
+    
+    <!-- SIDEBAR: GREEN WALLET & ACTIVE PRACTICES -->
+    <aside class="sidebar">
+      <div class="brand-block">
+        <i class="fas fa-leaf"></i>
+        <span>CarbonGuardian AI</span>
+      </div>
+
+      <!-- GREEN CREDIT WALLET -->
+      <div class="wallet-card">
+        <div class="wallet-header">
+          <span>Green Carbon Wallet</span>
+          <i class="fas fa-wallet"></i>
+        </div>
+        <div class="wallet-balance">
+          <span id="wallet-credits">340</span>
+          <span class="wallet-unit">Credits</span>
+        </div>
+        <div class="wallet-value-sub">
+          ≈ ₹<span id="wallet-inr">51,000</span> ($612.00 USD)
+        </div>
+        <button class="btn-mint" onclick="mintNewCredits()">
+          <i class="fas fa-coins"></i> Mint Verified Credits
+        </button>
+      </div>
+
+      <!-- FARM SEQUESTRATION METRICS -->
+      <div>
+        <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 8px;">
+          Farm Sequestration Profile
+        </div>
+        <div class="side-metric-item">
+          <span>Lifetime CO₂e Offset</span>
+          <strong><span id="side-co2">48.6</span> t CO₂e</strong>
+        </div>
+        <div class="side-metric-item">
+          <span>Soil Organic Carbon (SOC)</span>
+          <strong><span id="side-soc">1.74</span>% (+0.54%)</strong>
+        </div>
+        <div class="side-metric-item">
+          <span>Soil Health Index</span>
+          <strong style="color: #10b981;"><span id="side-health">96.5</span> / 100</strong>
+        </div>
+        <div class="side-metric-item">
+          <span>Active Practices</span>
+          <strong><span id="side-practices">5</span> Verified</strong>
+        </div>
+      </div>
+
+      <!-- VERIFIED AUDIT BADGES -->
+      <div style="background: var(--surface-bg); padding: 12px; border-radius: 14px; font-size: 12px;">
+        <div style="font-weight: 700; margin-bottom: 4px; color: #10b981;">
+          <i class="fas fa-shield-check"></i> IPCC Tier 1/2 Certified
+        </div>
+        <p style="color: var(--text-muted); line-height: 1.4;">
+          Audited by NPOP Organic & Verra VCS Standards. Zero-tillage and biochar permanence active.
+        </p>
+      </div>
+    </aside>
+
+    <!-- MAIN DASHBOARD VIEW -->
+    <main class="main-content">
+      
+      <!-- TOP HEADER -->
+      <div class="top-header">
+        <div>
+          <h1>🌾 Regenerative Agriculture & Carbon Sequestration Portal</h1>
+          <p>Scientific IPCC Tier 1/2 carbon accounting, Green Credits wallet, and marketplace eco-rewards.</p>
+        </div>
+        <div>
+          <a href="index.html" class="tab-btn" style="background: var(--surface-bg); text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+            <i class="fas fa-home"></i> Back to Hub
+          </a>
+        </div>
+      </div>
+
+      <!-- TAB BAR -->
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('tab-calculator')">
+          <i class="fas fa-calculator"></i> IPCC Carbon Calculator
+        </button>
+        <button class="tab-btn" onclick="switchTab('tab-analytics')">
+          <i class="fas fa-chart-line"></i> Sequestration Analytics & Trajectory
+        </button>
+        <button class="tab-btn" onclick="switchTab('tab-rewards')">
+          <i class="fas fa-gift"></i> Eco-Rewards & Marketplace Credits
+        </button>
+        <button class="tab-btn" onclick="switchTab('tab-leaderboard')">
+          <i class="fas fa-trophy"></i> Community Carbon Leaderboard
+        </button>
+      </div>
+
+      <!-- KPI METRIC CARDS -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon"><i class="fas fa-cloud-arrow-down"></i></div>
+          <div class="kpi-info">
+            <h4>Annual CO₂e Sequestration</h4>
+            <div class="kpi-val" id="kpi-co2">48.6 Tonnes</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: rgba(14, 165, 233, 0.15); color: #0ea5e9;"><i class="fas fa-coins"></i></div>
+          <div class="kpi-info">
+            <h4>Green Credits Minted</h4>
+            <div class="kpi-val" id="kpi-credits">486 Credits</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;"><i class="fas fa-indian-rupee-sign"></i></div>
+          <div class="kpi-info">
+            <h4>Carbon Income Potential</h4>
+            <div class="kpi-val" id="kpi-income">₹72,900 / yr</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6;"><i class="fas fa-seedling"></i></div>
+          <div class="kpi-info">
+            <h4>Soil Organic Carbon Gain</h4>
+            <div class="kpi-val" id="kpi-soc">+0.54% ΔSOC</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 1: IPCC TIER 1/2 CALCULATOR -->
+      <div id="tab-calculator" class="tab-section">
+        <div class="two-col-grid">
+          
+          <!-- CALCULATOR FORM -->
+          <div class="panel-card">
+            <div class="panel-title">
+              <i class="fas fa-sliders" style="color: var(--primary);"></i> IPCC Tier 1/2 Carbon Parameter Inputs
+            </div>
+            
+            <form id="calc-form" onsubmit="handleCalculate(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label><i class="fas fa-vector-square"></i> Farm Acreage (Acres)</label>
+                  <input type="number" id="calc-acreage" class="form-control" value="25" min="1" max="5000" step="0.5">
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fas fa-earth-asia"></i> Climate Zone</label>
+                  <select id="calc-climate" class="form-control">
+                    <option value="Tropical Moist" selected>Tropical Moist (Monsoon Belts)</option>
+                    <option value="Tropical Dry / Semi-Arid">Tropical Dry / Semi-Arid (Deccan/Plateau)</option>
+                    <option value="Warm Temperate">Warm Temperate / Sub-Himalayan</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fas fa-mountain"></i> Soil Classification</label>
+                  <select id="calc-soil" class="form-control">
+                    <option value="Black Cotton (Vertisol)" selected>Black Cotton / Vertisol (High Clay)</option>
+                    <option value="Alluvial Silt / Loam">Alluvial Silt / Gangetic Loam</option>
+                    <option value="High Activity Clay">Red / High Activity Clay</option>
+                    <option value="Sandy Soil">Sandy Loam / Arid Soil</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fas fa-ruler-vertical"></i> Sampling Depth</label>
+                  <select id="calc-depth" class="form-control">
+                    <option value="30.0" selected>0 - 30 cm (Standard IPCC Mineral Topsoil)</option>
+                    <option value="60.0">0 - 60 cm (Deep Root Stratum)</option>
+                  </select>
+                </div>
+
+                <div class="form-group full">
+                  <label><i class="fas fa-check-double"></i> Regenerative Practices Applied</label>
+                  <div class="practices-checkbox-grid">
+                    <label class="practice-check-item">
+                      <input type="checkbox" id="p-notill" value="no_till" checked> Zero-Tillage (No-Till)
+                    </label>
+                    <label class="practice-check-item">
+                      <input type="checkbox" id="p-cover" value="cover_crops" checked> Multi-Species Cover Crops
+                    </label>
+                    <label class="practice-check-item">
+                      <input type="checkbox" id="p-biochar" value="biochar_application" checked> Biochar Soil Amendment
+                    </label>
+                    <label class="practice-check-item">
+                      <input type="checkbox" id="p-agro" value="agroforestry" checked> Boundary Agroforestry
+                    </label>
+                    <label class="practice-check-item">
+                      <input type="checkbox" id="p-compost" value="organic_compost" checked> Vermicompost & Bio-Inputs
+                    </label>
+                    <label class="practice-check-item">
+                      <input type="checkbox" id="p-drip" value="precision_drip" checked> Solar Micro-Drip Irrigation
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn-calc" style="width: 100%; margin-top: 14px;">
+                <i class="fas fa-bolt"></i> Run IPCC Sequestration Simulation
+              </button>
+            </form>
+          </div>
+
+          <!-- SIMULATION OUTPUT CARD -->
+          <div class="panel-card">
+            <div class="panel-title">
+              <i class="fas fa-certificate" style="color: var(--accent);"></i> Verified Sequestration Assessment
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 16px; padding: 18px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <span style="font-size: 13px; color: #a7f3d0; font-weight: 700;">ANNUAL CARBON OFFSET</span>
+                <span style="font-size: 26px; font-weight: 800; color: #10b981;" id="sim-co2">48.60 t CO₂e</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 13px;">
+                <span>Mintable Green Credits: <strong id="sim-credits" style="color: #38bdf8;">486 Credits</strong></span>
+                <span>Annual Value: <strong id="sim-inr" style="color: #f59e0b;">₹72,900 INR</strong></span>
+              </div>
+            </div>
+
+            <div style="font-size: 13px; color: var(--text-muted); line-height: 1.55;">
+              <p><strong>IPCC Protocol:</strong> Standard Tier 1 baseline reference combined with Tier 2 empirical multipliers for zero-tillage aggregate stabilization, root biomass exudates, and pyrogenic biochar permanence.</p>
+            </div>
+
+            <!-- Trajectory Chart -->
+            <div style="height: 160px; position: relative;">
+              <canvas id="miniTrajectoryChart"></canvas>
+            </div>
+
+            <button class="btn-mint" onclick="mintNewCredits()" style="padding: 12px;">
+              <i class="fas fa-coins"></i> Mint & Deposit to Green Wallet
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 2: ANALYTICS & 5-YEAR TRAJECTORY -->
+      <div id="tab-analytics" class="tab-section" style="display: none;">
+        <div class="two-col-grid">
+          
+          <div class="panel-card">
+            <div class="panel-title"><i class="fas fa-chart-pie" style="color: var(--primary);"></i> Carbon Offset by Regenerative Practice</div>
+            <div style="height: 280px; position: relative;">
+              <canvas id="practiceDoughnutChart"></canvas>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <div class="panel-title"><i class="fas fa-chart-line" style="color: var(--accent);"></i> 5-Year Cumulative CO₂e & SOC% Progression</div>
+            <div style="height: 280px; position: relative;">
+              <canvas id="fiveYearLineChart"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 3: ECO-REWARDS & MARKETPLACE REDEMPTION -->
+      <div id="tab-rewards" class="tab-section" style="display: none;">
+        <div class="panel-card" style="margin-bottom: 20px;">
+          <div class="panel-title"><i class="fas fa-gift" style="color: var(--primary);"></i> Marketplace Eco-Rewards & Sponsor Subsidies</div>
+          <p style="font-size: 13.5px; color: var(--text-muted);">
+            Redeem your verified Green Carbon Credits for high-grade organic bio-fertilizers, solar micro-drip pump subsidy vouchers, IoT probes, or direct sponsor cash payouts.
+          </p>
+        </div>
+
+        <div class="rewards-grid" id="rewards-catalog-container">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- TAB 4: COMMUNITY REGENERATIVE LEADERBOARD -->
+      <div id="tab-leaderboard" class="tab-section" style="display: none;">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title"><i class="fas fa-trophy" style="color: var(--warning);"></i> Regional Carbon Champions & Soil Guardians</div>
+            <span style="font-size: 12px; color: var(--text-muted);">Updated Hourly via Decentralized Ledger</span>
+          </div>
+
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Farmer & Farm Estate</th>
+                <th>District / State</th>
+                <th>CO₂e Sequestered</th>
+                <th>Green Credits</th>
+                <th>Badge Award</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- SCRIPT ENGINE -->
+  <script src="carbon_portal.js"></script>
+    <script src="translations.js" defer></script>
+  <script src="scripts/locales/zh-CN-extra.js" defer></script>
+<script src="scripts/i18n.js" defer></script>
+</body>
+
+</html>

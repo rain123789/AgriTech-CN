@@ -1,0 +1,129 @@
+{
+  "responses": [
+    {
+      "query": "hello",
+      "response": "Hi! 🌱 Welcome to AgriTech Assistant! I'm here to help with your farming questions."
+    },
+    {
+      "query": "hi",
+      "response": "Hello there! 👋 I'm your AgriBot assistant. Ask me about crops, weather, soil, or AgriTech features."
+    },
+    {
+      "query": "who is your developer",
+      "response": "I was created by AgriTech, with contributions from the community."
+    },
+    {
+      "query": "good morning",
+      "response": "Good morning! ☀️ How can I help you with farming today?"
+    },
+    {
+      "query": "good afternoon",
+      "response": "Good afternoon! 🌤️ What agricultural questions can I help with?"
+    },
+    {
+      "query": "good evening",
+      "response": "Good evening! 🌙 I’m here to help with your farming questions."
+    },
+    {
+      "query": "what can you do",
+      "response": "I can help with crop recommendations, weather impact, pest control, soil health, irrigation, and AgriTech platform guidance."
+    },
+    {
+      "query": "crop recommendation",
+      "response": "For crop recommendations, share your region, season, soil type, water availability, and goals."
+    },
+    {
+      "query": "best crops for winter",
+      "response": "Excellent winter crops include wheat, barley, peas, garlic, onions, broccoli, and leafy greens."
+    },
+    {
+      "query": "best crops for summer",
+      "response": "Perfect summer crops include tomatoes, peppers, cucumbers, beans, corn, and watermelons."
+    },
+    {
+      "query": "organic farming",
+      "response": "Organic farming focuses on compost, manure, biological pest control, crop rotation, and avoiding synthetic chemicals."
+    },
+    {
+      "query": "pest control",
+      "response": "Use beneficial insects, neem oil, traps, crop rotation, and good garden hygiene for effective pest control."
+    },
+    {
+      "query": "soil health",
+      "response": "Healthy soil needs balanced pH, organic matter, good drainage, beneficial microbes, and minimal tillage."
+    },
+    {
+      "query": "water conservation",
+      "response": "Smart water conservation includes drip irrigation, mulching, rainwater harvesting, and early-morning watering."
+    },
+    {
+      "query": "fertilizer",
+      "response": "Fertilizer use should be based on soil testing, with the right NPK balance and careful timing."
+    },
+    {
+      "query": "plant diseases",
+      "response": "Common plant diseases include fungal, bacterial, and viral issues. Early detection is the key to control."
+    },
+    {
+      "query": "weather impact",
+      "response": "Weather affects crop growth, irrigation needs, pest pressure, and harvest timing."
+    },
+    {
+      "query": "crop rotation",
+      "response": "Crop rotation helps break pest cycles, improve soil fertility, and reduce soil depletion."
+    },
+    {
+      "query": "greenhouse farming",
+      "response": "Greenhouse farming supports controlled growing conditions, better water management, and year-round production."
+    },
+    {
+      "query": "irrigation",
+      "response": "Efficient irrigation options include drip systems, sprinkler systems, and moisture-based scheduling."
+    },
+    {
+      "query": "seeds",
+      "response": "Choose certified seeds suited to your climate, soil, disease pressure, and yield goals."
+    },
+    {
+      "query": "harvest",
+      "response": "Harvest at the right maturity stage, handle produce carefully, and store it under the right conditions."
+    },
+    {
+      "query": "what can I do on this platform",
+      "response": "AgriTech supports crop recommendations, disease detection, weather, shopkeeper listings, marketplace, finance, crop planning, labour alerts, and more."
+    },
+    {
+      "query": "platform features",
+      "response": "AgriTech includes Crop Recommendation, Disease Detection, Weather, Farmer Connection, Shopkeeper Listings, AI ChatBot, Marketplace, Financial Support, and Crop Calendar."
+    },
+    {
+      "query": "how does chatbot work",
+      "response": "AgriBot can answer agriculture questions, explain AgriTech features, and use the AI backend when available."
+    },
+    {
+      "query": "how to find shopkeepers",
+      "response": "Shopkeeper Listings helps you find agricultural suppliers, equipment dealers, seed stores, and fertilizer shops nearby."
+    },
+    {
+      "query": "best crops for punjab",
+      "response": "Punjab is strong for wheat, rice, cotton, sugarcane, and maize. Use crop recommendation for location-specific advice."
+    },
+    {
+      "query": "best crops for maharashtra",
+      "response": "Maharashtra options vary by region and water availability. Cotton, soybean, sugarcane, rice, and pulses are common choices."
+    },
+    {
+      "query": "best crops for karnataka",
+      "response": "Karnataka options include jowar, maize, groundnut, rice, sugarcane, coconut, coffee, and ragi depending on the region."
+    },
+    {
+      "query": "soil types india",
+      "response": "India has alluvial, black cotton, red laterite, arid desert, and mountain soils, each suited to different crops."
+    }
+  ],
+  "fallback_responses": [
+    "I can still help even if I do not have an exact match. Try asking about crop recommendation, irrigation, soil health, or plant diseases.",
+    "I could not find a precise answer yet. You can ask me about weather impact, pest control, fertilizers, or seasonal crop planning.",
+    "Let us refine your question. Mention your crop, region, and problem so I can give more useful guidance."
+  ]
+}

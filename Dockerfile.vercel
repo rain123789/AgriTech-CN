@@ -1,0 +1,28 @@
+# Vercel 自定义容器部署（Python 3.12 + gunicorn）
+# 由 Vercel 云端构建，本地无需安装 Docker。
+
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    TZ=Asia/Shanghai
+
+# libmagic1：python-magic 运行时需要；tzdata：统一时区
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends libmagic1 tzdata \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY requirements-vercel.txt /app/requirements-vercel.txt
+RUN pip install --no-cache-dir -r /app/requirements-vercel.txt
+
+COPY . /app
+
+# Vercel 容器默认把流量转到 80 端口，可用 PORT 覆盖
+EXPOSE 80
+
+# 单进程 + 多线程：SQLite 写入避免多 worker 锁冲突，同时支持 Socket.IO 长轮询
+CMD ["sh", "-c", "exec gunicorn --bind 0.0.0.0:${PORT:-80} --workers 1 --threads 8 --worker-class gthread --timeout 120 --graceful-timeout 30 --access-logfile - --error-logfile - app:app"]

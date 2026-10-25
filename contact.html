@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>联系我们｜农智云</title>
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+  <link href= rel="stylesheet">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+
+  <!-- Prevent theme flash on page load -->
+  <script>
+    (function () {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+    })();
+  </script>
+
+  <link rel="stylesheet" href="contact.css">
+  <style>
+    :root {
+      --primary-green: #2e7d32;
+      --accent-green: #22c55e;
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --text-light: #f8fafc;
+      --input-border: #334155;
+      --nav-height: 70px;
+    }
+
+    /* DARK THEME SUPPORT */
+    [data-theme="light"] {
+      --bg-dark: #f1f5f3;
+      --card-bg: #ffffff;
+      --text-light: #333333;
+      --input-border: #cccccc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      line-height: 1.6;
+      transition: background 0.3s ease;
+    }
+
+    /* --- PREMIUM ADAPTIVE GLASSMORPHISM & SMART-SHRINK NAVBAR --- */
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: var(--nav-height);
+      background: linear-gradient(135deg, var(--primary-green), #1b5e20);
+      z-index: 2000;
+      /* Extended transition for premium feel */
+      transition: transform 0.3s ease-in-out, height 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease, backdrop-filter 0.4s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    /* GLASSMORPHISM STATE: Applied on scroll */
+    .header.scrolled {
+      height: 60px;
+      /* Smart-Shrink */
+      background: rgba(46, 125, 50, 0.7);
+      /* 70% opacity */
+      backdrop-filter: blur(10px);
+      /* Adaptive Glassmorphism blur */
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .nav-up {
+      transform: translateY(-100%);
+    }
+
+    .header-content {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    /* Shrink logo/buttons on scroll */
+    .header.scrolled .header-left,
+    .header.scrolled .theme-toggle {
+      transform: scale(0.9);
+    }
+
+    /* --- BOUNCY INTERACTIVE EXIT BUTTON --- */
+    .nav-back-btn {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
+    }
+
+    .nav-back-btn:hover {
+      background: white;
+      color: var(--primary-green);
+      transform: scale(1.1) translateY(-2px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    /* --- HERO ADJUSTED --- */
+    .hero {
+      padding-top: calc(var(--nav-height) + 60px);
+      text-align: center;
+      background: linear-gradient(to bottom, #143a18, var(--bg-dark));
+      padding-bottom: 80px;
+      position: relative;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: var(--accent-green);
+    }
+
+    .hero-content p {
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.8;
+    }
+
+    /* --- FIXED: IMPROVED DARK DROPDOWN STYLING --- */
+    select {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      background-color: var(--card-bg) !important;
+      color: var(--text-light) !important;
+      border: 1px solid var(--input-border);
+      font-size: 1rem;
+      margin-top: 10px;
+      appearance: none;
+      cursor: pointer;
+      /* Tells the browser to use dark-mode for the pop-up list UI */
+      color-scheme: dark;
+    }
+
+    select option {
+      background-color: var(--card-bg);
+      /* Forces dark background */
+      color: var(--text-light);
+      padding: 10px;
+    }
+
+    .contact-form-section {
+      padding: 80px 20px;
+    }
+
+    .form-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--accent-green);
+      display: block;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      border-radius: 10px;
+      background: rgba(39, 52, 71, 0.5);
+      border: 1px solid var(--input-border);
+      color: var(--text-light);
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--primary-green);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .submit-btn:hover {
+      transform: scale(1.02) translateY(-3px);
+      background: var(--accent-green);
+      box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .contact-methods {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: -40px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 10;
+      flex-wrap: wrap;
+    }
+
+    .method-card {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 300px;
+      border: 1px solid var(--input-border);
+      transition: transform 0.3s ease;
+    }
+
+    .method-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .method-icon {
+      font-size: 2rem;
+      color: var(--accent-green);
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 25px;
+      }
+
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+    }
+
+    /* --- HALL OF CONTRIBUTORS STYLES --- */
+    .contributors-section {
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px dashed var(--input-border);
+    }
+
+    .contributors-section h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: var(--accent-green);
+    }
+
+    .contributor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .contributor-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .contributor-card:hover {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: var(--accent-green);
+      transform: scale(1.05);
+    }
+
+    .contributor-avatar {
+      width: 50px;
+      height: 50px;
+      background: var(--card-bg);
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-green);
+      font-size: 1.2rem;
+      border: 1px solid var(--input-border);
+    }
+
+    .github-cta {
+      margin-top: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      background: #24292e;
+      /* GitHub Dark */
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .github-cta:hover {
+      background: #000;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Sparkle Cursor Effect */
+
+#sparkle-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.sparkle {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, #22c55e 0%, transparent 70%);
+  animation: sparkleFade 0.8s ease-out forwards;
+  box-shadow:
+    0 0 8px #22c55e,
+    0 0 18px #22c55e,
+    0 0 28px rgba(34, 197, 94, 0.8);
+
+  z-index: 9999;
+}
+
+@keyframes sparkleFade {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+
+  20% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.9;
+  }
+
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+  </style>
+  <link rel="stylesheet" href="footer.css" />
+  <link rel="stylesheet" href="cn-i18n.css" />
+</head>
+
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <header class="header" id="navbar">
+      <div class="header-content">
+        <a href="index.html" class="logo">
+          <i class="fas fa-seedling"></i>
+          <span>AgriTech</span>
+        </a>
+        <!-- Animated Sun/Moon Toggle -->
+        <button class="theme-toggle" type="button" id="themeToggle" title="Switch to dark mode"
+          aria-label="Switch to dark mode">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon" aria-hidden="true">
+            <i class="fas fa-sun"></i>
+          </span>
+          <span class="theme-toggle-icon moon-icon" aria-hidden="true">
+            <i class="fas fa-moon"></i>
+          </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <a href="index.html" class="back-home-btn hero-back">
+        <i class="fas fa-arrow-left"></i> Back to Home
+      </a>
+
+      <div class="hero-content">
+        <h1>联系我们</h1>
+        <p>Have questions about our AI-powered agricultural solutions? We're here to help farmers, agricultural
+          professionals, and communities grow smarter and more sustainably.</p>
+      </div>
+      <div class="hero-decoration">
+        <i class="fas fa-tractor"></i>
+      </div>
+    </section>
+
+    <!-- CONTACT METHODS -->
+    <section class="contact-methods">
+      <div class="method-card">
+        <div class="method-icon">
+          <i class="fas fa-envelope"></i>
+        </div>
+        <h3>邮件支持</h3>
+        <a href="mailto:support@agritech.com"
+          style="color: var(--accent-green); text-decoration: none;">support@agritech.com</a>
+      </div>
+
+      <div class="method-card">
+        <div class="method-icon">
+          <i class="fas fa-phone"></i>
+        </div>
+        <h3>电话支持</h3>
+        <a href="tel:+1234567890" style="color: var(--accent-green); text-decoration: none;">+1 (234) 567-890</a>
+      </div>
+      <div class="method-card">
+        <div class="method-icon"><i class="fas fa-comments"></i></div>
+        <h3>社区</h3>
+        <a href="#community" style="color: var(--accent-green); text-decoration: none;">立即加入</a>
+      </div>
+    </section>
+
+    <!-- CONTACT FORM -->
+    <section class="contact-form-section">
+      <div class="form-container">
+        <div class="form-header">
+          <h2>给我们留言</h2>
+          <p>Whether you're a farmer seeking guidance, a researcher interested in collaboration, or someone with
+            questions about our AI-powered tools, we'd love to hear from you.</p>
+        </div>
+
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">姓名 *</label>
+              <input type="text" id="firstName" name="firstName" required placeholder="Enter first name">
+            </div>
+            <div class="form-group">
+              <label for="lastName">姓 *</label>
+              <input type="text" id="lastName" name="lastName" required placeholder="Enter last name">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">邮箱地址 *</label>
+              <input type="email" id="email" name="email" required placeholder="Enter email address">
+            </div>
+            <div class="form-group">
+              <label for="phone">联系电话</label>
+              <input type="tel" id="phone" name="phone" placeholder="Enter phone number">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="userType">I am a...</label>
+            <select id="userType" name="userType">
+              <option value="">Select your role</option>
+              <option value="farmer">Farmer</option>
+              <option value="researcher">Agricultural Researcher</option>
+              <option value="student">Student</option>
+              <option value="business">Agribusiness Professional</option>
+              <option value="developer">Developer/Contributor</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="subject">主题 *</label>
+            <select id="subject" name="subject" required>
+              <option value="">Select a topic</option>
+              <option value="crop-recommendation">Crop Recommendation</option>
+              <option value="yield-prediction">Yield Prediction</option>
+              <option value="disease-detection">Disease Detection</option>
+              <option value="technical-support">Technical Support</option>
+              <option value="collaboration">Partnership/Collaboration</option>
+              <option value="feedback">Feedback/Suggestions</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">留言内容 *</label>
+            <textarea id="message" name="message" rows="6" maxlength="200"
+              placeholder="Please describe your question, issue, or how we can help you..." required></textarea>
+
+            <div class="char-counter" id="messageCounter">0 / 200</div>
+
+          </div>
+
+          <div class="form-group checkbox-group">
+            <input type="checkbox" id="newsletter" name="newsletter">
+            <label for="newsletter">I'd like to receive updates about new features and agricultural insights</label>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-paper-plane"></i>
+            发送留言
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- TEAM MEMBERS -->
+    <section class="team-section" style="text-align: center; padding: 80px 20px;">
+      <h2 style="font-size: 2.5rem; margin-bottom: 40px;">Meet Our Team</h2>
+
+      <div class="team-grid"
+        style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-bottom: 60px;">
+        <div class="team-member">
+          <div class="member-avatar"><i class="fas fa-user-tie"></i></div>
+          <h3>Om Roy</h3>
+          <p>Project Lead & ML Engineer</p>
+          <div class="social-links">
+            <a href="https://github.com/omroy07"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <div class="member-avatar"><i class="fas fa-user-ninja"></i></div>
+          <h3>Kanisha Sharma</h3>
+          <p>ML Engineer & Backend Developer</p>
+          <div class="social-links">
+            <a href="https://github.com/KanishaSharma11"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+
+        <div class="team-member">
+          <div class="member-avatar"><i class="fas fa-user-astronaut"></i></div>
+          <h3>Shubhangi Roy</h3>
+          <p>ML Engineer & Backend Developer</p>
+          <div class="social-links">
+            <a href="https://github.com/ShubhangiRoy12"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="contributors-section">
+        <h2>Hall of Contributions</h2>
+        <p style="margin-bottom: 30px; opacity: 0.8;">Recognizing the heroes of the AgriTech open-source community.</p>
+
+        <div id="github-contributors" class="contributor-grid">
+          <p>Loading contributors...</p>
+        </div>
+
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
+          <a href="certificate.html" class="github-cta" style="background: linear-gradient(135deg, var(--accent-green), #2563eb);">
+            <i class="fas fa-certificate"></i>
+            Generate Contributor Certificate
+          </a>
+          <a href="https://github.com/omroy07/AgriTech" target="_blank" class="github-cta">
+            <i class="fab fa-github"></i>
+            Become a Contributor
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-accordion">
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>How accurate are the crop recommendations?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Our AI models are trained on extensive agricultural data and provide recommendations with high accuracy
+              based on your soil conditions and local weather patterns.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Is AgriTech suitable for small-scale farmers?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Absolutely! AgriTech is designed to be accessible and valuable for farmers of all scales, from small
+              family
+              farms to large agricultural operations.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>How do I join the farmer community?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Simply create an account on our platform and you'll have access to our community chat features where you
+              can connect with fellow farmers and share experiences.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            <span>Do you offer training on using the platform?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content">
+              Yes! We provide comprehensive guides, video tutorials, and offer support sessions to help you get the most
+              out of all AgriTech features.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+<div id="sparkle-container"></div>
+
+<script>
+
+  if (window.innerWidth > 768) {
+  const sparkleContainer = document.getElementById("sparkle-container");
+
+  let lastSparkle = 0;
+
+  document.addEventListener("mousemove", (e) => {
+    const now = Date.now();
+
+    if (now - lastSparkle < 40) return;
+
+    lastSparkle = now;
+
+    const sparkle = document.createElement("div");
+    sparkle.classList.add("sparkle");
+
+    sparkle.style.left = `${e.clientX}px`;
+    sparkle.style.top = `${e.clientY}px`;
+
+    sparkleContainer.appendChild(sparkle);
+
+    setTimeout(() => {
+      sparkle.remove();
+    }, 1000);
+  });
+}
+
+document.querySelectorAll(".faq-question").forEach(button => {
+
+      button.addEventListener("click", () => {
+        const item = button.parentElement;
+        const answer = item.querySelector(".faq-answer");
+        const isOpen = item.classList.contains("active");
+
+        // Close all
+        document.querySelectorAll(".faq-item").forEach(faq => {
+          faq.classList.remove("active");
+          faq.querySelector(".faq-answer").style.height = 0;
+          faq.querySelector(".faq-question").setAttribute("aria-expanded", "false");
+        });
+
+        // Open selected
+        if (!isOpen) {
+          item.classList.add("active");
+          button.setAttribute("aria-expanded", "true");
+          answer.style.height = answer.scrollHeight + "px";
+        }
+      });
+
+    });
+  </script>
+
+  <script>
+    // --- NAVBAR & SCROLL EFFECTS ---
+    const navbar = document.getElementById('navbar');
+    let lastScrollTop = 0;
+
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      // Glassmorphism + shrink
+      if (scrollTop > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+
+      // Hide on scroll down / show on scroll up
+      if (scrollTop > lastScrollTop && scrollTop > 200) {
+        navbar.classList.add('nav-up');
+      } else {
+        navbar.classList.remove('nav-up');
+      }
+
+      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    });
+
+    const body = document.body;
+
+    // --- MESSAGE CHARACTER COUNTER ---
+    const messageInput = document.getElementById('message');
+    const messageCounter = document.getElementById('messageCounter');
+    const maxLength = parseInt(messageInput.getAttribute('maxlength'), 10);
+
+    messageInput.addEventListener('input', () => {
+      const length = messageInput.value.length;
+      messageCounter.textContent = `${length} / ${maxLength}`;
+
+      messageCounter.classList.toggle('warning', length > maxLength * 0.8);
+    });
+
+    // --- FORM SUBMISSION ---
+    const contactForm = document.getElementById('contactForm');
+
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      alert('留言已发送，感谢你的反馈！🌱');
+      contactForm.reset();
+
+      messageCounter.textContent = `0 / ${maxLength}`;
+      messageCounter.classList.remove('warning', 'danger');
+    });
+
+    // --- SMOOTH SCROLL ---
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+  <script>
+    async function fetchContributors() {
+      // 本地演示环境不请求 GitHub 接口，避免跨境网络失败与页面报错。
+      const contributors = [
+        { login: '原项目维护者', contributions: '原仓库贡献', html_url: 'https://github.com/omroy07/AgriTech', avatar_url: 'images/logo.png' },
+        { login: '本地化演示', contributions: '中文适配', html_url: 'https://github.com/omroy07/AgriTech', avatar_url: 'images/plant.png' }
+      ];
+      const container = document.getElementById('github-contributors');
+      if (!container) return;
+      container.innerHTML = '';
+      contributors.forEach((user) => {
+        const card = document.createElement('div');
+        card.className = 'contributor-card';
+        card.innerHTML = `
+                <a href="${user.html_url}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: block;">
+                    <img src="${user.avatar_url}" alt="${user.login}" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--accent-green); margin-bottom: 10px; object-fit: cover;">
+                    <h4 style="font-size: 0.9rem;">${user.login}</h4>
+                    <span style="font-size: 0.75rem; color: var(--accent-green);">${user.contributions}</span>
+                </a>
+                <a href="certificate.html?user=${encodeURIComponent(user.login)}" title="查看证书" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; color: #f59e0b; text-decoration: none; margin-top: 8px; font-weight: 600;">
+                  <i class="fas fa-certificate"></i> 证书
+                </a>
+            `;
+        container.appendChild(card);
+      });
+    }
+
+    // Run the function when the page loads
+    document.addEventListener('DOMContentLoaded', fetchContributors);
+  </script>
+
+  <script src="theme.js"></script>
+  <script src="auth.js"></script>
+
+  <!-- ===== Universal Back To Top Button (All Pages) ===== -->
+  <style>
+    #globalBackToTop {
+      position: fixed;
+      bottom: 25px;
+      /* prevents overlap with chatbot/floating icons */
+      right: 25px;
+      z-index: 9999;
+      display: none;
+      background: #2ecc71;
+      color: #ffffff;
+      border: none;
+      border-radius: 50%;
+      width: 52px;
+      height: 52px;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+      transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+
+    #globalBackToTop:hover {
+      transform: scale(1.12);
+      background: #27ae60;
+    }
+
+    @media (max-width: 768px) {
+      #globalBackToTop {
+        bottom: 100px;
+        /* better spacing on mobile */
+        right: 18px;
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+      }
+    }
+  </style>
+
+  <button id="globalBackToTop" title="Back to Top">↑</button>
+
+  <script>
+    (function () {
+      const btn = document.getElementById("globalBackToTop");
+
+      // Show button after scrolling down
+      window.addEventListener("scroll", function () {
+        if (window.scrollY > 300) {
+          btn.style.display = "block";
+        } else {
+          btn.style.display = "none";
+        }
+      });
+
+      // Smooth scroll to top on click
+      btn.addEventListener("click", function () {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      });
+    })();
+  </script>
+  <!-- ===== End Back To Top Button ===== -->
+
+  <footer class="site-footer tech-dark-theme final-match">
+    <div class="footer-top-accent"></div>
+
+    <div class="footer-inner-content">
+      <div class="footer-section footer-brand">
+        <a href="index.html" class="brand-header">
+          <img src="images/logo.png" alt="AgriTech logo" class="brand-logo" />
+          <h3>AgriTech</h3>
+        </a>
+
+        <p class="tagline">
+          Empowering India's Farming Future with innovative technology
+          connecting every stakeholder.
+        </p>
+
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="X (formerly Twitter)"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-group-links">
+        <div class="footer-section footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li>
+              <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+              <a href="login.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li>
+              <a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+              <a href="weather_dashboard.html"><i class="fas fa-cloud-sun"></i> Weather</a>
+            </li>
+            <li>
+              <a href="contact.html"><i class="fas fa-headset"></i> Contact Us</a>
+            </li>
+            <li>
+              <a href="feed-back.html"><i class="fas fa-comment-dots"></i> Feedback</a>
+            </li>
+            <li>
+              <a href="terms-and-service.html"><i class="fas fa-file-contract"></i> Terms & Service</a>
+            </li>
+            <li>
+              <a href="privacy-policy.html"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-section footer-contact">
+          <h4>Contact</h4>
+          <ul>
+            <li>
+              <a href="mailto:service@example.com">
+                <i class="fas fa-envelope"></i> service@example.com
+              </a>
+            </li>
+            <li>
+              <a href="tel:4000000000">
+                <i class="fas fa-phone"></i> 400-000-0000（演示）
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-section footer-newsletter">
+          <h4>Newsletter</h4>
+          <p class="newsletter-desc">
+            Subscribe to get the latest farming insights, tips, and updates.
+          </p>
+          <form class="newsletter-form" onsubmit="return handleNewsletterSubmit(event, this)">
+            <div class="newsletter-input-group">
+              <input
+                type="email"
+                class="newsletter-input"
+                placeholder="Enter your email to get the latest updates..."
+                required
+                aria-label="Email address for newsletter"
+              />
+              <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
+                <span>Subscribe</span>
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            <div class="newsletter-feedback" style="display:none;" role="status" aria-live="polite"></div>
+            <div class="newsletter-footer-optout">
+              <small>No spam. <a href="javascript:void(0)" onclick="openUnsubscribeModal(event)">Unsubscribe</a> anytime.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <span id="current-year">2026</span> AgriTech. All rights reserved. <a href="privacy-policy.html">Privacy Policy</a> · <a href="terms-and-service.html">Terms</a> · <a href="cookie-policy.html">Cookie Policy</a></p>
+    </div>
+
+    <div class="footer-wave-overlay"></div>
+  </footer>
+  <script src="footer.js"></script>
+    <script src="translations.js" defer></script>
+  <script src="scripts/locales/zh-CN-extra.js" defer></script>
+<script src="scripts/i18n.js" defer></script>
+</body>
+
+</html>

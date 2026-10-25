@@ -1,0 +1,153 @@
+/* AgriTech 简体中文排版补丁（保持原设计体系，仅修正字体与中文长度） */
+:root {
+  --cn-font-sans: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC",
+    "Source Han Sans SC", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+}
+
+html[lang="zh-CN"] body,
+html[lang="zh-CN"] button,
+html[lang="zh-CN"] input,
+html[lang="zh-CN"] select,
+html[lang="zh-CN"] textarea,
+html[lang="zh-CN"] .btn,
+html[lang="zh-CN"] .nav-link {
+  font-family: var(--cn-font-sans) !important;
+}
+
+html[lang="zh-CN"] body {
+  letter-spacing: 0.01em;
+  overflow-x: hidden;
+}
+
+html[lang="zh-CN"] .hero {
+  overflow: hidden;
+}
+
+html[lang="zh-CN"],
+html[lang="zh-CN"] body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+html[lang="zh-CN"] h1,
+html[lang="zh-CN"] h2,
+html[lang="zh-CN"] h3,
+html[lang="zh-CN"] h4,
+html[lang="zh-CN"] p,
+html[lang="zh-CN"] li {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+html[lang="zh-CN"] button,
+html[lang="zh-CN"] .btn,
+html[lang="zh-CN"] .sort-btn {
+  line-height: 1.35;
+  min-height: 34px;
+}
+
+.cn-language-switch {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  z-index: 9997;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  background: rgba(15, 23, 42, 0.9);
+  color: #d1fae5;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+  font-family: var(--cn-font-sans);
+  font-size: 12px;
+}
+.cn-language-switch button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 999px;
+  font: inherit;
+}
+.cn-language-switch button.active {
+  background: #16a34a;
+  color: #fff;
+}
+[data-theme="light"] .cn-language-switch {
+  background: rgba(255, 255, 255, 0.94);
+  color: #166534;
+  border-color: #86efac;
+}
+[data-theme="light"] .cn-language-switch button {
+  color: #475569;
+}
+[data-theme="light"] .cn-language-switch button.active {
+  color: #fff;
+}
+
+/* 中文导航比英文紧凑但项目多，1440 桌面端限制搜索框宽度避免横向溢出 */
+@media (max-width: 1600px) {
+  .navbar-content {
+    max-width: calc(100% - 10px) !important;
+    gap: 0.55rem !important;
+  }
+  .left-nav {
+    gap: 0.7rem !important;
+  }
+  .navbar .nav-link {
+    font-size: 0.82rem !important;
+  }
+  .nav-buttons {
+    gap: 0.3rem !important;
+  }
+  .navbar .search-input {
+    width: 118px !important;
+  }
+  .navbar .search-input:focus {
+    width: 180px !important;
+  }
+  .navbar .nav-buttons .btn {
+    padding: 0.44rem 0.58rem !important;
+    font-size: 0.78rem !important;
+  }
+}
+@media (max-width: 1380px) {
+  .navbar a[href="faq.html"],
+  .navbar .notification-container {
+    display: none !important;
+  }
+  .left-nav {
+    gap: 0.55rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  html[lang="zh-CN"] .nav-links,
+  html[lang="zh-CN"] .nav-buttons {
+    font-size: 0.92rem;
+  }
+  .cn-language-switch {
+    left: 10px;
+    bottom: 12px;
+    transform: scale(0.92);
+    transform-origin: left bottom;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-language-switch {
+    backdrop-filter: none;
+  }
+}
+
+/* 认证页表单占满视口时，语言开关移到左上角，避免遮住按钮 */
+body:has(.form-container) .cn-language-switch {
+  top: 16px;
+  bottom: auto;
+  left: 16px;
+}

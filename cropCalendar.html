@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Crop Calendar - AgriTech</title>
+
+  <link rel="icon" type="image/png" href="images/logo.png" />
+
+  <link rel="preconnect" href= />
+  <link rel="preconnect" href= crossorigin />
+  <link href= rel="stylesheet" />
+
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+
+  <!-- Prevent theme flash on page load -->
+  <script>
+    (function () {
+      const saved = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+      document.documentElement.setAttribute(
+        "data-theme",
+        saved || (prefersDark ? "dark" : "light"),
+      );
+    })();
+  </script>
+
+  <link rel="stylesheet" href="cropCalendar.css" />
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="footer.css" />
+  <style>
+    /* 1. GLOBAL VARIABLES (Matching index.html) */
+    :root {
+      --bg-color: #f8fafc;
+      --surface-color: #ffffff;
+      --text-color: #0f172a;
+      --text-muted: #64748b;
+      --accent-color: #16a34a; /* Green */
+      --accent-hover: #15803d;
+      --primary-color: #16a34a;
+      --secondary-color: #22c55e;
+      --section-bg: #f8fafc;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+      --font-sans: 'Open Sans', sans-serif;
+      --font-serif: 'Libertinus Serif', serif;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #0f172a;
+      --surface-color: #1e293b;
+      --text-color: #f8fafc;
+      --text-muted: #cbd5e1;
+      --primary-color: #22c55e;
+      --secondary-color: #4ade80;
+      --section-bg: #0f172a;
+      --border-color: #334155;
+    }
+
+    /* 2. RESET & BASE */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* 3. HEADER STYLES */
+    header {
+      background-color: var(--surface-color);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    header h1 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    header h1::before {
+      content: '\f133'; /* Calendar Icon */
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .back-btn:hover {
+      background-color: var(--border-color);
+    }
+
+    /* 4. MAIN LAYOUT */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Filter Section - MODIFIED FOR COUNTRY FILTER */
+    .filter-container {
+      background: var(--surface-color);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+
+    .filter-container label {
+      font-weight: 600;
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--surface-color);
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      font-weight: 500;
+      font-size: 0.9rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .legend-item span {
+      font-size: 1.2rem;
+    }
+
+    /* Calendar Wrapper */
+    .calendar-wrapper {
+      background: var(--surface-color);
+      border-radius: 16px;
+      box-shadow: var(--shadow-md);
+      padding: 2rem;
+      border: 1px solid var(--border-color);
+      overflow-x: auto; /* IMPORTANT for mobile responsiveness */
+    }
+
+    #calendar {
+      min-width: 800px; /* Ensures grid doesn't squish on small screens */
+    }
+
+   /* --- Cursor Trail Container --- */
+.circle-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999999;
+}
+
+/* --- Individual Trail Circles --- */
+.cursor-circle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ff8c00;
+  box-shadow: 0 0 15px rgba(255, 140, 0, 0.7);
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  mix-blend-mode: screen;
+  transition: transform 0.1s ease-out;
+}
+
+/* --- The Leading "Head" Circle --- */
+.cursor-circle:first-child {
+  width: 14px;
+  height: 14px;
+  background-color: #ffcc00;
+  box-shadow:
+    0 0 20px #ff8c00,
+    0 0 40px rgba(255, 140, 0, 0.5);
+}
+
+/* --- Interaction States --- */
+.cursor-clicking {
+  transform: translate(-50%, -50%) scale(2.5) !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 30px #ffffff !important;
+}
+
+.cursor-hovering {
+  transform: translate(-50%, -50%) scale(1.8);
+  background-color: #22c55e; /* AgriTech green */
+  box-shadow: 0 0 20px #22c55e;
+}
+  </style>
+  <link rel="stylesheet" href="cn-i18n.css" />
+</head>
+
+<body>
+  <header>
+    <h1>Crop Calendar</h1>
+    <div class="header-actions">
+      <a href="index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Home
+      </a>
+    <button class="theme-toggle" type="button" id="themeToggle" title="Switch theme" aria-label="Switch theme">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon" aria-hidden="true">
+            <i class="fas fa-sun"></i>
+          </span>
+          <span class="theme-toggle-icon moon-icon" aria-hidden="true">
+            <i class="fas fa-moon"></i>
+          </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <div class="filter-container">
+      <label for="countrySelect"><i class="fas fa-globe"></i> Region:</label>
+      <select id="countrySelect">
+        </select>
+
+      <label for="cropSelect"><i class="fas fa-filter"></i> Crop:</label>
+      <select id="cropSelect">
+        <option value="all">View All Crops</option>
+        </select>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item sow"><span>🌱</span> Sowing Period</div>
+      <div class="legend-item grow"><span>🌿</span> Growing Period</div>
+      <div class="legend-item harvest"><span>🌾</span> Harvesting Period</div>
+    </div>
+
+    <div class="calendar-wrapper">
+      <div class="calendar" id="calendar">
+        </div>
+    </div>
+  </main>
+
+  <footer class="site-footer tech-dark-theme final-match">
+    <div class="footer-top-accent"></div>
+
+    <div class="footer-inner-content">
+      <!-- Column 1: Brand / Logo + short description -->
+      <div class="footer-section footer-brand">
+        <a href="index.html" class="brand-header">
+          <img src="images/logo.png" alt="AgriTech logo" class="brand-logo" />
+          <h3>AgriTech</h3>
+        </a>
+        <p class="tagline">
+          Empowering India's Farming Future with innovative technology
+          connecting every stakeholder.
+        </p>
+      </div>
+
+      <div class="footer-group-links">
+        <!-- Column 2: Quick Links -->
+        <div class="footer-section footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="main.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="about.html"><i class="fas fa-info-circle"></i> About Us</a></li>
+            <li><a href="feed-back.html"><i class="fas fa-comment-dots"></i> Feedback</a></li>
+            <li><a href="chat.html"><i class="fas fa-robot"></i> AI Assistant</a></li>
+            <li><a href="terms-and-service.html"><i class="fas fa-file-contract"></i> Terms &amp; Service</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Tools / Features -->
+        <div class="footer-section footer-links">
+          <h4>Tools / Features</h4>
+          <ul>
+            <li><a href="crop_recommendation/templates/index.html"><i class="fas fa-seedling"></i> Crop Recommendation</a></li>
+            <li><a href="Disease prediction/template/index.html"><i class="fas fa-shield-virus"></i> Disease Detector</a></li>
+            <li><a href="Crop Yield Prediction/crop_yield_app/templates/index.html"><i class="fas fa-chart-line"></i> Yield Prediction</a></li>
+            <li><a href="Crop_Planning/templates/cropplan.html"><i class="fas fa-calendar-check"></i> Crop Planner</a></li>
+            <li><a href="crop_advisory.html"><i class="fas fa-cloud-sun"></i> Crop Advisory</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Social links / Contact information -->
+        <div class="footer-section footer-contact">
+          <h4>Contact &amp; Social</h4>
+          <ul>
+            <li>
+              <a href="mailto:service@example.com">
+                <i class="fas fa-envelope"></i> service@example.com
+              </a>
+            </li>
+            <li>
+              <a href="tel:4000000000">
+                <i class="fas fa-phone"></i> 400-000-0000（演示）
+              </a>
+            </li>
+            <li>
+              <a href="contact.html">
+                <i class="fas fa-headset"></i> Support Center
+              </a>
+            </li>
+          </ul>
+          <div class="social-icons" style="margin-top: 1rem;">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="X (formerly Twitter)"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <span id="current-year">2026</span> AgriTech. All rights reserved.</p>
+    </div>
+
+    <div class="footer-wave-overlay"></div>
+  </footer>
+ <!-- Cursor Trail -->
+<div class="circle-container" id="cursorTrail"></div>
+  <script src="cropCalendar.js"></script>
+  <script src="theme.js"></script>
+
+  <!-- ===== Universal Back To Top Button (All Pages) ===== -->
+<style>
+  #globalBackToTop {
+    position: fixed;
+    bottom: 90px; /* prevents overlap with chatbot/floating icons */
+    right: 25px;
+    z-index: 9999;
+    display: none;
+    background: #2ecc71;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    transition: opacity 0.3s ease, transform 0.2s ease;
+  }
+
+  #globalBackToTop:hover {
+    transform: scale(1.12);
+    background: #27ae60;
+  }
+
+  @media (max-width: 768px) {
+    #globalBackToTop {
+      bottom: 100px; /* better spacing on mobile */
+      right: 18px;
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+    }
+  }
+</style>
+
+<button id="globalBackToTop" title="Back to Top">↑</button>
+
+<script>
+  (function () {
+    const btn = document.getElementById("globalBackToTop");
+
+    // Show button after scrolling down
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > 300) {
+        btn.style.display = "block";
+      } else {
+        btn.style.display = "none";
+      }
+    });
+
+    // Smooth scroll to top on click
+    btn.addEventListener("click", function () {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  })();
+</script>
+<!-- ===== End Back To Top Button ===== -->
+
+  <script src="footer.js"></script>
+    <script src="translations.js" defer></script>
+  <script src="scripts/locales/zh-CN-extra.js" defer></script>
+<script src="scripts/i18n.js" defer></script>
+</body>
+</html>

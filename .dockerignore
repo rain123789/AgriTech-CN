@@ -1,0 +1,27 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.env
+.git
+.gitignore
+.vscode/
+node_modules/
+npm-debug.log
+logs/
+artifacts/
+dist/
+uploads/
+instance/
+browser-profile*/
+Disease prediction/
+tomato disease detection/
+disease_prediction/
+Soil Classifier CNN/
+Soil Classification Model/
+Plant Disease Detection/test/
+Plant Disease Detection/*.pth

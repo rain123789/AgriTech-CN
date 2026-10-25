@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh-CN">
+
+<head>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Predictive Mandi Price Intelligence & Net-Profit Optimizer | AgriTech</title>
+  
+  <script>
+    (function () {
+      const saved = localStorage.getItem("theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.setAttribute("data-theme", saved || (prefersDark ? "dark" : "light"));
+    })();
+  </script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="../static/styles.css">
+  <link rel="stylesheet" href="../../theme.css">
+  <link rel="stylesheet" href="../../vendor/fontawesome/css/all.min.css" />
+  <!-- Leaflet.js Map Styles -->
+  <link rel="stylesheet" href="../../vendor/leaflet/leaflet.css" />
+  <!-- Chart.js -->
+  <script src="../../vendor/chartjs/chart.umd.min.js"></script>
+  <!-- Leaflet.js -->
+  <script src="../../vendor/leaflet/leaflet.js"></script>
+
+  <style>
+    /* --- GLOBAL RESET & THEME VARIABLES --- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    :root {
+      --bg-color: #030712;
+      --surface-color: rgba(15, 23, 42, 0.92);
+      --section-bg: rgba(30, 41, 59, 0.75);
+      --border-color: #334155;
+      --text-color: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-color: #10b981;
+      --accent-hover: #059669;
+      --card-bg: #0f172a;
+      --shadow-color: rgba(0, 0, 0, 0.35);
+    }
+    [data-theme="light"] {
+      --bg-color: #f8fafc;
+      --surface-color: rgba(255, 255, 255, 0.95);
+      --section-bg: rgba(241, 245, 249, 0.85);
+      --border-color: #cbd5e1;
+      --text-color: #0f172a;
+      --text-muted: #475569;
+      --accent-color: #059669;
+      --accent-hover: #047857;
+      --card-bg: #ffffff;
+      --shadow-color: rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER & NAV */
+    .app-header {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+      color: white;
+      padding: 32px 20px 24px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(6, 78, 59, 0.4);
+    }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .app-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .app-header p {
+      font-size: 15px;
+      color: #a7f3d0;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* MAIN CONTAINER */
+    .main-container {
+      max-width: 1280px;
+      margin: 24px auto;
+      padding: 0 16px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+    }
+
+    /* TOP STATS TICKER */
+    .stats-ticker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+    }
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .stat-info h4 {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-info .stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin-top: 2px;
+    }
+
+    /* TWO COLUMN WORKSPACE */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 960px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 6px 18px var(--shadow-color);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 14px;
+    }
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+    .panel-title i {
+      color: var(--accent-color);
+    }
+
+    /* FORM CONTROLS */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .form-control {
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--surface-color);
+      color: var(--text-color);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .form-control:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+      transition: all 0.2s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
+    }
+    .btn-secondary {
+      background: var(--surface-color);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    /* LEAFLET MAP */
+    #mandi-map {
+      height: 380px;
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      z-index: 1;
+    }
+    .map-legend {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    /* ARBITRAGE BANNER */
+    .arbitrage-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.25) 100%);
+      border: 1px solid #10b981;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .arbitrage-icon {
+      font-size: 32px;
+      color: var(--accent-color);
+    }
+    .arbitrage-text h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+    .arbitrage-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* RANKED MANDI LIST */
+    .mandi-rankings-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    .mandi-rankings-table th {
+      text-align: left;
+      padding: 10px 12px;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .mandi-rankings-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-color);
+    }
+    .mandi-rankings-table tr:hover {
+      background: var(--surface-color);
+    }
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .rank-1 { background: #f59e0b; color: #78350f; }
+    .rank-2 { background: #94a3b8; color: #0f172a; }
+    .rank-3 { background: #b45309; color: #fef3c7; }
+    .rank-other { background: var(--surface-color); color: var(--text-muted); }
+
+    .profit-pill {
+      font-weight: 700;
+      color: #10b981;
+    }
+
+    /* ALERT MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .alert-modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      width: 440px;
+      max-width: 90vw;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* FOOTER */
+    footer {
+      background: #020617;
+      color: #94a3b8;
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      border-top: 1px solid #1e293b;
+      margin-top: 40px;
+    }
+  </style>
+  <link rel="stylesheet" href="../../cn-i18n.css" />
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-badge">
+      <i class="fas fa-chart-line"></i> Agmarknet & e-NAM AI Intelligence
+    </div>
+    <h1>🌾 Predictive Mandi Price Intelligence & Net-Profit Optimizer</h1>
+    <p>14-day ARIMA/Prophet time-series price forecasts with confidence intervals, road freight matrix, and farmgate net-profit maximization.</p>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="main-container">
+
+    <!-- REAL-TIME KPI TICKER -->
+    <div class="stats-ticker-grid">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-tags"></i></div>
+        <div class="stat-info">
+          <h4>Tracked Mandis</h4>
+          <div class="stat-value">15+ Major APMCs</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-brain"></i></div>
+        <div class="stat-info">
+          <h4>Forecast Horizon</h4>
+          <div class="stat-value">14 Days (95% CI)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-truck-moving"></i></div>
+        <div class="stat-info">
+          <h4>Logistics Engine</h4>
+          <div class="stat-value">Multi-Vehicle OSRM</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-bell"></i></div>
+        <div class="stat-info">
+          <h4>Price Alerts</h4>
+          <div class="stat-value">SMS & Web Push</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORKSPACE ROW 1: OPTIMIZER & FORECAST CHART -->
+    <div class="workspace-grid">
+      
+      <!-- LOGISTICS & NET PROFIT OPTIMIZER FORM -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-title">
+            <i class="fas fa-calculator"></i> Net-Profit Optimizer
+          </div>
+          <button id="btn-detect-loc" class="btn-secondary" title="Use current GPS location">
+            <i class="fas fa-location-crosshairs"></i> Detect GPS
+          </button>
+        </div>
+
+        <form id="optimizer-form" onsubmit="handleOptimize(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="opt-crop"><i class="fas fa-wheat-awn"></i> Commodity / Crop</label>
+              <select id="opt-crop" class="form-control">
+                {% for c in crops %}
+                <option value="{{ c }}" {% if c == 'Tomato' %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="opt-volume"><i class="fas fa-weight-hanging"></i> Volume (Quintals)</label>
+              <input type="number" id="opt-volume" class="form-control" value="50" min="1" max="10000" step="1">
+            </div>
+
+            <div class="form-group">
+              <label for="opt-vehicle"><i class="fas fa-truck"></i> Transport Vehicle</label>
+              <select id="opt-vehicle" class="form-control">
+                <option value="tractor_trolley" selected>Tractor Trolley (4.5T / ₹24/km)</option>
+                <option value="auto_pickup">Pickup Truck (1.5T / ₹16/km)</option>
+                <option value="mini_truck">Eicher Mini Truck (8.5T / ₹34/km)</option>
+                <option value="heavy_truck">Heavy Commercial Truck (22T / ₹54/km)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="opt-horizon"><i class="fas fa-calendar-days"></i> Harvest Date</label>
+              <input type="date" id="opt-date" class="form-control">
+            </div>
+
+            <div class="form-group full-width">
+              <label for="opt-location-select"><i class="fas fa-map-marker-alt"></i> Farmer Location / Base District</label>
+              <select id="opt-location-select" class="form-control">
+                <option value="19.9975,73.7898" selected>Nashik / Lasalgaon (Maharashtra)</option>
+                <option value="18.5204,73.8567">Pune (Maharashtra)</option>
+                <option value="28.7041,77.1025">Delhi / NCR</option>
+                <option value="30.9010,75.8573">Ludhiana / Khanna (Punjab)</option>
+                <option value="16.3067,80.4365">Guntur (Andhra Pradesh)</option>
+                <option value="21.1702,72.8311">Surat (Gujarat)</option>
+                <option value="22.7196,75.8577">Indore (Madhya Pradesh)</option>
+                <option value="13.1367,78.1291">Kolar / Bengaluru (Karnataka)</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-top: 14px;">
+            <button type="submit" class="btn-primary" style="flex: 1;">
+              <i class="fas fa-bolt"></i> Compute Net Profit Ranking
+            </button>
+            <button type="button" class="btn-secondary" onclick="openAlertModal()">
+              <i class="fas fa-bell"></i> Set Price Alert
+            </button>
+          </div>
+        </form>
+
+        <!-- Arbitrage Banner -->
+        <div id="arbitrage-box" class="arbitrage-banner" style="display: none;">
+          <div class="arbitrage-icon"><i class="fas fa-arrow-trend-up"></i></div>
+          <div class="arbitrage-text">
+            <h4 id="arbitrage-title">Arbitrage Opportunity Detected</h4>
+            <p id="arbitrage-desc">Analyzing road transport vs market price spread...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7-14 DAY PRICE FORECAST CHART -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-title">
+            <i class="fas fa-chart-area"></i> 14-Day Price Forecast (95% CI)
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-secondary" onclick="updateForecast(7)">7D</button>
+            <button class="btn-secondary" onclick="updateForecast(14)">14D</button>
+          </div>
+        </div>
+
+        <div style="position: relative; height: 260px; width: 100%;">
+          <canvas id="forecastChart"></canvas>
+        </div>
+
+        <div id="forecast-recommendation-box" style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; font-size: 13px;">
+          <strong>💡 AI Recommendation:</strong> <span id="forecast-rec-text">Loading intelligence...</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- WORKSPACE ROW 2: LEAFLET MAP & RANKED MANDI LIST -->
+    <div class="workspace-grid">
+      
+      <!-- INTERACTIVE LEAFLET MANDI HEATMAP -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-title">
+            <i class="fas fa-map-location-dot"></i> Mandi Price & Logistics Map
+          </div>
+          <div class="map-legend">
+            <div class="legend-item"><span class="legend-dot" style="background: #10b981;"></span> High Profit</div>
+            <div class="legend-item"><span class="legend-dot" style="background: #f59e0b;"></span> Moderate</div>
+            <div class="legend-item"><span class="legend-dot" style="background: #ef4444;"></span> Low Realization</div>
+          </div>
+        </div>
+
+        <div id="mandi-map"></div>
+      </div>
+
+      <!-- RANKED NET-PROFIT TABLE -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-title">
+            <i class="fas fa-ranking-star"></i> Ranked Mandis by Net Profit
+          </div>
+          <span id="rankings-crop-tag" style="font-size: 12px; background: rgba(16, 185, 129, 0.15); color: var(--accent-color); padding: 4px 10px; border-radius: 12px; font-weight: 600;">Tomato (50 Q)</span>
+        </div>
+
+        <div style="overflow-x: auto; max-height: 380px; overflow-y: auto;">
+          <table class="mandi-rankings-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Mandi / APMC</th>
+                <th>Modal Price</th>
+                <th>Logistics Cost</th>
+                <th>Net Profit</th>
+              </tr>
+            </thead>
+            <tbody id="mandi-rankings-tbody">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-muted);">Click "Compute Net Profit Ranking" to analyze nearby mandis.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- TARGET PRICE ALERT MODAL -->
+  <div id="alert-modal" class="modal-overlay">
+    <div class="alert-modal-content">
+      <div class="panel-header">
+        <div class="panel-title"><i class="fas fa-bell"></i> Subscribe to Price Alert</div>
+        <button class="btn-secondary" onclick="closeAlertModal()" style="padding: 4px 8px;">&times;</button>
+      </div>
+      <form id="alert-form" onsubmit="handleAlertSubscribe(event)" style="margin-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+        <div class="form-group">
+          <label>Commodity</label>
+          <input type="text" id="alert-crop" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+          <label>Target Price Threshold (₹ / Quintal)</label>
+          <input type="number" id="alert-price" class="form-control" value="3200" required>
+        </div>
+        <div class="form-group">
+          <label>Mobile Number (For SMS / WhatsApp)</label>
+          <input type="tel" id="alert-phone" class="form-control" placeholder="+91 98765 43210" required>
+        </div>
+        <div class="form-group">
+          <label>Notification Channel</label>
+          <select id="alert-channel" class="form-control">
+            <option value="SMS">SMS Message</option>
+            <option value="WHATSAPP">WhatsApp Advisory</option>
+            <option value="PUSH">Browser Web Push</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary" style="margin-top: 8px;">
+          <i class="fas fa-check"></i> Activate Alert Trigger
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 AgriTech Mandi Intelligence Engine. Integrated with Agmarknet, e-NAM, and Leaflet.js.</p>
+  </footer>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    let map = null;
+    let mapMarkers = [];
+    let routePolyline = null;
+    let forecastChart = null;
+
+    // Set today's date
+    document.getElementById('opt-date').value = new Date().toISOString().split('T')[0];
+
+    // Initialize Map
+    function initMap() {
+      if (map) return;
+      map = L.map('mandi-map').setView([20.5937, 78.9629], 5);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 18
+      }).addTo(map);
+    }
+
+    // Initialize Chart
+    function initChart() {
+      const ctx = document.getElementById('forecastChart').getContext('2d');
+      forecastChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: 'Predicted Price (₹/Q)',
+              data: [],
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              borderWidth: 3,
+              tension: 0.35,
+              fill: false
+            },
+            {
+              label: 'Upper 95% Bound',
+              data: [],
+              borderColor: 'rgba(16, 185, 129, 0.3)',
+              borderDash: [4, 4],
+              borderWidth: 1.5,
+              fill: '+1',
+              backgroundColor: 'rgba(16, 185, 129, 0.08)'
+            },
+            {
+              label: 'Lower 95% Bound',
+              data: [],
+              borderColor: 'rgba(16, 185, 129, 0.3)',
+              borderDash: [4, 4],
+              borderWidth: 1.5,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#94a3b8', font: { size: 11 } } },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => ` ₹${ctx.parsed.y} / Quintal`
+              }
+            }
+          },
+          scales: {
+            x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { size: 11 } } },
+            y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8', font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    // Fetch and Update Forecast
+    async function updateForecast(horizon = 14) {
+      const crop = document.getElementById('opt-crop').value;
+      try {
+        const res = await fetch(`/api/forecast?crop=${encodeURIComponent(crop)}&horizon_days=${horizon}`);
+        const data = await res.json();
+        
+        if (data.forecast) {
+          const labels = data.forecast.map(f => f.day_name);
+          const yhat = data.forecast.map(f => f.yhat);
+          const yhat_upper = data.forecast.map(f => f.yhat_upper);
+          const yhat_lower = data.forecast.map(f => f.yhat_lower);
+
+          forecastChart.data.labels = labels;
+          forecastChart.data.datasets[0].data = yhat;
+          forecastChart.data.datasets[1].data = yhat_upper;
+          forecastChart.data.datasets[2].data = yhat_lower;
+          forecastChart.update();
+
+          document.getElementById('forecast-rec-text').innerText = data.recommendation;
+        }
+      } catch (e) {
+        console.warn('Forecast error:', e);
+      }
+    }
+
+    // Handle Net Profit Optimization
+    async function handleOptimize(e) {
+      if (e) e.preventDefault();
+      
+      const crop = document.getElementById('opt-crop').value;
+      const volume = parseFloat(document.getElementById('opt-volume').value) || 50;
+      const vehicle = document.getElementById('opt-vehicle').value;
+      const [lat, lng] = document.getElementById('opt-location-select').value.split(',').map(Number);
+      const harvestDate = document.getElementById('opt-date').value;
+
+      document.getElementById('rankings-crop-tag').innerText = `${crop} (${volume} Q)`;
+
+      try {
+        const res = await fetch('/api/optimize-profit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            crop: crop,
+            volume: volume,
+            vehicle_type: vehicle,
+            lat: lat,
+            lng: lng,
+            harvest_date: harvestDate
+          })
+        });
+        const data = await res.json();
+        renderOptimizationResults(data, lat, lng);
+        updateForecast(14);
+      } catch (err) {
+        console.error('Optimization error:', err);
+      }
+    }
+
+    function renderOptimizationResults(data, farmerLat, farmerLng) {
+      const mandis = data.ranked_mandis || [];
+      const tbody = document.getElementById('mandi-rankings-tbody');
+
+      if (!mandis.length) return;
+
+      tbody.innerHTML = mandis.map((m, idx) => `
+        <tr>
+          <td>
+            <span class="rank-badge ${idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : 'rank-other'}">
+              ${m.rank}
+            </span>
+          </td>
+          <td>
+            <strong>${m.mandi_name}</strong><br>
+            <small style="color: var(--text-muted);">${m.district}, ${m.state} (${m.distance_km} km)</small>
+          </td>
+          <td>₹${m.mandi_price_per_qtl.toLocaleString()}</td>
+          <td>₹${m.costs.total_logistics.toLocaleString()}</td>
+          <td><span class="profit-pill">₹${m.net_profit.toLocaleString()}</span></td>
+        </tr>
+      `).join('');
+
+      // Render Arbitrage Banner
+      const arbBox = document.getElementById('arbitrage-box');
+      if (data.arbitrage_opportunity && data.arbitrage_opportunity.exists) {
+        arbBox.style.display = 'flex';
+        document.getElementById('arbitrage-title').innerText = `Arbitrage Alert: +₹${data.arbitrage_opportunity.extra_net_gain_inr.toLocaleString()} Extra Profit!`;
+        document.getElementById('arbitrage-desc').innerText = data.arbitrage_opportunity.summary;
+      } else {
+        arbBox.style.display = 'none';
+      }
+
+      // Update Map Markers & Polyline
+      mapMarkers.forEach(m => map.removeLayer(m));
+      mapMarkers = [];
+      if (routePolyline) map.removeLayer(routePolyline);
+
+      // Add Farmer Home Pin
+      const farmerMarker = L.marker([farmerLat, farmerLng], {
+        icon: L.divIcon({
+          className: 'custom-farmer-icon',
+          html: '<div style="background:#3b82f6; width:16px; height:16px; border-radius:50%; border:3px solid white; box-shadow:0 0 10px rgba(59,130,246,0.8);"></div>'
+        })
+      }).addTo(map).bindPopup('<strong>📍 Your Farm Origin</strong>');
+      mapMarkers.push(farmerMarker);
+
+      mandis.forEach((m, idx) => {
+        const color = idx === 0 ? '#10b981' : idx <= 3 ? '#f59e0b' : '#ef4444';
+        const circle = L.circleMarker([m.lat, m.lng], {
+          radius: idx === 0 ? 12 : 8,
+          fillColor: color,
+          color: '#ffffff',
+          weight: 2,
+          opacity: 1,
+          fillOpacity: 0.85
+        }).addTo(map);
+
+        circle.bindPopup(`
+          <div style="font-family: inherit; padding: 4px;">
+            <h4 style="margin: 0 0 4px 0; color: #0f172a;">${m.mandi_name} (Rank #${m.rank})</h4>
+            <p style="margin: 0; font-size: 12px; color: #475569;">
+              <strong>Price:</strong> ₹${m.mandi_price_per_qtl} / Q<br>
+              <strong>Distance:</strong> ${m.distance_km} km (${m.transit_time_hours} hrs)<br>
+              <strong>Logistics Cost:</strong> ₹${m.costs.total_logistics}<br>
+              <strong style="color: #059669;">Net Profit: ₹${m.net_profit.toLocaleString()}</strong>
+            </p>
+          </div>
+        `);
+        mapMarkers.push(circle);
+      });
+
+      // Draw Polyline to Top Mandi
+      const topMandi = mandis[0];
+      routePolyline = L.polyline([
+        [farmerLat, farmerLng],
+        [topMandi.lat, topMandi.lng]
+      ], {
+        color: '#10b981',
+        weight: 3,
+        dashArray: '6, 6'
+      }).addTo(map);
+
+      map.fitBounds([
+        [farmerLat, farmerLng],
+        [topMandi.lat, topMandi.lng]
+      ], { padding: [40, 40] });
+    }
+
+    // Modal Handlers
+    function openAlertModal() {
+      document.getElementById('alert-crop').value = document.getElementById('opt-crop').value;
+      document.getElementById('alert-modal').classList.add('active');
+    }
+    function closeAlertModal() {
+      document.getElementById('alert-modal').classList.remove('active');
+    }
+
+    async function handleAlertSubscribe(e) {
+      e.preventDefault();
+      const crop = document.getElementById('alert-crop').value;
+      const price = document.getElementById('alert-price').value;
+      const phone = document.getElementById('alert-phone').value;
+      const channel = document.getElementById('alert-channel').value;
+
+      try {
+        const res = await fetch('/api/alert-subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ crop, target_price: price, phone, channel })
+        });
+        const data = await res.json();
+        alert(data.message);
+        closeAlertModal();
+      } catch (err) {
+        alert('Failed to register alert.');
+      }
+    }
+
+    // Detect GPS
+    document.getElementById('btn-detect-loc')?.addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const lat = pos.coords.latitude;
+          const lng = pos.coords.longitude;
+          const select = document.getElementById('opt-location-select');
+          const opt = document.createElement('option');
+          opt.value = `${lat},${lng}`;
+          opt.text = `📍 My Current GPS (${lat.toFixed(3)}, ${lng.toFixed(3)})`;
+          opt.selected = true;
+          select.prepend(opt);
+          handleOptimize();
+        }, () => {
+          alert('GPS permission denied or unavailable. Using default location.');
+        });
+      }
+    });
+
+    // Boot
+    document.addEventListener('DOMContentLoaded', () => {
+      initMap();
+      initChart();
+      handleOptimize();
+    });
+  </script>
+    <script src="../../translations.js" defer></script>
+  <script src="../../scripts/locales/zh-CN-extra.js" defer></script>
+<script src="../../scripts/i18n.js" defer></script>
+</body>
+
+</html>

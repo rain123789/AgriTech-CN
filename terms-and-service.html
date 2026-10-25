@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>服务条款｜农智云</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description"
+    content="Terms of Service and Privacy Policy for AgriTech - Learn about our platform policies, user rights, and data protection in agricultural technology services." />
+  <meta name="keywords" content="AgriTech terms, service policy, privacy policy, agriculture platform" />
+  <meta name="author" content="AgriTech Team" />
+
+  <!-- Open Graph (for sharing) -->
+  <meta property="og:title" content="Terms and Service - AgriTech" />
+  <meta property="og:description"
+    content="Comprehensive terms of service and privacy policy for AgriTech agricultural platform." />
+  <meta property="og:image" content="images/logo.png" />
+  <meta property="og:type" content="website" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+  <link rel="preconnect" href= />
+  <link rel="preconnect" href= crossorigin />
+  <link
+    href=
+    rel="stylesheet" />
+
+    <!-- Prevent theme flash on page load -->
+    <script>
+      (function () {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+      })();
+    </script>
+    
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="terms-and-service.css" />
+  <link rel="stylesheet" href="footer.css" />
+  <link rel="stylesheet" href="cn-i18n.css" />
+</head>
+
+<body>
+  <!-- Navigation bar -->
+  <nav class="navbar" aria-label="Main Navigation">
+    <div class="navbar-content">
+      <a href="index.html" class="brand">
+        <a href="index.html" class="logo serif">AgriTech</a>
+      </a>
+
+      <div class="navbar-spacer"></div>
+
+      <div class="nav-buttons">
+        <a href="login.html" class="btn btn-secondary login-btn-desktop">Login</a>
+        <a href="register.html" class="btn btn-primary register-btn-desktop">Register</a>
+        <a href="#" class="btn btn-secondary logout-button" style="display: none;">Logout</a>
+        <!-- Animated Sun/Moon Toggle -->
+        <button class="theme-toggle" type="button" id="themeToggle" title="Switch to dark mode"
+          aria-label="Switch to dark mode">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon" aria-hidden="true">
+            <i class="fas fa-sun"></i>
+          </span>
+          <span class="theme-toggle-icon moon-icon" aria-hidden="true">
+            <i class="fas fa-moon"></i>
+          </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header Section -->
+  <header class="page-header">
+    <div class="back-bar-inner">
+      <a href="index.html" class="back-home-btn">
+        <span class="back-icon">
+          <i class="fas fa-arrow-left"></i>
+        </span>
+        <span>返回首页</span>
+      </a>
+    </div>
+
+    <div class="header-content">
+      <h1 class="serif">服务条款</h1>
+      <p class="subtitle">使用农智云本地演示版前，请阅读以下说明</p>
+      <div class="last-updated">
+        <i class="fas fa-calendar-alt"></i>
+        <span>最后更新：2026 年 10 月 25 日</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="terms-content">
+    <div class="container">
+      <aside class="toc-sidebar">
+        <div class="toc-container">
+          <h3 class="serif">目录</h3>
+          <nav class="toc-nav">
+            <a href="#acceptance" class="toc-link">1. 条款接受</a>
+            <a href="#services" class="toc-link">2. 服务范围</a>
+            <a href="#user-accounts" class="toc-link">3. 用户账号</a>
+            <a href="#user-conduct" class="toc-link">4. 使用规范</a>
+            <a href="#intellectual-property" class="toc-link">5. 知识产权</a>
+            <a href="#privacy" class="toc-link">6. 隐私与数据</a>
+            <a href="#ai-disclaimer" class="toc-link">7. AI 与模型边界</a>
+            <a href="#marketplace" class="toc-link">8. 市场演示</a>
+            <a href="#liability" class="toc-link">9. 责任限制</a>
+            <a href="#termination" class="toc-link">10. 终止使用</a>
+            <a href="#changes" class="toc-link">11. 条款变更</a>
+            <a href="#contact" class="toc-link">12. 联系方式</a>
+          </nav>
+        </div>
+      </aside>
+
+      <div class="terms-main">
+        <div class="terms-intro">
+          <p><strong>重要说明：</strong>本项目是开源 AgriTech 的中国大陆本地化演示版本，不是经过金融、医疗或政务许可的生产系统。页面中的价格、商家、订单、模型类别与天气均按界面标识区分演示数据和实际模型输出。</p>
+        </div>
+
+        <section id="acceptance" class="terms-section">
+          <h2 class="serif">1. 条款接受</h2>
+          <p>访问或使用本平台即表示你理解并同意本条款。如不同意，请停止使用。演示环境中的账号、商品和交易记录不得用于真实商业结算。</p>
+        </section>
+
+        <section id="services" class="terms-section">
+          <h2 class="serif">2. 服务范围</h2>
+          <ul>
+            <li><strong>作物种植推荐：</strong>使用项目自带随机森林模型，基于土壤与气候参数输出 22 个作物类别之一。</li>
+            <li><strong>科学施肥建议：</strong>基于作物养分需求与土壤 pH 的规则库，不声称是机器学习诊断。</li>
+            <li><strong>植物病害识别：</strong>使用 PlantVillage 38 类 PyTorch 权重；自检失败时自动禁用。</li>
+            <li><strong>AI 农业助手：</strong>优先使用配置的 DeepSeek 兼容接口，失败时降级为本地规则库并明确提示。</li>
+            <li><strong>农产品交易市场：</strong>本地演示商品、筛选与购物车交互，不提供真实支付或物流。</li>
+            <li><strong>农业气象与政策：</strong>优先使用公开气象数据或官方政策入口；无法获取时明确标注演示数据。</li>
+          </ul>
+        </section>
+
+        <section id="user-accounts" class="terms-section">
+          <h2 class="serif">3. 用户账号</h2>
+          <p>注册需提供有效邮箱、姓名或昵称及符合强度要求的密码。账号保存在本机 SQLite 数据库，密码使用安全哈希。你应妥善保管账号密码，不得冒用他人身份或绕过角色权限。</p>
+        </section>
+
+        <section id="user-conduct" class="terms-section">
+          <h2 class="serif">4. 使用规范</h2>
+          <p>不得上传违法、侵权或恶意内容；不得尝试攻击服务、绕过限流、批量注册或获取他人数据。发现安全问题时请负责任地联系维护者。</p>
+        </section>
+
+        <section id="intellectual-property" class="terms-section">
+          <h2 class="serif">5. 知识产权</h2>
+          <p>原 AgriTech 项目遵循仓库中的 MIT 许可证。第三方图标、字体、数据集和模型保留各自许可。中国本土化修改保留原项目署名与版本追溯信息，不改变原始许可义务。</p>
+        </section>
+
+        <section id="privacy" class="terms-section">
+          <h2 class="serif">6. 隐私与数据</h2>
+          <p>数据处理方式详见<a href="privacy-policy.html">隐私政策</a>。API Key 只保存在服务端环境变量，不下发到浏览器。请勿在演示环境录入真实身份证号、银行卡或敏感商业数据。</p>
+        </section>
+
+        <section id="ai-disclaimer" class="terms-section">
+          <h2 class="serif">7. AI 与模型边界</h2>
+          <p>作物推荐与病害识别模型使用公开农业数据集，尚未用中国田间数据验证。模型输出不构成农艺、植保、金融或法律结论。涉及农药时必须核对在中国登记的作物、防治对象、标签剂量和安全间隔期。政策补贴、贷款与保险信息须以主管部门或经办机构最新公告为准。</p>
+        </section>
+
+        <section id="marketplace" class="terms-section">
+          <h2 class="serif">8. 市场演示</h2>
+          <p>商城中的商品、商家、库存、评分和价格均为本地演示样例，不代表实时行情或真实成交。平台不参与支付、担保、物流和售后，也不对线下交易作信用背书。</p>
+        </section>
+
+        <section id="liability" class="terms-section">
+          <h2 class="serif">9. 责任限制</h2>
+          <p>本演示按“现状”提供。维护者不对因依赖模型输出、演示数据、第三方接口中断或使用者误操作造成的直接或间接损失承担责任。生产使用前应完成独立验证、合规评估和安全加固。</p>
+        </section>
+
+        <section id="termination" class="terms-section">
+          <h2 class="serif">10. 终止使用</h2>
+          <p>如发现滥用、攻击或违法行为，维护者可停止相关服务或删除测试数据。你可随时退出登录并清除浏览器存储。</p>
+        </section>
+
+        <section id="changes" class="terms-section">
+          <h2 class="serif">11. 条款变更</h2>
+          <p>条款会随功能调整更新，更新日期显示在页面顶部。继续使用更新后的版本视为接受修改。</p>
+        </section>
+
+        <section id="contact" class="terms-section">
+          <h2 class="serif">12. 联系方式</h2>
+          <p>演示环境联系邮箱：<strong>service@example.com</strong>（示例地址，不实际收信）。原项目地址：<a href="https://github.com/omroy07/AgriTech" target="_blank" rel="noopener noreferrer">github.com/omroy07/AgriTech</a>。</p>
+        </section>
+
+        <section class="agreement-section">
+          <h2 class="serif">确认</h2>
+          <p>继续使用本平台即表示你已阅读并理解以上条款，以及页面中关于演示数据和模型适用范围的说明。</p>
+          <a href="index.html" class="back-btn">返回首页</a>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="images/logo.png" alt="AgriTech logo" class="footer-logo">
+        <h3 class="serif">AgriTech</h3>
+        <p>Empowering India's Farming Future with innovative technology solutions that connect every stakeholder in the
+          agricultural ecosystem.</p>
+        <div class="social-media">
+          <a href="https://instagram.com" target="_blank" aria-label="Follow us on Instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://github.com/omroy07" target="_blank" aria-label="View our GitHub repositories">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/om-roy-3b809628a/" target="_blank"
+            aria-label="Connect with us on LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4 class="serif">Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="login.html" title="login first">Dashboard</a></li>
+          <li><a href="feed-back.html">Feedback</a></li>
+          <li><a href="chat.html">AI Assistant</a></li>
+          <li><a href="terms-and-service.html">Terms & Service</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4 class="serif">Smart Tools</h4>
+        <ul>
+          <li><a href="/crop">Crop Recommendation</a></li>
+          <li><a href="Crop Yield Prediction/crop_yield_app/templates/index.html">Yield Prediction</a></li>
+          <li><a href="Disease prediction/template/index.html">Disease Detector</a></li>
+          <li><a href="Crop_Planning/templates/cropplan.html">Crop Planner</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 AgriTech - <a href="terms-and-service.html">Terms of Service</a> · <a href="privacy-policy.html">Privacy Policy</a> · <a href="cookie-policy.html">Cookie Policy</a>
+        <div class="footer-section footer-newsletter">
+          <h4>Newsletter</h4>
+          <p class="newsletter-desc">
+            Subscribe to get the latest farming insights, tips, and updates.
+          </p>
+          <form class="newsletter-form" onsubmit="return handleNewsletterSubmit(event, this)">
+            <div class="newsletter-input-group">
+              <input
+                type="email"
+                class="newsletter-input"
+                placeholder="Enter your email to get the latest updates..."
+                required
+                aria-label="Email address for newsletter"
+              />
+              <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
+                <span>Subscribe</span>
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            <div class="newsletter-feedback" style="display:none;" role="status" aria-live="polite"></div>
+            <div class="newsletter-footer-optout">
+              <small>No spam. <a href="javascript:void(0)" onclick="openUnsubscribeModal(event)">Unsubscribe</a> anytime.</small>
+            </div>
+          </form>
+        </div>
+</div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+  // --- Your Existing TOC Logic (Kept exactly as is) ---
+  document.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      }
+    });
+  });
+
+  const sections = document.querySelectorAll('.terms-section');
+  const tocLinks = document.querySelectorAll('.toc-link');
+
+  function updateActiveTOC() {
+    let current = '';
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop;
+      if (window.scrollY >= sectionTop - 100) {
+        current = section.getAttribute('id');
+      }
+    });
+    tocLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  }
+  window.addEventListener('scroll', updateActiveTOC);
+  updateActiveTOC();
+
+  // --- New Cursor Trail Logic ---
+  
+  // 1. Create the container and circles
+  const container = document.createElement('div');
+  container.className = 'circle-container';
+  document.body.appendChild(container);
+
+  const circles = [];
+  const count = 20; // Number of trail segments
+  const coords = { x: 0, y: 0 };
+
+  for (let i = 0; i < count; i++) {
+    const div = document.createElement('div');
+    div.className = 'cursor-circle';
+    container.appendChild(div);
+    circles.push({
+      element: div,
+      x: 0,
+      y: 0,
+      scale: (count - i) / count // Gradually smaller tail
+    });
+  }
+
+  // 2. Track mouse movement
+  window.addEventListener('mousemove', (e) => {
+    coords.x = e.clientX;
+    coords.y = e.clientY;
+  });
+
+  // 3. Handle Click and Hover states
+  window.addEventListener('mousedown', () => {
+    circles[0].element.classList.add('cursor-clicking');
+  });
+  window.addEventListener('mouseup', () => {
+    circles[0].element.classList.remove('cursor-clicking');
+  });
+
+  // Add hover effect for links and buttons
+  const interactables = 'a, button, .toc-link, .btn';
+  document.querySelectorAll(interactables).forEach(el => {
+    el.addEventListener('mouseenter', () => circles[0].element.classList.add('cursor-hovering'));
+    el.addEventListener('mouseleave', () => circles[0].element.classList.remove('cursor-hovering'));
+  });
+
+  // 4. Animation Loop
+  function animateCircles() {
+    let x = coords.x;
+    let y = coords.y;
+
+    circles.forEach((circle, index) => {
+      circle.element.style.left = x + "px";
+      circle.element.style.top = y + "px";
+      
+      // Apply the scale based on position in trail
+      circle.element.style.transform = `translate(-50%, -50%) scale(${circle.scale})`;
+
+      circle.x = x;
+      circle.y = y;
+
+      const nextCircle = circles[index + 1] || circles[0];
+      x += (nextCircle.x - x) * 0.3; // Delay factor
+      y += (nextCircle.y - y) * 0.3;
+    });
+
+    requestAnimationFrame(animateCircles);
+  }
+
+  animateCircles();
+</script>
+  
+  <script src="auth.js"></script>
+  <script src="theme.js"></script>
+  <!-- ===== Universal Back To Top Button (All Pages) ===== -->
+<style>
+  #globalBackToTop {
+    position: fixed;
+    bottom: 90px; /* prevents overlap with chatbot/floating icons */
+    right: 25px;
+    z-index: 9999;
+    display: none;
+    background: #2ecc71;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    transition: opacity 0.3s ease, transform 0.2s ease;
+  }
+
+  #globalBackToTop:hover {
+    transform: scale(1.12);
+    background: #27ae60;
+  }
+
+  @media (max-width: 768px) {
+    #globalBackToTop {
+      bottom: 100px; /* better spacing on mobile */
+      right: 18px;
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+    }
+  }
+</style>
+
+<button id="globalBackToTop" title="Back to Top">↑</button>
+
+<script>
+  (function () {
+    const btn = document.getElementById("globalBackToTop");
+
+    // Show button after scrolling down
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > 300) {
+        btn.style.display = "block";
+      } else {
+        btn.style.display = "none";
+      }
+    });
+
+    // Smooth scroll to top on click
+    btn.addEventListener("click", function () {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  })();
+</script>
+<!-- ===== End Back To Top Button ===== -->
+
+  <script src="footer.js"></script>
+    <script src="translations.js" defer></script>
+  <script src="scripts/locales/zh-CN-extra.js" defer></script>
+<script src="scripts/i18n.js" defer></script>
+</body>
+
+</html>

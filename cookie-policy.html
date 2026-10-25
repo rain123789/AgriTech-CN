@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html data-theme="dark" lang="zh-CN" data-lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cookie 政策｜农智云</title>
+
+<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+
+<script>
+  (function () {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+  })();
+</script>
+
+<style>
+:root {
+  --bg: linear-gradient(135deg, #020617, #042f2e);
+  --card: rgba(15, 23, 42, 0.86);
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --accent: #22c55e;
+  --border: #334155;
+}
+
+[data-theme="light"] {
+  --bg: linear-gradient(135deg, #f8fafc, #ecfdf5);
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --accent: #16a34a;
+  --border: #e2e8f0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+.hero {
+  text-align: center;
+  padding: 72px 20px 28px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.14);
+  color: var(--accent);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: clamp(2.3rem, 4vw, 3.3rem);
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: var(--muted);
+  max-width: 760px;
+  margin: auto;
+  font-size: 1.05rem;
+}
+
+.hero-meta {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.hero-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  color: var(--muted);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  font-size: 0.85rem;
+}
+
+[data-theme="dark"] .hero-meta span {
+  background: rgba(15, 23, 42, 0.48);
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+.container {
+  max-width: 950px;
+  margin: auto;
+  padding: 12px 20px 28px;
+}
+
+.policy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.policy-chip {
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.18);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.policy-chip h3 {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.policy-chip p {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.policy-card {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 24px;
+  border-left: 5px solid var(--accent);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.policy-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+}
+
+.policy-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.policy-card p {
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.policy-list {
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.policy-list li {
+  margin-bottom: 6px;
+}
+
+.policy-note {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: var(--muted);
+}
+
+[data-theme="dark"] .policy-note {
+  background: rgba(15, 23, 42, 0.48);
+}
+
+.back-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.back-btn {
+  display: inline-block;
+  padding: 12px 22px;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.back-btn.secondary {
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  color: var(--text);
+}
+
+.back-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.policy-footer-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.policy-footer-links a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.policy-footer-links a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+  font-size: 0.9rem;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(148, 163, 184, 0.08);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.36);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.56);
+}
+
+@media (max-width: 860px) {
+  .policy-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+  <link rel="stylesheet" href="footer.css" />
+  <link rel="stylesheet" href="cn-i18n.css" />
+</head>
+
+<body>
+<section class="hero">
+  <div class="hero-badge"><i class="fas fa-cookie-bite"></i> Cookie 使用说明</div>
+  <h1><i class="fas fa-cookie-bite"></i> Cookie 政策</h1>
+  <p>
+    This Cookie Policy explains how AgriTech uses cookies and similar storage to keep the platform secure,
+    remember preferences, and improve your experience.
+  </p>
+  <div class="hero-meta">
+    <span><i class="fas fa-calendar-alt"></i> Effective May 2026</span>
+    <span><i class="fas fa-sliders-h"></i> Preference storage</span>
+    <span><i class="fas fa-shield-alt"></i> Essential functionality first</span>
+  </div>
+</section>
+
+<div class="container">
+  <div class="policy-intro"><p>农智云只使用维持登录、记住偏好和保存演示购物车所必需的 Cookie 与浏览器本地存储，不接入广告追踪。</p></div>
+  <div class="policy-card">
+    <h2>1. 必要存储</h2>
+    <ul class="policy-list">
+      <li><strong>登录状态：</strong>保存本地会话信息，以便在页面之间保持登录。</li>
+      <li><strong>语言与主题：</strong>保存简体中文/English 和深浅色偏好。</li>
+      <li><strong>购物车：</strong>保存本地演示商品和数量，刷新页面后仍可查看。</li>
+      <li><strong>识别历史：</strong>仅在你使用病害识别并产生结果后保存在浏览器中。</li>
+    </ul>
+  </div>
+  <div class="policy-card">
+    <h2>2. 如何管理</h2>
+    <p>你可以通过浏览器设置清除本站 Cookie 和本地存储。清除后，登录状态、语言偏好和购物车会重置。演示站点不提供跨站广告 Cookie。</p>
+  </div>
+  <div class="policy-card">
+    <h2>3. 第三方请求</h2>
+    <p>核心页面已本地化字体、图标和图表脚本。若配置在线大模型，服务端会向你指定的模型接口发送问答内容；浏览器端不会直接持有 API Key。</p>
+    <a href="privacy-policy.html" class="back-btn">查看隐私政策</a>
+    <a href="index.html" class="back-btn secondary">返回首页</a>
+  </div>
+</div>
+
+  <footer class="site-footer tech-dark-theme final-match">
+    <div class="footer-top-accent"></div>
+
+    <div class="footer-inner-content">
+      <div class="footer-section footer-brand">
+        <a href="index.html" class="brand-header">
+          <img src="images/logo.png" alt="AgriTech logo" class="brand-logo" />
+          <h3>AgriTech</h3>
+        </a>
+
+        <p class="tagline">
+          Empowering India's Farming Future with innovative technology
+          connecting every stakeholder.
+        </p>
+
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="X (formerly Twitter)"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-group-links">
+        <div class="footer-section footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li>
+              <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+              <a href="login.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li>
+              <a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+              <a href="weather_dashboard.html"><i class="fas fa-cloud-sun"></i> Weather</a>
+            </li>
+            <li>
+              <a href="contact.html"><i class="fas fa-headset"></i> Contact Us</a>
+            </li>
+            <li>
+              <a href="feed-back.html"><i class="fas fa-comment-dots"></i> Feedback</a>
+            </li>
+            <li>
+              <a href="terms-and-service.html"><i class="fas fa-file-contract"></i> Terms & Service</a>
+            </li>
+            <li>
+              <a href="privacy-policy.html"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-section footer-contact">
+          <h4>Contact</h4>
+          <ul>
+            <li>
+              <a href="mailto:service@example.com">
+                <i class="fas fa-envelope"></i> service@example.com
+              </a>
+            </li>
+            <li>
+              <a href="tel:4000000000">
+                <i class="fas fa-phone"></i> 400-000-0000（演示）
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-section footer-newsletter">
+          <h4>Newsletter</h4>
+          <p class="newsletter-desc">
+            Subscribe to get the latest farming insights, tips, and updates.
+          </p>
+          <form class="newsletter-form" onsubmit="return handleNewsletterSubmit(event, this)">
+            <div class="newsletter-input-group">
+              <input
+                type="email"
+                class="newsletter-input"
+                placeholder="Enter your email to get the latest updates..."
+                required
+                aria-label="Email address for newsletter"
+              />
+              <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
+                <span>Subscribe</span>
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            <div class="newsletter-feedback" style="display:none;" role="status" aria-live="polite"></div>
+            <div class="newsletter-footer-optout">
+              <small>No spam. <a href="javascript:void(0)" onclick="openUnsubscribeModal(event)">Unsubscribe</a> anytime.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <span id="current-year">2026</span> AgriTech. All rights reserved. <a href="privacy-policy.html">Privacy Policy</a> · <a href="terms-and-service.html">Terms</a> · <a href="cookie-policy.html">Cookie Policy</a></p>
+    </div>
+
+    <div class="footer-wave-overlay"></div>
+  </footer>
+
+<script src="theme.js"></script>
+
+  <script src="footer.js"></script>
+    <script src="translations.js" defer></script>
+  <script src="scripts/locales/zh-CN-extra.js" defer></script>
+<script src="scripts/i18n.js" defer></script>
+</body>
+</html>

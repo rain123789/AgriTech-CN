@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hyperlocal Precision Irrigation & Climate Risk Early Warning | AgriTech</title>
+  
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+  <link href= rel="stylesheet">
+  
+  <!-- Leaflet.js Map CSS & JS -->
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <script src="vendor/leaflet/leaflet.js"></script>
+  
+  <!-- Chart.js & SweetAlert2 -->
+  <script src="vendor/chartjs/chart.umd.min.js"></script>
+  <script src="vendor/sweetalert2/sweetalert2.all.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #0ea5e9;
+      --secondary: #10b981;
+      --warning: #f59e0b;
+      --accent: #f43f5e;
+      --bg: #020617;
+      --sidebar-bg: #030712;
+      --card: #0f172a;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .dashboard-container {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: var(--sidebar-bg);
+      padding: 2rem;
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .brand-logo i {
+      color: var(--secondary);
+      font-size: 1.6rem;
+    }
+    .sidebar-section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .zone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .zone-pill {
+      padding: 1.1rem;
+      border-radius: 16px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      transition: all 0.25s ease;
+    }
+    .zone-pill:hover {
+      background: rgba(14, 165, 233, 0.08);
+      border-color: rgba(14, 165, 233, 0.3);
+    }
+    .zone-pill.active {
+      background: rgba(14, 165, 233, 0.15);
+      border-color: var(--primary);
+      box-shadow: 0 4px 15px rgba(14, 165, 233, 0.2);
+    }
+    .zone-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .zone-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* SATELLITE SYNC BADGE */
+    .satellite-card {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 14px;
+      padding: 1rem;
+      font-size: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sat-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--secondary);
+      font-weight: 700;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      padding: 2.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .header-title-block h2 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .header-title-block p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 0.75rem 1.4rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+    }
+    .btn-primary:hover {
+      background: #0284c7;
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* CLIMATE RISK TICKER BANNER */
+    .risk-ticker-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .risk-card {
+      padding: 1rem 1.25rem;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid transparent;
+      animation: slideIn 0.3s ease-out;
+    }
+    .risk-frost {
+      background: rgba(14, 165, 233, 0.12);
+      border-color: var(--primary);
+    }
+    .risk-blight {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: var(--warning);
+    }
+    .risk-heat {
+      background: rgba(244, 63, 94, 0.12);
+      border-color: var(--accent);
+    }
+    .risk-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .risk-icon {
+      font-size: 1.5rem;
+    }
+    .risk-info h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .risk-info p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .risk-tag {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* GAUGES GRID */
+    .gauges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+    .gauge-card {
+      background: var(--card);
+      padding: 1.5rem;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      position: relative;
+      overflow: hidden;
+    }
+    .gauge-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .val-display {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 8px 0 2px;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .val-unit {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .gauge-subtext {
+      font-size: 0.78rem;
+      color: var(--secondary);
+      font-weight: 600;
+    }
+
+    /* TWO-COL WORKSPACE */
+    .workspace-row {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 1080px) {
+      .dashboard-container { grid-template-columns: 1fr; }
+      .workspace-row { grid-template-columns: 1fr; }
+    }
+
+    .panel-card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 1.75rem;
+      border: 1px solid var(--card-border);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.8rem;
+    }
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* FIELD MAPPER */
+    #field-polygon-map {
+      height: 340px;
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      z-index: 1;
+    }
+
+    /* 3-DAY IRRIGATION SCHEDULE CARDS */
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .schedule-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+    .schedule-card.irrigate-now {
+      border-left: 4px solid var(--secondary);
+      background: rgba(16, 185, 129, 0.05);
+    }
+    .schedule-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sched-day {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .sched-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .badge-irrigate {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+    }
+    .badge-conserve {
+      background: rgba(148, 163, 184, 0.2);
+      color: var(--text-muted);
+    }
+    .sched-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .sched-metrics strong {
+      color: var(--text);
+    }
+    .sched-action {
+      font-size: 0.82rem;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    /* CHART CONTAINER */
+    .chart-container {
+      position: relative;
+      height: 260px;
+      width: 100%;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+  <link rel="stylesheet" href="cn-i18n.css" />
+</head>
+
+<body>
+
+  <div class="dashboard-container">
+    
+    <!-- SIDEBAR: FIELD ZONES & SATELLITE TELEMETRY -->
+    <aside class="sidebar">
+      <div class="brand-logo">
+        <i class="fas fa-droplet"></i>
+        <span>HydroGuardian AI</span>
+      </div>
+
+      <div>
+        <div class="sidebar-section-title">Farm Polygon Zones</div>
+        <div id="polygon-zone-list" class="zone-list">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <div class="satellite-card">
+        <div class="sat-header">
+          <i class="fas fa-satellite"></i> Copernicus Sentinel-2
+        </div>
+        <p style="color: var(--text-muted);">10m SAR & Optical Soil Moisture Layer active. Overpass refreshed 3h ago.</p>
+        <button class="btn btn-secondary" onclick="syncSatelliteTelemetry()" style="width: 100%; padding: 0.5rem; font-size: 0.75rem; margin-top: 4px;">
+          <i class="fas fa-rotate"></i> Sync Sentinel-2 Grid
+        </button>
+      </div>
+
+      <div>
+        <button class="btn btn-secondary" onclick="openProvisionModal()" style="width: 100%;">
+          <i class="fas fa-plus"></i> Add IoT Sensor Node
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="main-content">
+      
+      <!-- TOP HEADER -->
+      <div class="top-header">
+        <div class="header-title-block">
+          <h2 id="active-field-title">North Block - Tomato Greenhouse</h2>
+          <p>FAO-56 Penman-Monteith Evapotranspiration, Root-Zone Moisture & Microclimate Alerts</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="recalculateIrrigation()">
+            <i class="fas fa-calculator"></i> Run Water Balance
+          </button>
+        </div>
+      </div>
+
+      <!-- MICROCLIMATE RISK EARLY WARNING TICKER -->
+      <div id="risk-ticker-container" class="risk-ticker-container">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- ROOT ZONE MOISTURE GAUGES & FAO-56 TELEMETRY -->
+      <div class="gauges-grid">
+        <div class="gauge-card">
+          <div class="gauge-top">
+            <span>Root-Zone (0-30cm)</span>
+            <i class="fas fa-droplet" style="color: var(--primary);"></i>
+          </div>
+          <div class="val-display">
+            <span id="gauge-moist-top">22.4</span>
+            <span class="val-unit">% VWC</span>
+          </div>
+          <div id="gauge-moist-sub" class="gauge-subtext">Optimal Moisture Band</div>
+        </div>
+
+        <div class="gauge-card">
+          <div class="gauge-top">
+            <span>Plant Available Water</span>
+            <i class="fas fa-seedling" style="color: var(--secondary);"></i>
+          </div>
+          <div class="val-display">
+            <span id="gauge-paw">68.5</span>
+            <span class="val-unit">% PAW</span>
+          </div>
+          <div class="gauge-subtext" style="color: #38bdf8;">Field Capacity: 32% | PWP: 18%</div>
+        </div>
+
+        <div class="gauge-card">
+          <div class="gauge-top">
+            <span>FAO-56 ET₀ (Reference)</span>
+            <i class="fas fa-sun" style="color: var(--warning);"></i>
+          </div>
+          <div class="val-display">
+            <span id="gauge-et0">4.8</span>
+            <span class="val-unit">mm / day</span>
+          </div>
+          <div class="gauge-subtext" id="gauge-etc-sub">Crop ETc: 5.52 mm (Kc 1.15)</div>
+        </div>
+
+        <div class="gauge-card">
+          <div class="gauge-top">
+            <span>Soil Moisture Deficit</span>
+            <i class="fas fa-glass-water" style="color: var(--accent);"></i>
+          </div>
+          <div class="val-display">
+            <span id="gauge-smd">14.2</span>
+            <span class="val-unit">mm</span>
+          </div>
+          <div class="gauge-subtext" id="gauge-liters-sub">Req: ~57,400 L / acre</div>
+        </div>
+      </div>
+
+      <!-- WORKSPACE ROW 1: FIELD POLYGON MAPPER & 3-DAY SCHEDULE -->
+      <div class="workspace-row">
+        
+        <!-- LEAFLET INTERACTIVE POLYGON MAPPER -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i class="fas fa-draw-polygon" style="color: var(--primary);"></i>
+              <span>Interactive Field Polygon Mapper</span>
+            </div>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Root-Zone Moisture Heatmap</span>
+          </div>
+          <div id="field-polygon-map"></div>
+        </div>
+
+        <!-- 3-DAY OPTIMAL IRRIGATION WINDOWS -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i class="fas fa-calendar-check" style="color: var(--secondary);"></i>
+              <span>3-Day Optimal Irrigation Windows</span>
+            </div>
+            <span style="font-size: 0.8rem; color: #34d399; font-weight: 700;">Drip Efficiency: 90%</span>
+          </div>
+          <div id="schedule-list-container" class="schedule-list">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- WORKSPACE ROW 2: HISTORICAL MOISTURE TRENDS & VPD -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div class="panel-title">
+            <i class="fas fa-chart-line" style="color: var(--primary);"></i>
+            <span>Real-time Soil Moisture & Atmospheric Vapor Pressure Deficit (VPD)</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">
+            VPD Status: <span id="vpd-status-badge" style="color: var(--secondary); font-weight: 700;">VEGETATIVE (1.18 kPa)</span>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="telemetryCombinedChart"></canvas>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- SCRIPT ENGINE -->
+  <script src="climate_dashboard.js"></script>
+    <script src="translations.js" defer></script>
+  <script src="scripts/locales/zh-CN-extra.js" defer></script>
+<script src="scripts/i18n.js" defer></script>
+</body>
+
+</html>

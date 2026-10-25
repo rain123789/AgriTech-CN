@@ -1,0 +1,34 @@
+.git
+.gitignore
+.venv
+venv
+env
+node_modules
+__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+.mypy_cache
+artifacts
+dist
+browser-profile*
+.DS_Store
+Thumbs.db
+instance
+uploads
+coverage
+htmlcov
+
+# 上游体量较大的实验目录：主程序不引用，保留在仓库中但不进入部署包
+Disease prediction
+tomato disease detection
+disease_prediction
+Soil Classifier CNN
+Soil Classification Model
+
+# 病害模型权重与测试图：默认已禁用（ENABLE_PLANT_MODEL=0），不随包上传
+Plant Disease Detection/test
+Plant Disease Detection/*.pth
+Plant Disease Detection/*.ipynb
+.env
+.env.local

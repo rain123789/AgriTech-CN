@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html data-theme="dark" lang="zh-CN" data-lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>隐私政策｜农智云</title>
+
+<link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+
+<!-- Prevent theme flash on page load -->
+<script>
+  (function () {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+  })();
+</script>
+
+<style>
+:root {
+  --bg: linear-gradient(135deg, #020617, #022c22);
+  --card: rgba(15, 23, 42, 0.85);
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --accent: #22c55e;
+  --border: #334155;
+
+  --bg-secondary: #e0e4dd;
+  --border-color: #b2cfba;
+  --text-muted: #94a3b8;
+}
+
+[data-theme="dark"] {
+  --bg-secondary: #0d1a34;
+  --border-color: #475569;
+  --text-muted: #94a3b8;
+}
+
+[data-theme="light"] {
+  --bg: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --accent: #16a34a;
+  --border: #e2e8f0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* HERO HEADER */
+.hero {
+  text-align: center;
+  padding: 72px 20px 28px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.14);
+  color: var(--accent);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: clamp(2.3rem, 4vw, 3.3rem);
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: var(--muted);
+  max-width: 700px;
+  margin: auto;
+  font-size: 1.05rem;
+}
+
+.hero-meta {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.hero-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  color: var(--muted);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  font-size: 0.85rem;
+}
+
+[data-theme="dark"] .hero-meta span {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+/* Animated Theme Toggle  */
+        .theme-toggle {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color, #d1d5db);
+        cursor: pointer;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        border-radius: 50%;
+        color: var(--text-primary, #111827);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+        flex-shrink: 0;
+        align-self: center;
+        box-shadow: none !important;
+        }
+
+        [data-theme="dark"] .theme-toggle {
+        background: #1e293b !important;
+        border: 1px solid #475569 !important;
+        color: #f1f5f9 !important;
+        }
+
+        .theme-toggle:hover {
+        background-color: var(--bg-secondary, #f3f4f6);
+        border-color: var(--primary-green, #16a34a) !important;
+        }
+
+        .theme-icon {
+        width: 22px;
+        height: 22px;
+        overflow: visible;
+        transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+        display: block;
+        }
+
+        .sun-core {
+        transform-origin: center;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sun-rays {
+        transform-origin: center;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+        }
+
+        .moon-bite {
+        transform-origin: center;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Light mode → Sun */
+        [data-theme="light"] .theme-icon {
+        transform: rotate(0deg);
+        }
+
+        [data-theme="light"] .sun-core {
+        transform: scale(1);
+        }
+
+        [data-theme="light"] .sun-rays {
+        transform: scale(1.1);
+        opacity: 1;
+        }
+
+        [data-theme="light"] .moon-bite {
+        transform: translate(20px, -20px);
+        }
+
+        /* Dark mode → Moon */
+        [data-theme="dark"] .theme-icon {
+        transform: rotate(-10deg);
+        }
+
+        [data-theme="dark"] .sun-core {
+        transform: scale(1.4);
+        }
+
+        [data-theme="dark"] .sun-rays {
+        transform: scale(0.1);
+        opacity: 0;
+        }
+
+        [data-theme="dark"] .moon-bite {
+        transform: translate(5px, -1.5px) scale(0.6);
+        }
+
+/* MAIN CONTAINER */
+.container {
+  max-width: 950px;
+  margin: auto;
+  padding: 12px 20px 28px;
+}
+
+.policy-intro {
+  margin-bottom: 22px;
+}
+
+.policy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.policy-chip {
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.18);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.policy-chip h3 {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.policy-chip p {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-bottom: 0;
+}
+
+/* POLICY CARDS (MAJOR REDESIGN) */
+.policy-card {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 24px;
+  border-left: 5px solid var(--accent);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  backdrop-filter: blur(14px);
+  transition: 0.3s ease;
+}
+
+.policy-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+}
+
+/* SECTION HEADINGS WITH ICONS */
+.policy-card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.policy-card p {
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.policy-card strong {
+  color: var(--text);
+}
+
+.policy-list {
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.policy-list li {
+  margin-bottom: 6px;
+}
+
+.policy-note {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: var(--muted);
+}
+
+[data-theme="dark"] .policy-note {
+  background: rgba(15, 23, 42, 0.48);
+}
+
+ul {
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+/* CTA BUTTON */
+.back-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 22px;
+  background: var(--accent);
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.back-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.back-btn.secondary {
+  margin-left: 10px;
+}
+
+.policy-footer-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.policy-footer-links a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.policy-footer-links a:hover {
+  text-decoration: underline;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 25px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+  font-size: 0.9rem;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+</style>
+  <link rel="stylesheet" href="footer.css" />
+  <link rel="stylesheet" href="cn-i18n.css" />
+</head>
+
+<body>
+
+<!-- Animated Sun/Moon Toggle -->
+<button style="position: fixed; top: 1rem; right: 1rem; z-index: 999;"
+class="theme-toggle" type="button" id="themeToggle" title="Switch to dark mode"
+  aria-label="Switch to dark mode">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon" aria-hidden="true">
+            <i class="fas fa-sun"></i>
+          </span>
+          <span class="theme-toggle-icon moon-icon" aria-hidden="true">
+            <i class="fas fa-moon"></i>
+          </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
+
+<!-- HERO SECTION (NEW) -->
+<section class="hero">
+  <div class="hero-badge"><i class="fas fa-shield-heart"></i> 隐私保护概览</div>
+  <h1><i class="fas fa-shield-alt"></i> 隐私政策</h1>
+  <p>本政策说明农智云本地演示版如何收集、使用、存储和保护账号、商城交互及 AI 辅助功能中的数据。</p>
+  <div class="hero-meta">
+    <span><i class="fas fa-calendar-alt"></i> 更新日期：2026 年 10 月 25 日</span>
+    <span><i class="fas fa-cookie-bite"></i> Cookie 与本地存储</span>
+    <span><i class="fas fa-lock"></i> 不出售个人数据</span>
+  </div>
+</section>
+
+<div class="container">
+
+  <div class="policy-intro">
+    <p>本项目是 AgriTech 的中国大陆本地化演示版本。核心页面和账号数据默认保存在本机 SQLite 数据库；不会因为演示而将个人数据出售给第三方。</p>
+  </div>
+
+  <div class="policy-grid">
+    <div class="policy-chip"><h3>最小化收集</h3><p>仅处理注册、登录和功能演示所必需的信息。</p></div>
+    <div class="policy-chip"><h3>用户可控</h3><p>你可以清除浏览器存储、退出登录或联系维护者删除本地账号。</p></div>
+    <div class="policy-chip"><h3>边界透明</h3><p>AI 在线/离线状态、演示数据和模型限制均在界面明确标注。</p></div>
+  </div>
+
+  <div class="policy-card">
+    <h2><i class="fas fa-database"></i> 1. 我们处理的信息</h2>
+    <ul class="policy-list">
+      <li>账号信息：姓名或昵称、邮箱、角色、所在地区和加密后的密码摘要。</li>
+      <li>功能输入：作物参数、施肥条件、聊天文字以及你主动上传的作物图片。</li>
+      <li>本地偏好：语言、主题、购物车和识别历史等浏览器本地存储。</li>
+      <li>运行日志：本地服务为排查错误可能记录请求路径和异常信息，不包含明文密码。</li>
+    </ul>
+  </div>
+
+  <div class="policy-card">
+    <h2><i class="fas fa-chart-line"></i> 2. 使用目的</h2>
+    <ul class="policy-list">
+      <li>验证账号身份、维持登录状态并应用角色权限。</li>
+      <li>执行作物推荐、施肥建议、病害初步筛查和 AI 农业问答。</li>
+      <li>保存购物车、语言与主题偏好，改善页面体验。</li>
+      <li>定位程序错误、检查接口状态和维护演示稳定性。</li>
+    </ul>
+  </div>
+
+  <div class="policy-card">
+    <h2><i class="fas fa-robot"></i> 3. AI 与第三方服务</h2>
+    <p>配置 DeepSeek API Key 后，文字问题和必要的上下文会发送到你配置的模型服务用于生成回答。API Key 仅保存在服务端环境变量中，不会写入前端。</p>
+    <ul class="policy-list">
+      <li>未配置 API Key 或请求失败时，系统使用本地规则库并明确标注“离线规则回答”。</li>
+      <li>图片识别由本机模型执行；模型不可用时会禁用识别，不会把图片描述冒充为诊断结果。</li>
+      <li>演示页面不接入支付、征信、短信或真实物流服务。</li>
+    </ul>
+  </div>
+
+  <div class="policy-card">
+    <h2><i class="fas fa-cookie-bite"></i> 4. Cookie 与本地存储</h2>
+    <p>站点使用必要的本地存储保存语言、主题、登录会话、购物车和识别历史。你也可以在浏览器中清除这些数据，但登录状态和购物车会随之丢失。</p>
+    <div class="policy-note">本演示不接入第三方广告或行为追踪脚本。</div>
+  </div>
+
+  <div class="policy-card">
+    <h2><i class="fas fa-shield-alt"></i> 5. 安全与保存期限</h2>
+    <p>密码使用 Werkzeug 安全哈希保存，接口按角色校验令牌。本地演示数据默认保留在本机，直到你删除数据库或清除相应记录。任何系统都不能保证绝对安全，请勿在演示环境录入真实敏感信息。</p>
+  </div>
+
+  <div class="policy-card">
+    <h2><i class="fas fa-user-check"></i> 6. 你的权利</h2>
+    <ul class="policy-list">
+      <li>查看和更正账号资料，或退出当前登录。</li>
+      <li>清除浏览器本地存储、购物车记录和识别历史。</li>
+      <li>联系维护者删除本地 SQLite 中的测试账号和相关数据。</li>
+    </ul>
+  </div>
+
+  <div class="policy-card">
+    <h2><i class="fas fa-sync-alt"></i> 7. 政策更新与联系</h2>
+    <p>本政策可能随着功能调整更新，更新日期会显示在本页。演示环境联系邮箱：<strong>service@example.com</strong>（示例地址，不会实际收信）。</p>
+    <a href="terms-and-service.html" class="back-btn">查看服务条款</a>
+    <a href="index.html" class="back-btn secondary">返回首页</a>
+    <div class="policy-footer-links">
+      <a href="terms-and-service.html">服务条款</a>
+      <a href="cookie-policy.html">Cookie 政策</a>
+      <a href="index.html">首页</a>
+    </div>
+  </div>
+
+</div>
+
+  <footer class="site-footer tech-dark-theme final-match">
+    <div class="footer-top-accent"></div>
+
+    <div class="footer-inner-content">
+      <div class="footer-section footer-brand">
+        <a href="index.html" class="brand-header">
+          <img src="images/logo.png" alt="AgriTech logo" class="brand-logo" />
+          <h3>AgriTech</h3>
+        </a>
+
+        <p class="tagline">
+          Empowering India's Farming Future with innovative technology
+          connecting every stakeholder.
+        </p>
+
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="X (formerly Twitter)"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-group-links">
+        <div class="footer-section footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li>
+              <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+              <a href="login.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li>
+              <a href="marketplace.html"><i class="fas fa-store"></i> Marketplace</a>
+            </li>
+            <li>
+              <a href="weather_dashboard.html"><i class="fas fa-cloud-sun"></i> Weather</a>
+            </li>
+            <li>
+              <a href="contact.html"><i class="fas fa-headset"></i> Contact Us</a>
+            </li>
+            <li>
+              <a href="feed-back.html"><i class="fas fa-comment-dots"></i> Feedback</a>
+            </li>
+            <li>
+              <a href="terms-and-service.html"><i class="fas fa-file-contract"></i> Terms & Service</a>
+            </li>
+            <li>
+              <a href="privacy-policy.html"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-section footer-contact">
+          <h4>Contact</h4>
+          <ul>
+            <li>
+              <a href="mailto:service@example.com">
+                <i class="fas fa-envelope"></i> service@example.com
+              </a>
+            </li>
+            <li>
+              <a href="tel:4000000000">
+                <i class="fas fa-phone"></i> 400-000-0000（演示）
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-section footer-newsletter">
+          <h4>Newsletter</h4>
+          <p class="newsletter-desc">
+            Subscribe to get the latest farming insights, tips, and updates.
+          </p>
+          <form class="newsletter-form" onsubmit="return handleNewsletterSubmit(event, this)">
+            <div class="newsletter-input-group">
+              <input
+                type="email"
+                class="newsletter-input"
+                placeholder="Enter your email to get the latest updates..."
+                required
+                aria-label="Email address for newsletter"
+              />
+              <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
+                <span>Subscribe</span>
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            <div class="newsletter-feedback" style="display:none;" role="status" aria-live="polite"></div>
+            <div class="newsletter-footer-optout">
+              <small>No spam. <a href="javascript:void(0)" onclick="openUnsubscribeModal(event)">Unsubscribe</a> anytime.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <span id="current-year">2026</span> AgriTech. All rights reserved. <a href="privacy-policy.html">Privacy Policy</a> · <a href="terms-and-service.html">Terms</a> · <a href="cookie-policy.html">Cookie Policy</a></p>
+    </div>
+
+    <div class="footer-wave-overlay"></div>
+  </footer>
+
+<script src="theme.js"></script>
+
+  <script src="footer.js"></script>
+    <script src="translations.js" defer></script>
+  <script src="scripts/locales/zh-CN-extra.js" defer></script>
+<script src="scripts/i18n.js" defer></script>
+</body>
+</html>

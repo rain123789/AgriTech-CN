@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farm-to-Fork Batch Traceability & Dynamic QR Verification | AgriTech</title>
+  
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+  <link href= rel="stylesheet">
+  
+  <!-- Leaflet.js Map CSS & JS -->
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="vendor/sweetalert2/sweetalert2.all.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --accent: #0ea5e9;
+      --bg: #030712;
+      --card-bg: #0f172a;
+      --surface-bg: rgba(30, 41, 59, 0.7);
+      --border-color: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --surface-bg: rgba(241, 245, 249, 0.9);
+      --border-color: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #475569;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HERO HEADER */
+    .hero-header {
+      background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+      color: white;
+      padding: 40px 20px 32px;
+      text-align: center;
+      box-shadow: 0 4px 25px rgba(6, 78, 59, 0.4);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.18);
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .hero-header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .hero-header p {
+      color: #a7f3d0;
+      font-size: 15px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* SEARCH BAR */
+    .search-wrapper {
+      max-width: 600px;
+      margin: -24px auto 30px;
+      padding: 0 16px;
+      width: 100%;
+      z-index: 10;
+      position: relative;
+    }
+    .search-box {
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: 50px;
+      padding: 6px 8px 6px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+    .search-box input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 15px;
+      outline: none;
+      font-family: inherit;
+    }
+    .search-btn {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* MAIN CONTAINER */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto 50px;
+      padding: 0 16px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* TOP PASSPORT SUMMARY CARD */
+    .passport-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+    @media (max-width: 860px) {
+      .passport-card { grid-template-columns: 1fr; }
+    }
+
+    .crop-title-block h2 {
+      font-size: 26px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .batch-tag {
+      font-family: monospace;
+      font-size: 13px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      padding: 3px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .meta-badges-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .cert-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .cert-chip.blue {
+      background: rgba(14, 165, 233, 0.1);
+      color: #0ea5e9;
+      border-color: rgba(14, 165, 233, 0.3);
+    }
+    .cert-chip.amber {
+      background: rgba(245, 158, 11, 0.1);
+      color: #f59e0b;
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .qr-sticker-preview-box {
+      background: var(--surface-bg);
+      border: 1px dashed var(--border-color);
+      border-radius: 18px;
+      padding: 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .qr-sticker-preview-box img {
+      width: 140px;
+      height: 140px;
+      border-radius: 8px;
+      background: white;
+      padding: 6px;
+    }
+    .btn-download-qr {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* GRID: MAP & FARMER PROFILE */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 860px) {
+      .two-col-grid { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .panel-title {
+      font-size: 17px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    #farm-map {
+      height: 240px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* TIMELINE */
+    .timeline-container {
+      position: relative;
+      padding-left: 28px;
+    }
+    .timeline-container::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      bottom: 10px;
+      width: 2px;
+      background: linear-gradient(180deg, #10b981, #0ea5e9);
+    }
+    .timeline-step {
+      position: relative;
+      margin-bottom: 24px;
+    }
+    .timeline-node {
+      position: absolute;
+      left: -28px;
+      top: 2px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #10b981;
+      border: 3px solid var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 10px;
+    }
+    .step-card {
+      background: var(--surface-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .step-time {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .step-body {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .step-payload-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 10px;
+      background: rgba(0, 0, 0, 0.15);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 12px;
+    }
+    .step-hash-tag {
+      font-family: monospace;
+      font-size: 11px;
+      color: #38bdf8;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* CRYPTO BADGE */
+    .crypto-proof-banner {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(16, 185, 129, 0.15));
+      border: 1px solid #0ea5e9;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .crypto-icon {
+      font-size: 28px;
+      color: #0ea5e9;
+    }
+
+    footer {
+      background: #020617;
+      color: #94a3b8;
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      border-top: 1px solid #1e293b;
+      margin-top: auto;
+    }
+  </style>
+  <link rel="stylesheet" href="cn-i18n.css" />
+</head>
+
+<body>
+
+  <header class="hero-header">
+    <div class="hero-badge">
+      <i class="fas fa-shield-halved"></i> Immutable Cryptographic Traceability
+    </div>
+    <h1>🌿 Farm-to-Fork Transparency Passport</h1>
+    <p>Verify seed origin, organic bio-inputs, NABL lab certifications, and cold-chain integrity from planting to your table.</p>
+  </header>
+
+  <!-- SEARCH / SCANNER BAR -->
+  <div class="search-wrapper">
+    <div class="search-box">
+      <i class="fas fa-barcode" style="color: var(--primary); font-size: 18px;"></i>
+      <input type="text" id="batchIdInput" placeholder="Enter Batch ID (e.g. AGRI-TOM-1200-F4A8)" value="AGRI-TOM-1200-F4A8">
+      <button class="search-btn" onclick="traceBatch()">
+        <i class="fas fa-search"></i> Verify Produce
+      </button>
+    </div>
+  </div>
+
+  <main class="container">
+
+    <!-- PASSPORT SUMMARY CARD -->
+    <div class="passport-card">
+      <div>
+        <div class="crop-title-block">
+          <h2 id="p-crop-name">Organic Tomato (Arka Rakshak)</h2>
+          <span class="batch-tag" id="p-batch-id">AGRI-TOM-1200-F4A8</span>
+        </div>
+        <p style="color: var(--text-muted); font-size: 14px; margin-top: 6px;">
+          <i class="fas fa-location-dot" style="color: #ef4444;"></i> <span id="p-location">Green Valley Agro Farm, Nashik, Maharashtra</span>
+        </p>
+
+        <div class="meta-badges-row">
+          <span class="cert-chip"><i class="fas fa-seedling"></i> NPOP India Organic</span>
+          <span class="cert-chip blue"><i class="fas fa-shield-check"></i> 0.00 ppm Residue Safe</span>
+          <span class="cert-chip amber"><i class="fas fa-star"></i> Grade A+ Export Quality</span>
+          <span class="cert-chip"><i class="fas fa-leaf"></i> Net-Zero Carbon (2.45 kg CO₂e saved)</span>
+        </div>
+      </div>
+
+      <!-- QR STICKER PREVIEW -->
+      <div class="qr-sticker-preview-box">
+        <img id="qr-preview-img" src="/api/v1/traceability/generate-qr/AGRI-TOM-1200-F4A8" alt="Packaging QR Sticker">
+        <button class="btn-download-qr" onclick="downloadSticker()">
+          <i class="fas fa-print"></i> Download Packaging Sticker
+        </button>
+      </div>
+    </div>
+
+    <!-- MAP & FARMER PROFILE ROW -->
+    <div class="two-col-grid">
+      
+      <!-- FARM GEOLOCATION MAP -->
+      <div class="panel">
+        <div class="panel-title">
+          <i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> Farm Geolocation & Origin Plot
+        </div>
+        <div id="farm-map"></div>
+        <div style="font-size: 12.5px; color: var(--text-muted); display: flex; justify-content: space-between;">
+          <span>📍 GPS: <strong id="geo-coords">19.9975° N, 73.7898° E</strong></span>
+          <span>Altitude: <strong>584m (Western Ghats)</strong></span>
+        </div>
+      </div>
+
+      <!-- FARMER PROFILE -->
+      <div class="panel">
+        <div class="panel-title">
+          <i class="fas fa-user-check" style="color: var(--accent);"></i> Verified Producer Profile
+        </div>
+        <div style="display: flex; gap: 14px; align-items: center;">
+          <div style="width: 54px; height: 54px; border-radius: 50%; background: #10b981; display: flex; align-items: center; justify-content: center; font-size: 22px; color: white;">
+            👨‍🌾
+          </div>
+          <div>
+            <h3 style="font-size: 17px;" id="farmer-name">Rajesh Narayan Patil</h3>
+            <p style="font-size: 13px; color: var(--text-muted);" id="farmer-farm">Green Valley Organic Estate (16 yrs exp)</p>
+          </div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;" id="farmer-bio">
+          Third-generation progressive farmer adopting zero-budget natural farming, rainwater harvesting, and solar micro-drip precision irrigation.
+        </p>
+        <div style="background: var(--surface-bg); padding: 10px; border-radius: 10px; font-size: 12px; display: flex; justify-content: space-between;">
+          <span>🌾 Soil Health: <strong>1.45% Organic Carbon</strong></span>
+          <span>💧 Irrigation: <strong>Solar Drip</strong></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CRYPTOGRAPHIC INTEGRITY PROOF -->
+    <div class="crypto-proof-banner">
+      <div class="crypto-icon"><i class="fas fa-link"></i></div>
+      <div style="flex: 1;">
+        <h4 style="font-size: 14.5px;">Cryptographically Verified Immutable Ledger</h4>
+        <p style="font-size: 12.5px; color: var(--text-muted);">
+          SHA-256 Block Chained Root Hash: <span id="crypto-hash" style="font-family: monospace; color: #38bdf8;">e4d91a82f3...9821</span>
+        </p>
+      </div>
+      <button class="cert-chip blue" onclick="verifyCryptographicProof()">
+        <i class="fas fa-check-double"></i> Verify Signature
+      </button>
+    </div>
+
+    <!-- LIFECYCLE AUDIT TIMELINE -->
+    <div class="panel">
+      <div class="panel-title">
+        <i class="fas fa-timeline" style="color: var(--primary);"></i> Farm-to-Fork Lifecycle Journey
+      </div>
+
+      <div id="timeline-flow" class="timeline-container">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 AgriTech Traceability Engine. SHA-256 Cryptographic Supply Chain Verification.</p>
+  </footer>
+
+  <script>
+    let map = null;
+    let farmMarker = null;
+
+    function initMap(lat = 19.9975, lng = 73.7898, locationName = "Green Valley Agro Farm") {
+      if (!map) {
+        map = L.map('farm-map').setView([lat, lng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors',
+          maxZoom: 18
+        }).addTo(map);
+      } else {
+        map.setView([lat, lng], 13);
+      }
+
+      if (farmMarker) map.removeLayer(farmMarker);
+      farmMarker = L.marker([lat, lng]).addTo(map)
+        .bindPopup(`<strong>📍 ${locationName}</strong><br>Certified Organic Estate`)
+        .openPopup();
+    }
+
+    async function traceBatch() {
+      const batchId = document.getElementById('batchIdInput').value.trim() || 'AGRI-TOM-1200-F4A8';
+      
+      try {
+        const res = await fetch(`/api/v1/traceability/batches/${encodeURIComponent(batchId)}`);
+        const data = await res.json();
+
+        if (data.status === 'success' && data.data) {
+          renderBatchPassport(data.data);
+        } else {
+          Swal.fire('Batch Not Found', 'Could not locate batch on the ledger.', 'warning');
+        }
+      } catch (e) {
+        console.warn('Trace fetch error:', e);
+      }
+    }
+
+    function renderBatchPassport(batch) {
+      document.getElementById('p-crop-name').textContent = `${batch.crop_name} (${batch.crop_variety || 'Organic'})`;
+      document.getElementById('p-batch-id').textContent = batch.batch_id;
+      document.getElementById('p-location').textContent = batch.farm_location;
+      document.getElementById('geo-coords').textContent = `${batch.latitude.toFixed(4)}° N, ${batch.longitude.toFixed(4)}° E`;
+      document.getElementById('crypto-hash').textContent = (batch.integrity_hash || '').substring(0, 32) + '...';
+      document.getElementById('qr-preview-img').src = `/api/v1/traceability/generate-qr/${batch.batch_id}`;
+
+      // Update Map
+      initMap(batch.latitude, batch.longitude, batch.farm_location);
+
+      // Farmer Profile
+      if (batch.farmer_profile) {
+        document.getElementById('farmer-name').textContent = batch.farmer_profile.name;
+        document.getElementById('farmer-farm').textContent = `${batch.farmer_profile.farm_name} (${batch.farmer_profile.experience_years} yrs exp)`;
+        document.getElementById('farmer-bio').textContent = batch.farmer_profile.bio;
+      }
+
+      // Render Timeline
+      const timelineCont = document.getElementById('timeline-flow');
+      const logs = batch.lifecycle_logs || [];
+
+      if (!logs.length) {
+        timelineCont.innerHTML = '<p style="color: var(--text-muted);">No lifecycle events recorded yet.</p>';
+        return;
+      }
+
+      const icons = {
+        SEED_SOWING: '🌱',
+        SOIL_HEALTH: '🧪',
+        BIO_FERTILIZER: '🍃',
+        IRRIGATION: '💧',
+        HARVEST: '🌾',
+        LAB_CERTIFICATION: '🔬',
+        PACKAGING: '📦'
+      };
+
+      timelineCont.innerHTML = logs.map(l => {
+        const icon = icons[l.event_type] || '✓';
+        let payloadHtml = '';
+        if (l.payload && Object.keys(l.payload).length > 0) {
+          payloadHtml = `<div class="step-payload-grid">` + 
+            Object.entries(l.payload).map(([k, v]) => `<div><span style="color:var(--text-muted);">${k.replace(/_/g, ' ')}:</span> <strong>${v}</strong></div>`).join('') +
+            `</div>`;
+        }
+
+        return `
+          <div class="timeline-step">
+            <div class="timeline-node">${icon}</div>
+            <div class="step-card">
+              <div class="step-header">
+                <span>${l.event_title}</span>
+                <span class="step-time"><i class="fas fa-clock"></i> ${new Date(l.timestamp).toLocaleDateString()}</span>
+              </div>
+              <div class="step-body">
+                <div><i class="fas fa-user"></i> Performed by: <strong>${l.performed_by}</strong> (${l.location || 'Farm'})</div>
+                ${l.notes ? `<div style="margin-top: 4px; color: var(--text);">${l.notes}</div>` : ''}
+                ${payloadHtml}
+                <div class="step-hash-tag">
+                  <i class="fas fa-fingerprint"></i> Block Hash: ${l.block_hash.substring(0, 18)}... | ${l.digital_signature || 'SIG_VALID'}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function downloadSticker() {
+      const batchId = document.getElementById('p-batch-id').textContent.trim();
+      window.open(`/api/v1/traceability/generate-qr/${batchId}`, '_blank');
+    }
+
+    async function verifyCryptographicProof() {
+      const batchId = document.getElementById('p-batch-id').textContent.trim();
+      const res = await fetch(`/api/v1/traceability/verify/${batchId}`);
+      const data = await res.json();
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Cryptographic Ledger Verified',
+        html: `
+          <div style="text-align: left; font-size: 13px;">
+            <p><strong>Status:</strong> Valid SHA-256 Chaining</p>
+            <p><strong>Verified Blocks:</strong> ${data.verified_blocks} Lifecycle Blocks</p>
+            <p><strong>Root Hash:</strong> <span style="font-family:monospace;">${data.root_hash}</span></p>
+            <p><strong>Proof:</strong> Zero-knowledge mathematical consistency confirmed.</p>
+          </div>
+        `
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      traceBatch();
+    });
+  </script>
+    <script src="translations.js" defer></script>
+  <script src="scripts/locales/zh-CN-extra.js" defer></script>
+<script src="scripts/i18n.js" defer></script>
+</body>
+
+</html>

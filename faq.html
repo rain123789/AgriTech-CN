@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+  <meta name="description"
+    content="AgriTech FAQ - Frequently Asked Questions about our agricultural technology platform. Get answers about registration, usage, payments, and more." />
+  <title>FAQ - AgriTech | Frequently Asked Questions</title>
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css" />
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="preconnect" href= />
+  <link rel="preconnect" href= crossorigin />
+  <link
+    href=
+    rel="stylesheet" />
+
+    <!-- Prevent theme flash on page load -->
+    <script>
+      (function () {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+      })();
+    </script>
+
+  <link href="style.css" rel="stylesheet" />
+  <link href="faq.css" rel="stylesheet" />
+  <style>
+    /* FAQ Search Enhancements */
+.faq-item.hidden {
+  display: none;
+}
+
+.faq-highlight {
+  background: #ffeb3b;
+  color: #000;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+/* FAQ No Results Message */
+.faq-no-results {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted, #aaa);
+  font-size: 1.1rem;
+}
+
+.faq-no-results i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  display: block;
+  opacity: 0.7;
+}
+
+  </style>
+  <link rel="stylesheet" href="footer.css" />
+  <link rel="stylesheet" href="cn-i18n.css" />
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="navbar-content">
+      <!-- Left side: Logo and Brand Name -->
+      <div class="brand-section">
+        <img src="images/logo.png" alt="AgriTech Logo" class="nav-logo">
+        <a href="index.html" class="logo">AgriTech</a>
+      </div>
+
+      <!-- Center: Navigation Links -->
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="blog.html" class="nav-link">Blog</a>
+        <a href="services.html" class="nav-link">Services</a>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+          <input type="text" placeholder="Search..." class="search-input" autocomplete="off"
+            aria-label="Search content" />
+          <button class="search-button" aria-label="Search">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right side: Buttons -->
+      <div class="nav-buttons">
+        <a href="login.html" class="btn btn-secondary login-btn-desktop">Login</a>
+        <a href="faq.html" class="btn btn-secondary active">FAQ</a>
+        <a href="#" class="btn btn-secondary logout-button" style="display: none;">Logout</a>
+        <a href="register.html" class="btn btn-primary register-btn-desktop">Register</a>
+
+      <!-- Animated Sun/Moon Toggle -->
+                <button class="theme-toggle" type="button" id="themeToggle" title="Switch to dark mode"
+                    aria-label="Switch to dark mode">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon" aria-hidden="true">
+            <i class="fas fa-sun"></i>
+          </span>
+          <span class="theme-toggle-icon moon-icon" aria-hidden="true">
+            <i class="fas fa-moon"></i>
+          </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
+      </div>
+
+      <!-- Mobile Hamburger Menu Button -->
+      <button class="nav-toggle btn" id="navToggle" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-search">
+      <input type="text" placeholder="Search..." class="mobile-search-input" autocomplete="off"
+        aria-label="Search content" />
+      <button class="mobile-search-btn" aria-label="Search">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+
+    <div class="mobile-nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="blog.html" class="nav-link">Blog</a>
+      <a href="services.html" class="nav-link">Services</a>
+    </div>
+
+    <div class="mobile-nav-buttons">
+      <button class="theme-toggle mobile-theme-toggle-btn" type="button" id="mobileThemeToggle"
+        aria-label="Toggle dark/light mode">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-icon sun-icon" aria-hidden="true">
+            <i class="fas fa-sun"></i>
+          </span>
+          <span class="theme-toggle-icon moon-icon" aria-hidden="true">
+            <i class="fas fa-moon"></i>
+          </span>
+          <span class="theme-toggle-thumb"></span>
+        </span>
+      </button>
+
+      <a href="login.html" class="btn btn-secondary login-btn-mobile">Login</a>
+      <a href="faq.html" class="btn btn-secondary active">FAQ</a>
+      <a href="#" class="btn btn-secondary logout-link-mobile" style="display: none;">Logout</a>
+      <a href="register.html" class="btn btn-primary register-btn-mobile">Register</a>
+    </div>
+  </div>
+
+  <!-- FAQ Hero Section -->
+  <section class="faq-hero">
+    <div class="faq-hero-content">
+      <h1 class="serif">常见问题</h1>
+      <p>
+        Find quick answers to common questions about AgriTech platform, user registration,
+        transactions, and more. We're here to help you navigate our agricultural ecosystem seamlessly.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ Container -->
+  <div class="faq-container">
+    <div id="faqNoResults" class="faq-no-results" style="display: none;">
+      <i class="fas fa-search"></i>
+      <p>没有找到匹配的问题，请更换关键词。</p>
+    </div>
+
+    <div class="faq-section">
+      <h2 class="faq-section-title serif">开始使用</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>农智云是什么，能帮我做什么？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>农智云是 AgriTech 的中国大陆本地化演示版，围绕农户的日常经营提供四类工具：</p>
+            <ul>
+              <li><strong>作物种植推荐：</strong>输入土壤与气候参数，由随机森林模型给出 22 类作物建议；</li>
+              <li><strong>科学施肥建议：</strong>按作物、土壤 pH 与生育期给出肥料方向与公斤/亩用量区间；</li>
+              <li><strong>农业气象与农事提示：</strong>优先使用公开气象数据，并区分实时数据与演示数据；</li>
+              <li><strong>AI 农业助手：</strong>中文问答，可配置 DeepSeek，未配置时使用本地规则库。</li>
+            </ul>
+            <p>平台内的价格、天气样例、商家与订单均为本地演示数据，不提供真实交易结算。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>如何注册账号？可以填中文姓名吗？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>在「注册」页选择角色，填写姓名或昵称、常用邮箱和密码即可。姓名支持中文、少数民族姓名间隔号与英文字符，长度 2–50 个字符；邮箱不再限制为 Gmail 等特定服务商。</p>
+            <p>密码至少 8 位，并同时包含大写字母、小写字母和数字。账号保存在本机 SQLite 数据库中，密码以安全哈希保存。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>平台收费吗？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>本地演示版不收取任何费用，页面浏览、模型推理与账号功能均可直接使用。若自行配置在线大模型，会产生对应服务商的调用费用。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-section">
+      <h2 class="faq-section-title serif">使用平台</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>农产品交易市场如何使用？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>支持按关键词、品类和产地筛选，可按价格、评分、距离或最新排序；点击商品卡查看详情，加入购物车后可调整批次数量、查看预估合计并删除。购物车保存在浏览器本地，刷新后依然保留。</p>
+            <p>平台不提供支付、物流与担保，所有商品与商家均为演示样例。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>AI 助手没有联网还能用吗？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>可以。未配置 <code>DEEPSEEK_API_KEY</code> 或请求失败时，助手会切换到本地中文规则库，覆盖水稻、小麦、玉米、番茄、施肥、灌溉、病虫害与行情等主题，并在回答中明确标注来源；未覆盖的问题会直说知识库没有覆盖。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>图片识别为什么提示不可用？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>上游随附的 PlantVillage 38 类权重存在缺陷：对项目自带的番茄早疫病、马铃薯早疫病、玉米锈病、苹果黑星病等不同样本，均输出同一「健康」类别且置信度接近 100%。</p>
+            <p>为避免误导，系统默认禁用该模型并明确提示，而不是给出看似专业却不可靠的诊断结论。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-section">
+      <h2 class="faq-section-title serif">数据与安全</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>我的数据保存在哪里？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>账号与偏好保存在本机 SQLite 数据库和浏览器本地存储中，不上传到 Firebase 等海外服务。商品、气象与社区内容均为本地演示数据。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>模型结论可以直接用于生产决策吗？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>不可以。作物推荐与病害识别模型使用公开数据训练，尚未用中国田间数据验证，只适合作为初筛参考。涉及农药时必须核对在中国登记的作物、防治对象、标签剂量与安全间隔期。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>惠农政策信息准确吗？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>政策页只提供方向性入口并链接农业农村部、财政部等官方站点，不写具体补贴金额、资格与截止日期。实际申报请以属地主管部门最新公告为准。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-section">
+      <h2 class="faq-section-title serif">语言与界面</h2>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>可以切换成英文吗？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>可以。页面左下角提供「中文 / EN」切换，选择会保存在浏览器中，刷新与跨页面跳转后保持。默认语言为简体中文。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <h3>页面提示的“演示数据”是什么意思？</h3>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          <div class="faq-answer-content">
+            <p>表示该内容由本项目本地编写，用于展示界面与交互，不代表实时行情、真实成交或官方结论。真实使用前请以当地主管部门、气象台和农技部门的信息为准。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact CTA Section -->
+  <!-- 🌟 Enhanced Contact CTA Section (Improved Visual Hierarchy) -->
+<section class="contact-cta enhanced-cta">
+  <div class="cta-content">
+    <div class="cta-icon">
+      <i class="fas fa-headset"></i>
+    </div>
+
+    <h2 class="serif cta-title">还有其他问题？</h2>
+
+    <p class="cta-subtitle">
+      没有找到需要的答案？可以联系支持团队，或在 AI 助手中继续追问。
+    </p>
+
+    <div class="cta-actions">
+      <a href="feed-back.html" class="contact-btn primary-cta">
+        <i class="fas fa-life-ring"></i> 联系支持
+      </a>
+
+      <a href="chat.html" class="contact-btn secondary-cta">
+        <i class="fas fa-robot"></i> 询问 AI 助手
+      </a>
+    </div>
+  </div>
+</section>
+
+  <footer class="site-footer tech-dark-theme final-match">
+    <div class="footer-top-accent"></div>
+
+    <div class="footer-inner-content">
+      <div class="footer-section footer-brand">
+        <a href="index.html" class="brand-header">
+          <img src="images/logo.png" alt="AgriTech logo" class="brand-logo" />
+          <h3>AgriTech</h3>
+        </a>
+
+        <p class="tagline">
+          Empowering India's Farming Future with innovative technology
+          connecting every stakeholder.
+        </p>
+
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="X (formerly Twitter)"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+
+
+      <div class="footer-group-links">
+        <div class="footer-section footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li>
+              <a href="index.html"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+              <a href="login.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            </li>
+            <li>
+              <a href="feed-back.html"><i class="fas fa-comment-dots"></i> Feedback</a>
+            </li>
+            <li>
+              <a href="chat.html"><i class="fas fa-robot"></i> AI Assistant</a>
+            </li>
+            <li>
+              <a href="terms-and-service.html"><i class="fas fa-file-contract"></i> Terms & Service</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-section footer-contact">
+          <h4>Contact</h4>
+          <ul>
+            <li>
+              <a href="mailto:service@example.com">
+                <i class="fas fa-envelope"></i> service@example.com
+              </a>
+            </li>
+            <li>
+              <a href="tel:4000000000">
+                <i class="fas fa-phone"></i> 400-000-0000（演示）
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-section footer-newsletter">
+          <h4>Newsletter</h4>
+          <p class="newsletter-desc">
+            Subscribe to get the latest farming insights, tips, and updates.
+          </p>
+          <form class="newsletter-form" onsubmit="return handleNewsletterSubmit(event, this)">
+            <div class="newsletter-input-group">
+              <input
+                type="email"
+                class="newsletter-input"
+                placeholder="Enter your email to get the latest updates..."
+                required
+                aria-label="Email address for newsletter"
+              />
+              <button type="submit" class="newsletter-btn" aria-label="Subscribe to newsletter">
+                <span>Subscribe</span>
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            <div class="newsletter-feedback" style="display:none;" role="status" aria-live="polite"></div>
+            <div class="newsletter-footer-optout">
+              <small>No spam. <a href="javascript:void(0)" onclick="openUnsubscribeModal(event)">Unsubscribe</a> anytime.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <span id="current-year"></span> AgriTech. All rights reserved.</p>
+    </div>
+
+    <div class="footer-wave-overlay"></div>
+  </footer>
+
+  <!-- Floating Chatbot Button -->
+  <a href="chat.html" id="chatbotBtn" title="AI Assistant Support" aria-label="Open AI Assistant Chat">
+    <i class="fas fa-robot"></i>
+  </a>
+
+  <!-- Scroll Button -->
+  <button class="scroll-btn" id="scrollBtn" title="Scroll">
+    <i class="fas fa-arrow-down" id="scrollIcon"></i>
+  </button>
+
+  <script>
+    // FAQ Accordion functionality
+    function toggleFaq(element) {
+      const faqItem = element.parentElement;
+      const isActive = faqItem.classList.contains('active');
+
+      // Close all FAQ items
+      document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      // Open clicked item if it wasn't active
+      if (!isActive) {
+        faqItem.classList.add('active');
+      }
+    }
+
+    // Desktop Search
+    const searchButton = document.querySelector(".search-button");
+    const searchInput = document.querySelector(".search-input");
+
+    searchButton?.addEventListener("click", () => {
+      handleSearch(searchInput.value);
+    });
+
+    searchInput?.addEventListener("keydown", e => {
+      if (e.key === "Enter") handleSearch(e.target.value);
+    });
+
+    // Add focus effect when button is clicked or focused
+    searchButton?.addEventListener("click", () => {
+      searchInput?.classList.add("input-focused");
+    });
+
+    searchButton?.addEventListener("focus", () => {
+      searchInput?.focus(); //Focus the input to show cursor
+      searchInput?.classList.add("input-focused");
+    });
+
+    searchInput?.addEventListener("blur", () => {
+      searchInput.classList.remove("input-focused");
+    });
+
+    // Mobile Search
+    const mobileSearchBtn = document.querySelector(".mobile-search-btn");
+    const mobileSearchInput = document.querySelector(".mobile-search-input");
+
+    mobileSearchBtn?.addEventListener("click", () => {
+      handleSearch(mobileSearchInput.value);
+    });
+
+    mobileSearchInput?.addEventListener("keydown", e => {
+      if (e.key === "Enter") handleSearch(e.target.value);
+    });
+
+    // Add focus effect when button is clicked or focused
+    mobileSearchBtn?.addEventListener("click", () => {
+      mobileSearchInput?.classList.add("input-focused");
+    });
+
+    mobileSearchBtn?.addEventListener("focus", () => {
+      mobileSearchInput?.focus(); // Focus the input to show cursor
+      mobileSearchInput?.classList.add("input-focused");
+    });
+
+    mobileSearchInput?.addEventListener("blur", () => {
+      mobileSearchInput.classList.remove("input-focused");
+    });
+
+    // Mobile Menu Functionality
+    const navToggle = document.getElementById('navToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+
+    // Toggle mobile menu
+    navToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      navToggle.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // Close mobile menu when clicking on a link
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !navToggle.contains(e.target)) {
+        navToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Sync theme toggle for mobile
+    if (mobileThemeToggle) {
+      mobileThemeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+
+        // Update both theme toggles
+        document.querySelectorAll('.theme-text').forEach(text => {
+          text.textContent = newTheme === 'dark' ? 'Light' : 'Dark';
+        });
+      });
+    }
+
+    // Scroll button functionality
+    const scrollBtn = document.getElementById("scrollBtn");
+    const scrollIcon = document.getElementById("scrollIcon");
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY < 300) {
+        scrollBtn.classList.add("visible");
+        scrollIcon.classList.replace("fa-arrow-up", "fa-arrow-down");
+      } else {
+        scrollBtn.classList.add("visible");
+        scrollIcon.classList.replace("fa-arrow-down", "fa-arrow-up");
+      }
+    });
+
+    scrollBtn.addEventListener("click", () => {
+      if (scrollIcon.classList.contains("fa-arrow-down")) {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth",
+        });
+      } else {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }
+    });
+
+    // Prevent body scroll when menu is open
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+        navToggle.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+  <script>
+/* =========================
+   FAQ SEARCH FUNCTIONALITY
+========================= */
+
+function clearHighlights(element) {
+  element.innerHTML = element.innerHTML.replace(
+    /<span class="faq-highlight">(.*?)<\/span>/g,
+    "$1"
+  );
+}
+
+function highlightText(element, query) {
+  const regex = new RegExp(`(${query})`, "gi");
+  element.innerHTML = element.textContent.replace(
+    regex,
+    `<span class="faq-highlight">$1</span>`
+  );
+}
+
+function handleSearch(query) {
+  const searchTerm = query.trim().toLowerCase();
+  const faqItems = document.querySelectorAll(".faq-item");
+  const noResultsEl = document.getElementById("faqNoResults");
+
+  let matches = [];
+
+  faqItems.forEach(item => {
+    const questionEl = item.querySelector(".faq-question h3");
+    const answerEl = item.querySelector(".faq-answer-content");
+
+    // Clear old highlights
+    clearHighlights(questionEl);
+    clearHighlights(answerEl);
+
+    const qText = questionEl.textContent.toLowerCase();
+    const aText = answerEl.textContent.toLowerCase();
+
+    if (searchTerm === "") {
+      item.classList.remove("hidden");
+      item.classList.remove("active");
+      if (noResultsEl) noResultsEl.style.display = "none";
+      return;
+    }
+
+    if (qText.includes(searchTerm) || aText.includes(searchTerm)) {
+      item.classList.remove("hidden");
+      item.classList.add("active");
+
+      highlightText(questionEl, searchTerm);
+      highlightText(answerEl, searchTerm);
+
+      matches.push(item);
+    } else {
+      item.classList.add("hidden");
+      item.classList.remove("active");
+    }
+  });
+
+  // Bring matches to top of their section
+  matches.forEach(item => {
+    const section = item.closest(".faq-section");
+    section.appendChild(item);
+  });
+
+  // Show No Results message
+  if (noResultsEl) {
+    noResultsEl.style.display = matches.length === 0 && searchTerm !== ""
+      ? "block"
+      : "none";
+  }
+
+  // Scroll to first match
+  if (matches.length > 0) {
+    matches[0].scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+}
+
+</script>
+
+  <script src="auth.js"></script>
+  <script src="theme.js"></script>
+  <!-- ===== Universal Back To Top Button (All Pages) ===== -->
+<style>
+  #globalBackToTop {
+    position: fixed;
+    bottom: 90px; /* prevents overlap with chatbot/floating icons */
+    right: 25px;
+    z-index: 9999;
+    display: none;
+    background: #2ecc71;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    transition: opacity 0.3s ease, transform 0.2s ease;
+  }
+
+  #globalBackToTop:hover {
+    transform: scale(1.12);
+    background: #27ae60;
+  }
+
+  @media (max-width: 768px) {
+    #globalBackToTop {
+      bottom: 100px; /* better spacing on mobile */
+      right: 18px;
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
+    }
+  }
+  /* Cursor Trail Effect */
+.cursor-trail {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: rgba(46, 204, 113, 0.8);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: fadeOut 0.6s linear forwards;
+  z-index: 9999;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translate(-50%, -50%);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3) translate(-50%, -50%);
+  }
+}
+</style>
+
+<script>
+  (function () {
+    const btn = document.getElementById("globalBackToTop");
+    if (!btn) return;
+
+    // Show button after scrolling down
+    window.addEventListener("scroll", function () {
+      if (window.scrollY > 300) {
+        btn.style.display = "block";
+      } else {
+        btn.style.display = "none";
+      }
+    });
+
+    // Smooth scroll to top on click
+    btn.addEventListener("click", function () {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  })();
+</script>
+<!-- ===== End Back To Top Button ===== -->
+
+<script>
+document.addEventListener("mousemove", function (e) {
+  createTrail(e);
+});
+
+function createTrail(e) {
+  const dot = document.createElement("div");
+  dot.className = "cursor-trail";
+
+  dot.style.left = e.clientX + "px";
+  dot.style.top = e.clientY + "px";
+
+  document.body.appendChild(dot);
+
+  setTimeout(() => {
+    dot.remove();
+  }, 600);
+}
+</script>
+
+  <script src="footer.js"></script>
+    <script src="translations.js" defer></script>
+  <script src="scripts/locales/zh-CN-extra.js" defer></script>
+<script src="scripts/i18n.js" defer></script>
+</body>
+
+</html>

@@ -1,0 +1,5 @@
+# 开发/测试附加依赖（本地演示版不强制安装）
+-r requirements-cn.txt
+pytest>=8.0
+fonttools>=4.50
+brotli>=1.1

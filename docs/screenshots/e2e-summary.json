@@ -1,0 +1,37 @@
+[
+  {
+    "suite": "marketplace",
+    "passed": 16,
+    "failed": 0,
+    "exitCode": 0,
+    "seconds": 6.9
+  },
+  {
+    "suite": "auth",
+    "passed": 6,
+    "failed": 0,
+    "exitCode": 0,
+    "seconds": 6.9
+  },
+  {
+    "suite": "ai",
+    "passed": 7,
+    "failed": 0,
+    "exitCode": 0,
+    "seconds": 4.5
+  },
+  {
+    "suite": "tools",
+    "passed": 6,
+    "failed": 0,
+    "exitCode": 0,
+    "seconds": 2.1
+  },
+  {
+    "suite": "language",
+    "passed": 5,
+    "failed": 0,
+    "exitCode": 0,
+    "seconds": 6.9
+  }
+]
