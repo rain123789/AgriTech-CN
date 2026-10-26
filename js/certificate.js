@@ -71,8 +71,8 @@ async function initCertificateApp() {
  * Syncs page dark/light mode with localStorage
  */
 function setupTheme() {
-  const savedTheme = localStorage.getItem("theme") || "dark";
-  document.body.setAttribute("data-theme", savedTheme);
+  const savedTheme = localStorage.getItem("agritech-theme") || "light";
+  document.documentElement.setAttribute("data-theme", savedTheme);
   const themeIcon = document.getElementById("themeIcon");
   if (themeIcon) {
     themeIcon.className = savedTheme === "light" ? "fas fa-sun" : "fas fa-moon";
@@ -81,10 +81,10 @@ function setupTheme() {
   const themeBtn = document.getElementById("themeToggleBtn");
   if (themeBtn) {
     themeBtn.addEventListener("click", () => {
-      const current = document.body.getAttribute("data-theme") || "dark";
+      const current = document.documentElement.getAttribute("data-theme") || "light";
       const next = current === "dark" ? "light" : "dark";
-      document.body.setAttribute("data-theme", next);
-      localStorage.setItem("theme", next);
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("agritech-theme", next);
       if (themeIcon) {
         themeIcon.className = next === "light" ? "fas fa-sun" : "fas fa-moon";
       }

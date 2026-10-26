@@ -15,7 +15,7 @@
     (function () {
       const saved = localStorage.getItem('theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.setAttribute('data-theme', localStorage.getItem('agritech-theme') === 'dark' ? 'dark' : 'light');
     })();
   </script>
 
@@ -787,10 +787,20 @@ document.querySelectorAll(".faq-question").forEach(button => {
   <script>
     async function fetchContributors() {
       // 本地演示环境不请求 GitHub 接口，避免跨境网络失败与页面报错。
-      const contributors = [
-        { login: '原项目维护者', contributions: '原仓库贡献', html_url: 'https://github.com/omroy07/AgriTech', avatar_url: 'images/logo.png' },
-        { login: '本地化演示', contributions: '中文适配', html_url: 'https://github.com/omroy07/AgriTech', avatar_url: 'images/plant.png' }
-      ];
+      var isEn = false;
+      try {
+        if (window.cnI18n && window.cnI18n.language) isEn = window.cnI18n.language === 'en';
+        else isEn = String(localStorage.getItem('agritech_lang') || localStorage.getItem('lang') || 'zh-CN').toLowerCase().indexOf('en') === 0;
+      } catch (e) { isEn = false; }
+      const contributors = isEn
+        ? [
+            { login: 'Original maintainer', contributions: 'Upstream contribution', html_url: 'https://github.com/omroy07/AgriTech', avatar_url: 'images/logo.png' },
+            { login: 'China localization', contributions: 'Chinese adaptation', html_url: 'https://github.com/omroy07/AgriTech', avatar_url: 'images/plant.png' }
+          ]
+        : [
+            { login: '原项目维护者', contributions: '原仓库贡献', html_url: 'https://github.com/omroy07/AgriTech', avatar_url: 'images/logo.png' },
+            { login: '本地化演示', contributions: '中文适配', html_url: 'https://github.com/omroy07/AgriTech', avatar_url: 'images/plant.png' }
+          ];
       const container = document.getElementById('github-contributors');
       if (!container) return;
       container.innerHTML = '';
@@ -804,7 +814,7 @@ document.querySelectorAll(".faq-question").forEach(button => {
                     <span style="font-size: 0.75rem; color: var(--accent-green);">${user.contributions}</span>
                 </a>
                 <a href="certificate.html?user=${encodeURIComponent(user.login)}" title="查看证书" style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; color: #f59e0b; text-decoration: none; margin-top: 8px; font-weight: 600;">
-                  <i class="fas fa-certificate"></i> 证书
+                  <i class="fas fa-certificate"></i> ${isEn ? "Certificate" : "证书"}
                 </a>
             `;
         container.appendChild(card);

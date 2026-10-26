@@ -18,7 +18,7 @@
     (function () {
       const saved = localStorage.getItem('theme');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.setAttribute('data-theme', localStorage.getItem('agritech-theme') === 'dark' ? 'dark' : 'light');
     })();
   </script>
 
@@ -467,7 +467,7 @@ body.dark-mode .modal-content {
 </script>
 
   <!-- Scripts -->
-  <script src="forum.js"></script>
+  <script src="forum.js?v=20261026d"></script>
 
   <!-- ===== Universal Back To Top Button (All Pages) ===== -->
 <style>

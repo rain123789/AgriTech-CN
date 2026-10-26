@@ -746,7 +746,15 @@ class AgriVoiceAssistant {
               <h3>🌾 AI 农业语音助手</h3>
               <div id="agri-bot-network-badge" class="network-badge ${navigator.onLine ? 'online' : 'offline'}">
                 <span class="pulse-dot ${navigator.onLine ? '' : 'offline'}"></span>
-                ${navigator.onLine ? '在线模式（DeepSeek 兼容接口）' : '离线模式（本地规则库）'}
+                ${(() => {
+                  let en = false;
+                  try {
+                    if (window.cnI18n && window.cnI18n.language) en = window.cnI18n.language === 'en';
+                    else en = String(localStorage.getItem('agritech_lang') || localStorage.getItem('lang') || 'zh-CN').toLowerCase().startsWith('en');
+                  } catch (e) { en = false; }
+                  if (navigator.onLine) return en ? 'Online (DeepSeek-compatible endpoint)' : '在线模式（DeepSeek 兼容接口）';
+                  return en ? 'Offline (local rule base)' : '离线模式（本地规则库）';
+                })()}
               </div>
             </div>
           </div>

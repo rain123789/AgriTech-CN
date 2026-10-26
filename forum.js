@@ -1,3 +1,32 @@
+
+function forumIsEn() {
+  var l = document.documentElement.getAttribute("data-lang") || document.documentElement.lang || "zh-CN";
+  return l === "en";
+}
+function forumT(zh, en) { return forumIsEn() ? en : zh; }
+var FORUM_EN = {
+  "连续阴雨后水稻叶片出现褐色斑点，如何排查？": "Brown spots on rice leaves after days of rain — how to diagnose?",
+  "近日连续阴雨，田间部分叶片出现褐色斑点。希望了解应先观察什么、什么情况需要联系植保站，以及是否应立即喷药。": "After days of rain, brown spots appeared on some leaves. What should I check first, when should I contact plant protection, and should I spray immediately?",
+  "测土后磷含量偏高，磷肥应该如何调整？": "Soil test shows high phosphorus — how should I adjust P fertilizer?",
+  "本地检测结果显示有效磷偏高，计划下一季减少磷肥并轮作豆科作物，想听听大家的经验。": "Local tests show high available phosphorus. I plan to cut P fertilizer next season and rotate legumes — would love your experience.",
+  "滴灌带堵塞的日常检查方法": "Routine Checks for Clogged Drip Lines",
+  "整理一套简单的巡检流程：过滤网、压力表、冲洗顺序，供刚开始用滴灌的农户参考。": "A simple inspection routine — filters, pressure gauges and flushing order — for farmers new to drip irrigation.",
+  "卖粮前为什么要谈清楚等级和水分": "Why Agree on Grade and Moisture Before Selling Grain",
+  "整理了水分、杂质、容重、等级与交货方式对价格的影响，供准备售粮时参考。": "How moisture, impurities, test weight, grade and delivery terms affect price — a reference before selling grain."
+};
+var FORUM_TAG_EN = {
+  "水稻": "Rice", "病害": "Disease", "雨季": "Rainy Season",
+  "测土": "Soil Testing", "施肥": "Fertilization", "轮作": "Rotation",
+  "灌溉": "Irrigation", "农机": "Machinery", "维护": "Maintenance",
+  "销售": "Sales", "价格": "Price", "质量": "Quality"
+};
+var FORUM_CAT_EN = {
+  "作物保护": "Crop Protection",
+  "土壤与施肥": "Soil & Fertilizer",
+  "农机与灌溉": "Machinery & Irrigation",
+  "经营与市场": "Business & Market"
+};
+function forumText(t) { return forumIsEn() ? (FORUM_EN[t] || t) : t; }
 document.addEventListener('DOMContentLoaded', () => {
     const forum = new ForumManager();
     forum.init();
@@ -72,20 +101,20 @@ class ForumManager {
         this.categoriesList.innerHTML = categories.map(cat => `
             <div class="category-item ${this.currentCategoryId === cat.id ? 'active' : ''}" 
                  onclick="forum.filterByCategory(${cat.id})">
-                <span><i class="fas ${cat.icon || 'fa-folder'}"></i> ${cat.name}</span>
+                <span><i class="fas ${cat.icon || 'fa-folder'}"></i> ${forumIsEn() ? (FORUM_CAT_EN[cat.name] || cat.name) : cat.name}</span>
                 <span class="count">${cat.thread_count}</span>
             </div>
         `).join('') + `
             <div class="category-item ${!this.currentCategoryId ? 'active' : ''}" 
                  onclick="forum.filterByCategory(null)">
-                <span><i class="fas fa-list"></i> 全部话题</span>
+                <span><i class="fas fa-list"></i> ${forumT('全部话题', 'All Topics')}</span>
             </div>
         `;
     }
 
     renderThreads(threads) {
         if (threads.length === 0) {
-            this.threadsContainer.innerHTML = '<div class="empty-state">该分类下暂无话题，来发布第一条吧。</div>';
+            this.threadsContainer.innerHTML = '<div class="empty-state">' + forumT('该分类下暂无话题，来发布第一条吧。', 'No topics in this category yet. Be the first to post.') + '</div>';
             return;
         }
 
@@ -96,19 +125,19 @@ class ForumManager {
                 <div class="author-info">
                     <div class="avatar">${thread.user_id ? 'U' : 'AI'}</div>
                     <div class="meta">
-                        <div class="name">${thread.user_id ? '社区成员（演示）' : '平台助手'}</div>
+                        <div class="name">${thread.user_id ? forumT('社区成员（演示）', 'Community Member (Demo)') : forumT('平台助手', 'Platform Assistant')}</div>
                         <div class="date">${formatDate(thread.created_at)}</div>
                     </div>
                 </div>
-                <h3 class="thread-title">${thread.title}</h3>
-                <p class="thread-preview">${thread.content}</p>
+                <h3 class="thread-title">${forumText(thread.title)}</h3>
+                <p class="thread-preview">${forumText(thread.content)}</p>
                 <div class="thread-tags">
-                    ${thread.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                    ${thread.tags.map(tag => `<span class="tag">#${forumIsEn() ? (FORUM_TAG_EN[tag] || tag) : tag}</span>`).join('')}
                 </div>
                 <div class="thread-footer">
-                    <span><i class="far fa-thumbs-up"></i> ${thread.upvote_count} 赞同</span>
-                    <span><i class="far fa-comment"></i> ${thread.comment_count} 回复</span>
-                    <span><i class="far fa-eye"></i> ${thread.view_count} 浏览</span>
+                    <span><i class="far fa-thumbs-up"></i> ${thread.upvote_count}${forumT(' 赞同', ' Upvotes')}</span>
+                    <span><i class="far fa-comment"></i> ${thread.comment_count}${forumT(' 回复', ' Replies')}</span>
+                    <span><i class="far fa-eye"></i> ${thread.view_count}${forumT(' 浏览', ' Views')}</span>
                 </div>
             </div>
         `).join('');

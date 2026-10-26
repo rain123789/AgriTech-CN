@@ -1770,9 +1770,9 @@
 
         // Theme Toggle
         function toggleTheme() {
-            const current = document.body.getAttribute("data-theme");
+            const current = document.documentElement.getAttribute("data-theme");
             const next = current === "dark" ? "light" : "dark";
-            document.body.setAttribute("data-theme", next);
+            document.documentElement.setAttribute("data-theme", next);
             document.getElementById("themeIcon").className = next === "dark" ? "fas fa-sun" : "fas fa-moon";
         }
 

@@ -502,11 +502,11 @@
 
       <div class="result-container">
         <div class="result" id="crop-display">{{ crop_cn or crop }}</div>
-        <div class="result-subtitle" style="margin-top:6px;">模型类别：{{ crop }}</div>
+        <div class="result-subtitle" style="margin-top:6px;"><span>模型类别：</span><span>{{ crop }}</span></div>
         <div class="result-subtitle">根据土壤与气候参数得到的模型建议</div>
         {% if range_warnings %}
         <div class="range-warning" role="alert">
-          <strong>适用范围提示：</strong>{{ range_warnings | join('；') }}。结果可靠性下降，请结合当地试种与农技意见。
+          <strong>适用范围提示：</strong><span>{{ range_warnings | join('；') }}</span><span>。结果可靠性下降，请结合当地试种与农技意见。</span>
         </div>
         {% endif %}
         <div class="scope-note">模型使用印度公开农业数据训练，共 22 个作物类别；尚未用中国田间数据验证。本结果仅作演示参考，不构成生产决策。</div>

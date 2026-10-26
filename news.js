@@ -90,6 +90,75 @@ const newsArticles = [
   }
 ];
 
+// 全局语言键：与导航栏保持一致
+function newsIsEn() {
+  try {
+    if (window.cnI18n && window.cnI18n.language) return window.cnI18n.language === 'en';
+    const stored = localStorage.getItem('agritech_lang') || localStorage.getItem('lang') || 'zh-CN';
+    return String(stored).toLowerCase().startsWith('en');
+  } catch (error) {
+    return false;
+  }
+}
+
+// 英文模式下的演示资讯内容（与中文条目一一对应，不做逐词直译）
+const NEWS_EN = {
+  1: {
+    title: "Key Points for Rice at Tillering",
+    description: "Keep a shallow water layer during spells of rain, aerate the field between showers, and scout for the first rice-blast lesions.",
+    content: "This is local demo content. During tillering, adjust the water layer according to plant density and weather instead of leaving the field deeply flooded. If suspicious lesions appear, photograph them and ask your local plant-protection service to review; never spray based on a single image.",
+    source: "Local demo news"
+  },
+  2: {
+    title: "Preparing Soil Before Sowing Wheat",
+    description: "Timely tillage, controlled sowing depth and a balanced base fertilizer keep yields steadier than simply raising the seeding rate.",
+    content: "This is local demo content. Before sowing, check soil moisture, straw incorporation and seedbed levelness. Set the base fertilizer rate from a soil test and avoid one-sided nitrogen applications.",
+    source: "Local demo news"
+  },
+  3: {
+    title: "Ventilating Greenhouses to Cut Humidity",
+    description: "Ventilate gradually as the house warms in the morning to stop leaves staying wet and lower fungal risk.",
+    content: "This is local demo content. Use side vents, roof vents and circulation fans to manage temperature and humidity. Prefer drip irrigation under plastic mulch, and remove lower diseased leaves as soon as symptoms appear.",
+    source: "Local demo news"
+  },
+  4: {
+    title: "Autumn–Winter Machinery Maintenance Checklist",
+    description: "Clean, lubricate and check oil lines and tyres after the season to avoid breakdowns next spring.",
+    content: "This is local demo content. Log operating hours, replace filters and wear parts, and store machinery somewhere dry and well ventilated.",
+    source: "Local demo news"
+  },
+  5: {
+    title: "Directions for Green Crop–Livestock pilots",
+    description: "Returning manure to fields after full composting and testing requires field records and nutrient-balance accounting.",
+    content: "This is local demo content. The exact pilot scope, subsidy method and application window follow the public documents of your county agriculture bureau; this page does not invent subsidy amounts.",
+    source: "Policy direction demo"
+  },
+  6: {
+    title: "Common Water-Saving Irrigation Practices",
+    description: "Drip, sprinkler and mulching improve water-use efficiency, but scheduling still has to follow soil moisture.",
+    content: "This is local demo content. Prioritise supply during the crop's critical water-demand stages, avoid midday irrigation in hot weather, and check lines for blockages regularly.",
+    source: "Local demo news"
+  },
+  7: {
+    title: "Cross-Check Grain Prices Across Sources",
+    description: "Price trends on this platform are demo data; before trading, compare wholesale market and buyer quotes.",
+    content: "This is local demo content. Grain and oilseed prices depend on variety, moisture, impurities, transport distance and market grade, so never rely on a single quote.",
+    source: "Local demo news"
+  },
+  8: {
+    title: "Weather Forecasts and Farm Scheduling",
+    description: "Rain, wind and cold warnings change the window for spraying, fertilizing and harvest.",
+    content: "This is local demo content. Follow the warnings issued by your local weather bureau; demo weather on this platform cannot replace a live forecast.",
+    source: "Local demo news"
+  }
+};
+
+// 演示资讯数据的本地化包装
+function newsLocalized(article) {
+  if (newsIsEn() && NEWS_EN[article.id]) return Object.assign({}, article, NEWS_EN[article.id]);
+  return article;
+}
+
 // DOM Elements
 const newsGrid = document.getElementById('newsGrid');
 const searchInput = document.getElementById('searchInput');
@@ -111,6 +180,15 @@ let displayedArticles = 6;
 document.addEventListener('DOMContentLoaded', () => {
   renderNews();
   setupEventListeners();
+});
+
+// 语言切换后重渲染资讯卡片
+window.addEventListener('languageChanged', () => {
+  try {
+    renderNews();
+  } catch (error) {
+    /* 初始化未完成时忽略 */
+  }
 });
 
 // Setup Event Listeners
@@ -267,17 +345,18 @@ function renderNews() {
 
   // Render articles
   newsGrid.innerHTML = toDisplay
-    .map(
-      (article) => `
+    .map((article) => {
+      const L = newsLocalized(article);
+      return `
         <div class="news-card" onclick="openNewsModal(${article.id})">
-          <img src="${article.image}" alt="${article.title}" class="news-card-image">
+          <img src="${L.image}" alt="${L.title}" class="news-card-image">
           <div class="news-card-content">
             <span class="news-card-category">${capitalizeCategory(article.category)}</span>
-            <h3 class="news-card-title">${article.title}</h3>
-            <p class="news-card-description">${article.description}</p>
+            <h3 class="news-card-title">${L.title}</h3>
+            <p class="news-card-description">${L.description}</p>
             <div class="news-card-meta">
               <span class="news-card-source">
-                <i class="fas fa-globe"></i> ${article.source}
+                <i class="fas fa-globe"></i> ${L.source}
               </span>
               <span class="news-card-date">
                 <i class="far fa-calendar-alt"></i> ${formatDate(article.date)}
@@ -285,8 +364,8 @@ function renderNews() {
             </div>
           </div>
         </div>
-      `
-    )
+      `;
+    })
     .join('');
 
   // Show/hide load more button
@@ -301,10 +380,11 @@ function openNewsModal(id) {
   const article = newsArticles.find((a) => a.id === id);
   if (!article) return;
 
-  document.getElementById('modalTitle').textContent = article.title;
+  const L = newsLocalized(article);
+  document.getElementById('modalTitle').textContent = L.title;
   document.getElementById('modalImage').src = article.image;
-  document.getElementById('modalContent').textContent = article.content;
-  document.getElementById('modal-source').innerHTML = `<i class="fas fa-globe"></i> 来源：${article.source}`;
+  document.getElementById('modalContent').textContent = L.content;
+  document.getElementById('modal-source').innerHTML = `<i class="fas fa-globe"></i> ${newsIsEn() ? 'Source' : '来源'}：${L.source}`;
   document.getElementById('modal-date').innerHTML = `<i class="far fa-calendar-alt"></i> ${formatDate(article.date)}`;
   document.getElementById('modalCategory').textContent = capitalizeCategory(article.category);
   document.getElementById('modalLink').href = article.link;

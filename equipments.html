@@ -2173,19 +2173,19 @@
             const themeText = document.getElementById('themeText');
 
             // Load saved theme (default: dark)
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = localStorage.getItem('agritech-theme') || 'light';
             applyTheme(savedTheme);
 
             themeToggle.addEventListener('click', () => {
-                const currentTheme = document.body.getAttribute('data-theme');
+                const currentTheme = document.documentElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
                 applyTheme(newTheme);
-                localStorage.setItem('theme', newTheme);
+                localStorage.setItem('agritech-theme', newTheme);
             });
 
             function applyTheme(theme) {
-                document.body.setAttribute('data-theme', theme);
+                document.documentElement.setAttribute('data-theme', theme);
 
                 if (theme === 'dark') {
                     themeIcon.className = 'fas fa-sun';

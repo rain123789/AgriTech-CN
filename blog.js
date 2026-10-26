@@ -241,6 +241,52 @@ const defaultBlogPosts = [
     }
 ];
 
+// 演示文章的英文版本（按 id 映射）
+const BLOG_EN = {
+  "cn-soil-health": {
+    title: "Soil Health: The First Step to Stable Yields",
+    description: "Soil management through three fundamentals: organic matter, topsoil structure and soil testing.",
+    author: "AgriTech Demo",
+    content: `<p>Soil management is not a single-season task, but a continuous process of recording and adjusting.</p><h4>Three basic actions</h4><ul><li>Test pH, organic matter and available nutrients regularly;</li><li>Check maturity and incorporation quality when returning straw to the field;</li><li>Avoid repeated deep ploughing that damages topsoil structure.</li></ul><p>This is a demo article; tailor any plan to your local soil test results.</p>`
+  },
+  "cn-water-saving": {
+    title: "Water-Saving Irrigation: Check Soil Moisture First",
+    description: "How to combine drip, sprinkler and mulching for better water use.",
+    author: "AgriTech Demo",
+    content: `<p>Irrigation scheduling should consider soil moisture, critical crop water stages and the weather forecast.</p><h4>Recommendations</h4><ul><li>Avoid flood irrigation during hot hours;</li><li>Check drip systems regularly for clogging and pressure;</li><li>Mulching reduces evaporation but does not replace drainage management.</li></ul>`
+  },
+  "cn-iot-monitoring": {
+    title: "Putting IoT Field Monitoring into Practice",
+    description: "Sensors, networks and dashboards are only tools — the key is a closed inspection loop.",
+    author: "AgriTech Demo",
+    content: `<p>The value of IoT monitoring lies in connecting alerts with field verification.</p><h4>Implementation points</h4><ul><li>Define the variables and thresholds to monitor first;</li><li>Keep raw data to detect sensor drift;</li><li>Someone must follow up on alerts — never rely on automated conclusions alone.</li></ul>`
+  },
+  "cn-disease-check": {
+    title: "Using Disease Detection Results Correctly",
+    description: "Image recognition is good for initial screening, not for replacing field diagnosis or treatment decisions.",
+    author: "AgriTech Demo",
+    content: `<p>Uploading clear photos speeds up recording and communication, but results are for reference only.</p><h4>Recommendations</h4><ul><li>Photograph both leaf surfaces, the whole plant and the field environment;</li><li>Record weather, affected area and spread rate;</li><li>Before spraying, check the registered crop, target pest and label dose.</li></ul>`
+  },
+  "cn-green-practice": {
+    title: "Green Farming: Record First, Evaluate Later",
+    description: "Without field records, it is hard to tell whether a practice really works.",
+    author: "AgriTech Demo",
+    content: `<p>Record green practices across inputs, outputs and field conditions.</p><h4>What to record</h4><ul><li>Source, maturity and application rate of organic fertilizer;</li><li>Timing and amount of water and fertilizer inputs;</li><li>Pest and disease locations and treatment results.</li></ul>`
+  },
+  "cn-market-mindset": {
+    title: "Look at Grade and Origin Before Price",
+    description: "The same crop can vary widely by grade, origin and delivery terms.",
+    author: "AgriTech Demo",
+    content: `<p>Before trading, clarify variety, grade, moisture, impurities, packaging and transport responsibility.</p><h4>Recommendations</h4><ul><li>Cross-check at least two reliable sources;</li><li>Write the pricing unit into the contract or confirmation;</li><li>Demo prices on this platform are not a basis for quotations.</li></ul>`
+  }
+};
+
+function blogLocalized(post) {
+  if (blogIsEn() && BLOG_EN[post.id]) return Object.assign({}, post, BLOG_EN[post.id]);
+  return post;
+}
+
+
 // Initialize blogPosts with defaults + user posts
 let userPosts = JSON.parse(localStorage.getItem('agritech_user_posts')) || [];
 let blogPosts = [...defaultBlogPosts, ...userPosts];
@@ -503,6 +549,7 @@ function displayPosts() {
         "business": { zh: "经营与市场", en: "Business" }
     };
     postsToShow.forEach(post => {
+        const L = blogLocalized(post);
         const isFavorite = window.favoritesManager ? window.favoritesManager.isFavorite(post.id) : false;
         const favoriteIcon = isFavorite ? 'fas fa-heart' : 'far fa-heart';
         const favoriteClass = isFavorite ? 'favorite-btn active' : 'favorite-btn';
@@ -522,13 +569,13 @@ function displayPosts() {
             </button>
             <div class="card-content">
                 <span class="card-category">${CATEGORY_LABELS[post.category] ? CATEGORY_LABELS[post.category][en ? 'en' : 'zh'] : post.category}</span>
-                <h3 class="card-title">${post.title}</h3>
+                <h3 class="card-title">${L.title}</h3>
 
-                <p class="card-description">${post.description || ''}</p>
+                <p class="card-description">${L.description || ''}</p>
     
                 <div class="card-footer">
                 <div class="card-meta">
-                    <span class="card-author">${en ? 'By ' : '作者：'}${post.author}</span>
+                    <span class="card-author">${en ? 'By ' : '作者：'}${L.author}</span>
                     <span class="card-date">${post.date}</span>
                 </div>
                 <button class="read-more-btn"style="margin-top:16px" onclick="openModal('${post.id}')">${en ? 'Read More' : '阅读全文'}</button>
@@ -616,18 +663,19 @@ function openModal(postId) {
     if (!post) return;
 
     currentModalPostId = postId;
-    document.getElementById('modalTitle').textContent = post.title;
+    const L = blogLocalized(post);
+    document.getElementById('modalTitle').textContent = L.title;
     document.getElementById('modalCategory').textContent = post.category.replace('-', ' ');
     const modalImg = document.getElementById('modalImage');
     modalImg.src = post.image || DEFAULT_BLOG_IMAGE;
     modalImg.onerror = function () { this.onerror = null; this.src = DEFAULT_BLOG_IMAGE; };
 
-    document.getElementById('modalContent').innerHTML = post.content;
+    document.getElementById('modalContent').innerHTML = L.content;
 
     // Populate author and date if available
     const authorEl = document.getElementById('modal-Author');
     const dateEl = document.getElementById('modal-Date');
-    if (authorEl) authorEl.textContent = (post.author ? (blogIsEn() ? 'By ' : '作者：') + post.author : '');
+    if (authorEl) authorEl.textContent = (L.author ? (blogIsEn() ? 'By ' : '作者：') + L.author : '');
     if (dateEl) dateEl.textContent = (post.date ? post.date : '');
 
     updateModalFavoriteButton();

@@ -1,3 +1,14 @@
+// 全局语言键：与导航栏保持一致
+function dzIsEn() {
+  try {
+    if (window.cnI18n && window.cnI18n.language) return window.cnI18n.language === "en";
+    const stored = localStorage.getItem("agritech_lang") || localStorage.getItem("lang") || "zh-CN";
+    return String(stored).toLowerCase().startsWith("en");
+  } catch (error) {
+    return false;
+  }
+}
+
 const diseaseDatabase = {
   Tomato___Bacterial_spot: {
     name: "Tomato Bacterial Spot",
@@ -704,19 +715,21 @@ function displayResults(result) {
   resultsDiv.innerHTML = `
     <div class="result-card">
         <div class="disease-name">${severityEmoji[severityClass]} ${info.name}</div>
-        <div class="confidence">模型置信度：${confidence}% ${result.lowConfidence ? '（偏低，请谨慎参考）' : ''}</div>
+        <div class="confidence">${dzIsEn() ? "Model confidence" : "模型置信度"}：${confidence}% ${result.lowConfidence ? (dzIsEn() ? "(low — treat with caution)" : '（偏低，请谨慎参考）') : ''}</div>
         <div class="severity ${severityClass}">
-            风险提示：${severityClass === 'low' ? '未见明显病害特征' : severityClass === 'high' ? '建议尽快请当地植保部门复核' : '建议持续观察并复核'}
+            ${dzIsEn() ? "Risk notice" : "风险提示"}：${dzIsEn()
+              ? (severityClass === 'low' ? 'No obvious disease features' : severityClass === 'high' ? 'Ask your local plant-protection service to review as soon as possible' : 'Keep monitoring and re-check')
+              : (severityClass === 'low' ? '未见明显病害特征' : severityClass === 'high' ? '建议尽快请当地植保部门复核' : '建议持续观察并复核')}
         </div>
         <div class="description">${info.description}</div>
         <div style="margin-top:10px;font-size:12px;color:var(--text-gray);line-height:1.6;">
-          <strong>适用范围：</strong>${result.modelScope || 'PlantVillage 38 类公开数据集，未使用中国田间数据验证。'}<br />
+          <strong>${dzIsEn() ? "Scope" : "适用范围"}：</strong>${result.modelScope || (dzIsEn() ? 'PlantVillage 38-class public dataset, not validated with Chinese field data.' : 'PlantVillage 38 类公开数据集，未使用中国田间数据验证。')}<br />
           ${result.disclaimer || ''}
         </div>
         <div class="treatment">
-            <h4>🌿 通用农艺管理建议</h4>
+            <h4>🌿 ${dzIsEn() ? "General Agronomic Advice" : "通用农艺管理建议"}</h4>
             <p>${info.treatment}</p>
-            <p style="font-size:12px;color:var(--text-gray);margin-top:8px;">具体药剂须核对在中国登记的作物、防治对象、标签剂量和安全间隔期，不得凭图片识别自行用药。</p>
+            <p style="font-size:12px;color:var(--text-gray);margin-top:8px;">${dzIsEn() ? "For any specific pesticide, verify the crops, target pests, label dose and pre-harvest interval registered in China; never apply chemicals based on an image result alone." : "具体药剂须核对在中国登记的作物、防治对象、标签剂量和安全间隔期，不得凭图片识别自行用药。"}</p>
         </div>
     </div>
   `;

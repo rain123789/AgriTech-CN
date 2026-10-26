@@ -10,6 +10,17 @@
 const soilFactors = { sandy: 1.15, loamy: 1.0, clay: 0.9, silt: 0.95 };
 const irrigationEfficiency = { drip: 0.9, sprinkler: 0.75, flood: 0.6 };
 const deliveryRates = { drip: 2800, sprinkler: 4200, flood: 6500 };
+
+// 全局语言键：与导航栏保持一致
+function irIsEn() {
+  try {
+    if (window.cnI18n && window.cnI18n.language) return window.cnI18n.language === "en";
+    const stored = localStorage.getItem("agritech_lang") || localStorage.getItem("lang") || "zh-CN";
+    return String(stored).toLowerCase().startsWith("en");
+  } catch (error) {
+    return false;
+  }
+}
 const forecastCache = new Map();
 const state = {
   forecast: [],
@@ -34,7 +45,8 @@ function formatIndianNumber(value) {
 }
 
 function dayLabel(date) {
-  return new Intl.DateTimeFormat('zh-CN', { weekday: 'short', month: 'short', day: 'numeric' }).format(date);
+  const locale = irIsEn() ? 'en-US' : 'zh-CN';
+  return new Intl.DateTimeFormat(locale, { weekday: 'short', month: 'short', day: 'numeric' }).format(date);
 }
 
 function weatherIconFor(code, rainChance) {
@@ -205,7 +217,7 @@ function buildPlan(inputs, forecast) {
       shouldSkip,
       alerts,
       weather: day,
-      summary: `最高 ${day.maxTemp}℃，降雨概率 ${day.rainChance}%`
+      summary: irIsEn() ? `High ${day.maxTemp}℃, ${day.rainChance}% chance of rain` : `最高 ${day.maxTemp}℃，降雨概率 ${day.rainChance}%`
     };
   });
 
@@ -216,7 +228,9 @@ function buildPlan(inputs, forecast) {
   const nextAction = plan.find((entry) => entry.liters > 0) || plan[0];
   const topAlert = plan.flatMap((entry) => entry.alerts).find(Boolean) || 'No urgent irrigation alerts.';
 
-  const summaryText = `${cropEntry.label}在${inputs.location}共 ${area.toFixed(1)} 公顷，本周预计需水约 ${formatIndianNumber(weeklyWater)} 升。${topAlert}`;
+  const summaryText = irIsEn()
+    ? `${cropEntry.label} covers ${area.toFixed(1)} ha in ${inputs.location}; projected water demand this week is about ${formatIndianNumber(weeklyWater)} L. ${topAlert}`
+    : `${cropEntry.label}在${inputs.location}共 ${area.toFixed(1)} 公顷，本周预计需水约 ${formatIndianNumber(weeklyWater)} 升。${topAlert}`;
   const sms = `AgriTech Water Advisory: ${topAlert} Next irrigation: ${nextAction ? nextAction.label + ' at ' + nextAction.timing : 'none'}. Weekly water use: ${formatIndianNumber(weeklyWater)} L.`;
 
   return {
@@ -260,7 +274,9 @@ function renderPlan(results) {
       list.push({ severity: 'danger', title: `${entry.label}: heatwave coming`, text: 'Increase watering or move irrigation earlier in the morning.' });
     }
     if (!entry.shouldSkip && entry.liters > 0) {
-      list.push({ severity: 'success', title: `${entry.label}：已安排灌溉`, text: `${entry.action}，时间 ${entry.timing}，预计用水 ${formatIndianNumber(entry.liters)} 升。` });
+      list.push(irIsEn()
+        ? { severity: 'success', title: `${entry.label}: irrigation scheduled`, text: `${entry.action}, at ${entry.timing}, estimated ${formatIndianNumber(entry.liters)} L.` }
+        : { severity: 'success', title: `${entry.label}：已安排灌溉`, text: `${entry.action}，时间 ${entry.timing}，预计用水 ${formatIndianNumber(entry.liters)} 升。` });
     }
     if (index === 0 && results.topAlert) {
       list.unshift({ severity: 'info', title: 'Top advisory', text: results.topAlert });
@@ -271,7 +287,7 @@ function renderPlan(results) {
   els.resultsPanel.classList.remove('hidden');
   els.summaryCopy.textContent = results.summaryText;
   els.waterSaved.textContent = `${formatIndianNumber(results.savings)} L`;
-  els.waterSavedNote.textContent = `较漫灌基线节水 ${results.savingsPct}%`;
+  els.waterSavedNote.textContent = irIsEn() ? `${results.savingsPct}% less than the flood baseline` : `较漫灌基线节水 ${results.savingsPct}%`;
   els.nextAction.textContent = results.nextAction ? results.nextAction.action : 'No action';
   els.nextActionNote.textContent = results.nextAction ? `${results.nextAction.label} • ${results.nextAction.timing}` : 'No active watering required';
   els.weatherRisk.textContent = results.weatherRisk;
@@ -285,7 +301,9 @@ function renderPlan(results) {
   els.baselineBar.style.width = '100%';
   const advisorWidth = results.baselineWeekly > 0 ? Math.max(10, Math.min(100, (results.weeklyWater / results.baselineWeekly) * 100)) : 0;
   els.advisorBar.style.width = `${advisorWidth}%`;
-  els.trackerNote.textContent = `在结合生育期与天气趋势的前提下，${results.cropLabel} 用水较漫灌基线减少 ${results.savingsPct}%。`;
+  els.trackerNote.textContent = irIsEn()
+    ? `Allowing for growth stage and weather trends, ${results.cropLabel} uses ${results.savingsPct}% less water than the flood baseline.`
+    : `在结合生育期与天气趋势的前提下，${results.cropLabel} 用水较漫灌基线减少 ${results.savingsPct}%。`;
   els.smsPreview.textContent = results.sms;
   renderAlerts(results);
   renderSchedule(results.plan);
@@ -302,7 +320,9 @@ function renderAlerts(results) {
     } else if (entry.weather.maxTemp >= 35) {
       output.push({ severity: 'danger', title: `${entry.label}: heat alert`, text: `Increase watering. ${entry.summary}.` });
     } else {
-      output.push({ severity: 'success', title: `${entry.label}：已排程`, text: `${entry.action}，时间 ${entry.timing}，用水 ${formatIndianNumber(entry.liters)} 升。` });
+      output.push(irIsEn()
+        ? { severity: 'success', title: `${entry.label}: scheduled`, text: `${entry.action}, at ${entry.timing}, using ${formatIndianNumber(entry.liters)} L.` }
+        : { severity: 'success', title: `${entry.label}：已排程`, text: `${entry.action}，时间 ${entry.timing}，用水 ${formatIndianNumber(entry.liters)} 升。` });
     }
     entry.alerts.forEach((alert) => {
       output.push({ severity: alert.includes('Skip') ? 'warning' : 'info', title: entry.label, text: alert });
@@ -345,7 +365,7 @@ async function generateAdvisor(loadWeather = true) {
     method: els.irrigationMethod.value,
     soil: els.soilType.value,
     moisture: Number(els.soilMoisture.value),
-    location: els.location.value.trim() || '湖北省武汉市'
+    location: els.location.value.trim() || (irIsEn() ? 'Wuhan, Hubei' : '湖北省武汉市')
   };
 
   const forecast = loadWeather ? await fetchForecast(inputs.location) : (state.forecast.length ? state.forecast : createFallbackForecast(inputs.location));
@@ -462,10 +482,32 @@ function cacheElements() {
   els.offlineAlerts = $('offline-alerts');
 }
 
+// 语言切换时同步默认地名与提示，并重算建议文案
+function syncLocalizedDefaults() {
+  if (!els.location) return;
+  const zh = '湖北省武汉市';
+  const en = 'Wuhan, Hubei';
+  const current = els.location.value.trim();
+  if (!current || current === zh || current === en) {
+    els.location.value = irIsEn() ? en : zh;
+  }
+  els.location.placeholder = irIsEn() ? 'e.g. Wuhan, Hubei' : '例如：湖北省武汉市';
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   cacheElements();
+  syncLocalizedDefaults();
   bindEvents();
   updateMoistureLabel();
   els.alertsEnabled.textContent = els.offlineAlerts.checked ? 'On' : 'Off';
   await generateAdvisor(true);
+});
+
+window.addEventListener('languageChanged', async () => {
+  try {
+    syncLocalizedDefaults();
+    await generateAdvisor(true);
+  } catch (error) {
+    /* 初始化未完成时忽略 */
+  }
 });

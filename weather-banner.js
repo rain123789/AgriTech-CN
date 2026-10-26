@@ -1,5 +1,30 @@
 // weather-banner.js - Weather Advisory Banner Logic
 
+function wbIsEn() {
+  var l = document.documentElement.getAttribute("data-lang") || document.documentElement.lang || "zh-CN";
+  return l === "en";
+}
+function wbT(zh, en) { return wbIsEn() ? en : zh; }
+function wbLocation(name) {
+  if (!wbIsEn()) return name;
+  var map = {
+    "湖北省武汉市": "Wuhan, Hubei", "武汉市": "Wuhan", "北京市": "Beijing", "上海市": "Shanghai",
+    "广州市": "Guangzhou", "深圳市": "Shenzhen", "成都市": "Chengdu", "杭州市": "Hangzhou",
+    "南京市": "Nanjing", "西安市": "Xi'an", "重庆市": "Chongqing", "Punjab, India": "Punjab, India"
+  };
+  return map[String(name || "").trim()] || name;
+}
+function wbCondition(text) {
+  if (!wbIsEn()) return text;
+  var map = {
+    "晴": "Clear", "大部晴朗": "Mostly Sunny", "多云": "Partly Cloudy", "阴": "Overcast",
+    "小雨": "Light Rain", "中雨": "Moderate Rain", "大雨": "Heavy Rain", "阵雨": "Showers",
+    "雷阵雨": "Thunderstorm", "雾": "Fog", "霾": "Haze", "雪": "Snow"
+  };
+  return map[String(text || "").trim()] || text;
+}
+
+
 class WeatherAdvisoryBanner {
   constructor(options = {}) {
     // 不再硬编码第三方密钥；统一走本地 Flask 气象适配层。
@@ -98,7 +123,7 @@ class WeatherAdvisoryBanner {
     // Extreme heat
     else if (temp > 35) {
       advisory = {
-        message: '🔥 高温提醒，建议避开中午田间作业，并根据墒情分次灌溉。',
+        message: wbT('🔥 高温提醒，建议避开中午田间作业，并根据墒情分次灌溉。', '🔥 High temperature alert: avoid midday fieldwork and irrigate in splits based on soil moisture.'),
         severity: 'danger',
         icon: 'fa-temperature-high'
       };
@@ -106,7 +131,7 @@ class WeatherAdvisoryBanner {
     // Low humidity (drought risk)
     else if (humidity < 30 && temp > 28) {
       advisory = {
-        message: '🏜️ 空气干燥，请加强土壤墒情监测，优先采用滴灌或覆盖保墒。',
+        message: wbT('🏜️ 空气干燥，请加强土壤墒情监测，优先采用滴灌或覆盖保墒。', '🏜️ Dry air: monitor soil moisture closely and prefer drip irrigation or mulching.'),
         severity: 'warning',
         icon: 'fa-droplet-slash'
       };
@@ -114,7 +139,7 @@ class WeatherAdvisoryBanner {
     // High humidity (disease risk)
     else if (humidity > 80 && temp > 20) {
       advisory = {
-        message: '💧 湿度偏高，真菌性病害风险上升，请加强通风并巡查病叶。',
+        message: wbT('💧 湿度偏高，真菌性病害风险上升，请加强通风并巡查病叶。', '💧 High humidity: fungal disease risk rising. Improve ventilation and inspect leaves.'),
         severity: 'info',
         icon: 'fa-droplet'
       };
@@ -122,7 +147,7 @@ class WeatherAdvisoryBanner {
     // Thunderstorm
     else if (/雷|thunder|storm/.test(condition)) {
       advisory = {
-        message: '⚡ 有雷暴，请停止田间作业，远离高处与金属设施。',
+        message: wbT('⚡ 有雷暴，请停止田间作业，远离高处与金属设施。', '⚡ Thunderstorm: stop fieldwork and stay away from heights and metal structures.'),
         severity: 'danger',
         icon: 'fa-bolt'
       };
@@ -130,7 +155,7 @@ class WeatherAdvisoryBanner {
     // Perfect conditions
     else if (temp >= 15 && temp <= 28 && humidity >= 40 && humidity <= 70) {
       advisory = {
-        message: '✅ 当前气象条件较适宜田间作业，仍需结合土壤墒情安排。',
+        message: wbT('✅ 当前气象条件较适宜田间作业，仍需结合土壤墒情安排。', '✅ Conditions are suitable for field work; still plan around soil moisture.'),
         severity: 'success',
         icon: 'fa-check-circle'
       };
@@ -138,7 +163,7 @@ class WeatherAdvisoryBanner {
     // Default
     else {
       advisory = {
-        message: `☁️ 当前天气：${weatherData.current.condition.text}。请结合田间情况安排农事。`,
+        message: wbIsEn() ? `☁️ Current weather: ${wbCondition(weatherData.current.condition.text)}. Plan farm work accordingly.` : `☁️ 当前天气：${weatherData.current.condition.text}。请结合田间情况安排农事。`,
         severity: 'info',
         icon: 'fa-cloud-sun'
       };
@@ -160,9 +185,9 @@ class WeatherAdvisoryBanner {
           <i class="fas ${advisory.icon}"></i>
         </div>
         <div class="weather-info">
-          <div class="weather-location">${location.name}${weatherData.isDemo ? ' · 演示' : ''}</div>
+          <div class="weather-location">${wbLocation(location.name)}${weatherData.isDemo ? wbT(' · 演示', ' · Demo') : ''}</div>
           <div class="weather-temp">${Math.round(current.temp_c)}℃</div>
-          <div class="weather-condition">${current.condition.text}${weatherData.isDemo ? '（样例）' : ''}</div>
+          <div class="weather-condition">${wbCondition(current.condition.text)}${weatherData.isDemo ? wbT('（样例）', ' (Sample)') : ''}</div>
         </div>
       </div>
 
@@ -183,7 +208,7 @@ class WeatherAdvisoryBanner {
         </div>
       </div>
 
-      ${this.autoHide ? '<button class="banner-close" aria-label="关闭天气提示"><i class="fas fa-times"></i></button>' : ''}
+      ${this.autoHide ? '<button class="banner-close" aria-label="' + wbT('关闭天气提示', 'Dismiss weather advisory') + '"><i class="fas fa-times"></i></button>' : ''}
     `;
 
     // Add close button handler
@@ -203,13 +228,13 @@ class WeatherAdvisoryBanner {
       <div class="weather-banner-left">
         <div class="weather-icon"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="weather-info">
-          <div class="weather-temp">气象数据不可用</div>
-          <div class="weather-condition">请检查本地服务</div>
+          <div class="weather-temp">${wbT('气象数据不可用', 'Weather data unavailable')}</div>
+          <div class="weather-condition">${wbT('请检查本地服务', 'Please check the local service')}</div>
         </div>
       </div>
       <div class="weather-banner-center">
         <div class="advisory-message">
-          <span>暂时无法获取气象数据，请确认后端服务已启动。</span>
+          <span>${wbT('暂时无法获取气象数据，请确认后端服务已启动。', 'Unable to load weather data. Please make sure the backend service is running.')}</span>
         </div>
       </div>
     `;
@@ -251,4 +276,12 @@ document.addEventListener('DOMContentLoaded', () => {
       bannerElement.classList.add('hidden');
     }
   }
+});
+// 语言切换后重新渲染天气条
+window.addEventListener("languageChanged", function () {
+  try {
+    if (window.weatherBanner && typeof window.weatherBanner.fetchWeatherAndDisplay === "function") {
+      window.weatherBanner.fetchWeatherAndDisplay();
+    }
+  } catch (e) {}
 });

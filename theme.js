@@ -14,6 +14,7 @@
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     try {
+      // 全局共享：任意页面切换，其他页面也保持同一主题
       localStorage.setItem(KEY, theme);
       localStorage.removeItem(LEGACY_KEY);
     } catch (e) {}
@@ -54,12 +55,11 @@
     });
   }
 
-  // 初始主题：一律浅色（演示优先）。每次加载都清掉历史深色残留，
-  // 确保首屏不会被旧偏好或系统深色设置拉回深色；页面内仍可通过开关切换为深色。
+  // 初始主题：读取全局偏好（跨页面共享），默认浅色
   let initialTheme = 'light';
   try {
-    localStorage.removeItem(KEY);
-    localStorage.removeItem(LEGACY_KEY);
+    const saved = localStorage.getItem(KEY);
+    if (saved === 'dark' || saved === 'light') initialTheme = saved;
   } catch (e) {}
 
   applyTheme(initialTheme);

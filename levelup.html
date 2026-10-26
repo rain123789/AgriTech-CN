@@ -382,28 +382,8 @@
 
   </div>
 
-  <!-- Theme Handler Script -->
-  <script>
-    const themeBtn = document.getElementById("themeToggleBtn");
-    const themeIcon = document.getElementById("themeIcon");
-
-    function applyTheme(theme) {
-      document.body.setAttribute("data-theme", theme);
-      if (themeIcon) themeIcon.className = theme === "light" ? "fas fa-sun" : "fas fa-moon";
-      localStorage.setItem("theme", theme);
-    }
-
-    const savedTheme = localStorage.getItem("theme") || "light";
-    applyTheme(savedTheme);
-
-    if (themeBtn) {
-      themeBtn.addEventListener("click", () => {
-        const currentTheme = document.body.getAttribute("data-theme") || "light";
-        const newTheme = currentTheme === "dark" ? "light" : "dark";
-        applyTheme(newTheme);
-      });
-    }
-  </script>
+  <!-- 主题统一由 theme.js / 共享导航栏处理，这里不再单独设置 data-theme，
+       避免 body 被设成 light 而 html 是 dark，导致正文与导航栏主题不一致 -->
 
   <!-- Level Up JS -->
   <script src="js/levelup.js"></script>
@@ -513,6 +493,20 @@
   <script src="scripts/locales/zh-CN-extra.js" defer></script>
 <script src="scripts/i18n.js" defer></script>
 <script src="/navbar-inject.js" defer></script>
+<script src="/navbar-home.js?v=20261026g" defer></script>
+<script src="/navbar-labels.js?v=20261026e" defer></script>
+<script>
+  // 页面加载完成后按当前全局语言再应用一次，确保晚注入的导航与动态内容也被翻译
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      try {
+        if (window.cnI18n && typeof window.cnI18n.setLanguage === "function") {
+          window.cnI18n.setLanguage(window.cnI18n.language);
+        }
+      } catch (e) {}
+    }, 400);
+  });
+</script>
 </body>
 
 </html>

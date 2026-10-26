@@ -5,7 +5,7 @@
  */
 (function () {
   "use strict";
-  var VERSION = "20261026-shared7";
+  var VERSION = "20261026-shared11";
 
   function boot() {
     var host = document.getElementById("shared-navbar");

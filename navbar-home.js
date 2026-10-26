@@ -170,18 +170,37 @@
   }
 
   function initTheme(navbar) {
-    // 若页面已加载 theme.js（如首页），由 theme.js 统一处理，避免重复绑定
-    if (window.themeManager) return;
     var toggle = navbar.querySelector(".theme-toggle");
-    if (!toggle || toggle.dataset.navThemeBound) return;
+    if (!toggle) return;
+
+    // 读取全局主题偏好（与 theme.js 共用，跨页面保持一致）
+    try {
+      var saved = localStorage.getItem("agritech-theme");
+      if (saved === "dark" || saved === "light") {
+        document.documentElement.setAttribute("data-theme", saved);
+      }
+    } catch (e) {}
+
+    // theme.js 已绑定（enhancedToggle）或本脚本已绑定过，则跳过，避免双重绑定
+    if (toggle.dataset.enhancedToggle || toggle.dataset.navThemeBound) return;
+
+    // 共享导航栏通常是异步注入的，theme.js 的 DOMContentLoaded 绑定会错过它，
+    // 这里补绑，并打上标记，防止 theme.js 之后重复绑定。
     toggle.dataset.navThemeBound = "1";
+    toggle.dataset.enhancedToggle = "true";
+
     toggle.addEventListener("click", function (e) {
       e.preventDefault();
+      if (window.themeManager && typeof window.themeManager.toggleTheme === "function") {
+        window.themeManager.toggleTheme();
+        return;
+      }
       var root = document.documentElement;
       var current = root.getAttribute("data-theme") || "light";
       var next = current === "light" ? "dark" : "light";
       root.setAttribute("data-theme", next);
       try {
+        // 全局共享：切某页后其他页面也保持同一主题
         localStorage.setItem("agritech-theme", next);
       } catch (err) {}
     });
@@ -199,7 +218,7 @@
     // 确保导航栏中英文标签脚本已加载（共享导航栏页面统一由它管理文案）
     if (!window.applyNavbarLanguage && !document.querySelector('script[data-navbar-labels]')) {
       var ls = document.createElement("script");
-      ls.src = "/navbar-labels.js?v=20261026b";
+      ls.src = "/navbar-labels.js?v=20261026c";
       ls.setAttribute("data-navbar-labels", "1");
       document.head.appendChild(ls);
     }

@@ -3008,19 +3008,19 @@
 
   <section class="hero">
     <div class="hero-content">
-      <h2 class="serif" data-no-i18n="true">
+      <h2 class="serif" id="heroTitle">
         用科技赋能中国农业
       </h2>
-      <p data-no-i18n="true">
+      <p id="heroDesc">
         农智云连接 <strong>农户</strong>、<strong>采购商</strong>、
         <strong>农机服务商</strong>与<strong>生鲜零售商</strong>，
         用数字工具和顺畅协作，让生产更高效、交易更透明。
       </p>
       <div style="margin-top:1.25rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
-        <a class="btn btn-primary" href="/crop/" aria-label="开始作物种植推荐">🌾 获取作物种植建议</a>
-        <a class="btn btn-primary" href="fertilizer.html" aria-label="获取科学施肥建议">🧪 科学施肥建议</a>
-        <a class="btn btn-secondary" href="disease.html" aria-label="植物病害识别">🔬 病害识别</a>
-        <a class="btn btn-secondary" href="community_forum.html">👩‍🌾 农户社区</a>
+        <a class="btn btn-primary" data-hero-btn="1" href="/crop/" aria-label="开始作物种植推荐">🌾 获取作物种植建议</a>
+        <a class="btn btn-primary" data-hero-btn="2" href="fertilizer.html" aria-label="获取科学施肥建议">🧪 科学施肥建议</a>
+        <a class="btn btn-secondary" data-hero-btn="3" href="disease.html" aria-label="植物病害识别">🔬 病害识别</a>
+        <a class="btn btn-secondary" data-hero-btn="4" href="community_forum.html">👩‍🌾 农户社区</a>
       </div>
     </div>
   </section>
@@ -3736,7 +3736,7 @@
 
   <script type="module" src="index.js?v=20261026e"></script>
 
-  <script src="theme.js?v=20261026"></script>
+  <script src="theme.js?v=20261026c"></script>
   <script>
     // 主题与「农业服务」下拉统一由 theme.js / index.js 负责，此处不再重复绑定
     // （同一元素绑定两次会导致"点一下开、又立刻关"，表现为无反应）
@@ -4086,8 +4086,8 @@
           sunIcon.style.display = theme === "dark" ? "inline-block" : "none";
       };
 
-      // Initialize —— 初始一律浅色（深色由 theme.js 的开关切换，此处不再读取旧偏好）
-      applyTheme("light");
+      // Initialize —— 读取全局主题偏好（与 theme.js 共用 agritech-theme），不再强制浅色
+      applyTheme(localStorage.getItem("agritech-theme") || "light");
 
       // Toggle on Click
       if (themeText) {
@@ -4348,10 +4348,108 @@
     });
   </script>
 
-  <script src="voice-input.js"></script>
+  <script src="voice-input.js?v=20261026d"></script>
   <script src="weather-banner.js"></script>
   <script src="footer.js"></script>
-<script src="/navbar-labels.js?v=20261026b" defer></script>
+<script src="/navbar-labels.js?v=20261026e" defer></script>
+<script>
+  (function () {
+    var ZH = {
+      title: "用科技赋能中国农业",
+      desc: '农智云连接 <strong>农户</strong>、<strong>采购商</strong>、<strong>农机服务商</strong>与<strong>生鲜零售商</strong>，用数字工具和顺畅协作，让生产更高效、交易更透明。',
+      btns: ["🌾 获取作物种植建议", "🧪 科学施肥建议", "🔬 病害识别", "👩‍🌾 农户社区"]
+    };
+    var EN = {
+      title: "Empowering Agriculture Through Technology",
+      desc: 'AgriTech connects <strong>farmers</strong>, <strong>buyers</strong>, <strong>machinery service providers</strong> and <strong>fresh produce retailers</strong>, using digital tools and seamless collaboration to make production more efficient and trade more transparent.',
+      btns: ["🌾 Get Crop Recommendations", "🧪 Fertilizer Advice", "🔬 Disease Detection", "👩‍🌾 Farmer Community"]
+    };
+    function currentLang() {
+      try {
+        if (window.cnI18n && window.cnI18n.language) return window.cnI18n.language;
+      } catch (e) {}
+      return document.documentElement.getAttribute("data-lang") || "zh-CN";
+    }
+    function apply(lang) {
+      var en = lang === "en";
+      var d = en ? EN : ZH;
+      var t = document.getElementById("heroTitle");
+      if (t) t.textContent = d.title;
+      var p = document.getElementById("heroDesc");
+      if (p) p.innerHTML = d.desc;
+      var btns = document.querySelectorAll("[data-hero-btn]");
+      btns.forEach(function (b) {
+        var i = parseInt(b.getAttribute("data-hero-btn"), 10) - 1;
+        if (d.btns[i]) b.textContent = d.btns[i];
+      });
+    }
+    window.addEventListener("languageChanged", function (e) {
+      apply((e && e.detail && e.detail.lang) || currentLang());
+    });
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () { apply(currentLang()); });
+    } else {
+      apply(currentLang());
+    }
+  })();
+</script>
+<script>
+  (function () {
+    var HOME_MISC = {
+      "作物种植推荐": "Crop Recommendations",
+      "科学施肥建议": "Fertilizer Advice",
+      "作物智能监测": "Smart Crop Monitoring",
+      "供应链服务": "Supply Chain Support",
+      "农田灌溉管理": "Irrigation Management",
+      "绿色种植指导": "Sustainable Farming Guidance",
+      "农产品交易市场": "Marketplace",
+      "物联网农场监测": "IoT Farm Monitoring",
+      "金融与保险服务": "Financial & Insurance",
+      "已售商品": "Products Sold",
+      "已购商品": "Products Bought",
+      "销售收入": "Sales Revenue",
+      "支出合计": "Total Expenses",
+      "盈亏趋势": "Profit & Loss Trend",
+      "收支构成": "Income & Expense Breakdown",
+      "用数字技术连接农业生产与市场，服务每一位参与者。": "Connecting agricultural production and markets with digital technology, serving every participant.",
+      "400-000-0000（演示）": "400-000-0000 (Demo)"
+    };
+    var EN2ZH = {};
+    Object.keys(HOME_MISC).forEach(function (k) { EN2ZH[HOME_MISC[k]] = k; });
+
+    function skip(el) {
+      return !el || el.closest("script,style,noscript,.lang-dropdown,nav.navbar,#cn-language-switch,[data-no-i18n]");
+    }
+    function apply(lang) {
+      var en = lang === "en";
+      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      var nodes = [], n;
+      while ((n = walker.nextNode())) nodes.push(n);
+      nodes.forEach(function (node) {
+        var t = (node.nodeValue || "").trim();
+        if (!t) return;
+        if (skip(node.parentElement)) return;
+        if (en && HOME_MISC[t]) {
+          node.nodeValue = node.nodeValue.replace(t, HOME_MISC[t]);
+        } else if (!en && EN2ZH[t]) {
+          node.nodeValue = node.nodeValue.replace(t, EN2ZH[t]);
+        }
+      });
+    }
+    function currentLang() {
+      try { if (window.cnI18n && window.cnI18n.language) return window.cnI18n.language; } catch (e) {}
+      return document.documentElement.getAttribute("data-lang") || "zh-CN";
+    }
+    window.addEventListener("languageChanged", function (e) {
+      apply((e && e.detail && e.detail.lang) || currentLang());
+    });
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () { apply(currentLang()); });
+    } else {
+      apply(currentLang());
+    }
+  })();
+</script>
 <script src="/navbar-inject.js" defer></script>
 </body>
 

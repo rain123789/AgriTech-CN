@@ -17,11 +17,26 @@
     "levelup.html": ["技能提升", "Level Up"],
     "login.html": ["登录", "Login"],
     "faq.html": ["常见问题", "FAQ"],
-    "register.html": ["注册", "Register"]
+    "register.html": ["注册", "Register"],
+    // 农业服务下拉条目
+    "crop/": ["作物种植推荐", "Crop Recommendation"],
+    "fertilizer.html": ["科学施肥建议", "Fertilizer Advice"],
+    "crop.html": ["作物智能监测", "Smart Crop Monitoring"],
+    "supply-chain.html": ["供应链服务", "Supply Chain"],
+    "irrigation.html": ["农田灌溉管理", "Irrigation Management"],
+    "sustainable-farming.html": ["绿色种植指导", "Sustainable Farming"],
+    "marketplace.html": ["农产品交易市场", "Marketplace"],
+    "iot_monitoring.html": ["物联网农场监测", "IoT Farm Monitoring"],
+    "financial-support.html": ["金融与保险服务", "Finance & Insurance"]
   };
 
   function fileOf(a) {
     var h = (a.getAttribute("href") || "").split("?")[0].split("#")[0];
+    // 目录型链接（如 /crop/）取其目录名，避免匹配到空串
+    if (/\/$/.test(h)) {
+      var seg = h.split("/").filter(Boolean);
+      return seg.length ? seg[seg.length - 1] + "/" : "";
+    }
     var parts = h.split("/");
     return parts[parts.length - 1] || "";
   }
@@ -48,6 +63,11 @@
   function currentLang() {
     try {
       if (window.cnI18n && window.cnI18n.language) return window.cnI18n.language;
+      // 未加载 i18n 的页面也读取全局语言，保证跨页面一致
+      var saved = localStorage.getItem("agritech_lang");
+      if (saved === "en" || saved === "zh-CN" || saved === "zh") {
+        return saved === "en" ? "en" : "zh-CN";
+      }
     } catch (e) {}
     return document.documentElement.getAttribute("data-lang") ||
       document.documentElement.getAttribute("lang") || "zh-CN";
@@ -55,6 +75,9 @@
 
   function apply(lang) {
     var en = lang === "en";
+    // 同步 html 的 lang/data-lang，让语言相关样式与后续脚本保持一致
+    document.documentElement.setAttribute("lang", en ? "en" : "zh-CN");
+    document.documentElement.setAttribute("data-lang", en ? "en" : "zh-CN");
     var navs = document.querySelectorAll("nav.navbar");
     if (!navs.length) return;
 
@@ -83,6 +106,17 @@
       // 语言按钮
       var cl = nav.querySelector("#current-lang-text");
       if (cl) cl.textContent = en ? "English" : "中文";
+
+      // 辅助说明文本（data-no-i18n 下 i18n 不会处理，这里补上）
+      nav.querySelectorAll("[aria-label], [title]").forEach(function (el) {
+        var zhAria = el.getAttribute("data-zh-aria");
+        var enAria = el.getAttribute("data-en-aria");
+        if (!zhAria) return;
+        el.setAttribute("aria-label", en ? enAria || zhAria : zhAria);
+        if (el.hasAttribute("title") && el.getAttribute("data-has-title")) {
+          el.setAttribute("title", en ? enAria || zhAria : zhAria);
+        }
+      });
     });
   }
 

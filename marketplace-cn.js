@@ -10,6 +10,17 @@
   const CART_KEY = "agritech_marketplace_cart_v1";
   const PAGE_SIZE = 12;
 
+  // 全局语言键：与导航栏保持一致
+  function mcIsEn() {
+    try {
+      if (window.cnI18n && window.cnI18n.language) return window.cnI18n.language === "en";
+      const stored = localStorage.getItem("agritech_lang") || localStorage.getItem("lang") || "zh-CN";
+      return String(stored).toLowerCase().startsWith("en");
+    } catch (error) {
+      return false;
+    }
+  }
+
   const CATEGORIES = {
     vegetables: "蔬菜",
     fruits: "水果",
@@ -462,6 +473,14 @@
     if (currentPageDisplay) currentPageDisplay.textContent = String(state.page);
     if (totalPagesDisplay) totalPagesDisplay.textContent = String(totalPages);
 
+    // 分页文案整块按语言渲染，避免“第 / 页”被拆成碎片后各翻各的
+    const pageDisplay = document.getElementById("pageDisplay");
+    if (pageDisplay) {
+      pageDisplay.textContent = mcIsEn()
+        ? `Page ${state.page} / ${totalPages}`
+        : `第 ${state.page} / ${totalPages} 页`;
+    }
+
     const pageNumbers = document.getElementById("pageNumbers");
     if (pageNumbers) {
       pageNumbers.innerHTML = Array.from({ length: totalPages }, (_, index) => {
@@ -758,7 +777,13 @@
         button.classList.add("active");
         applyFilters();
         const labels = { price: "价格", rating: "评分", distance: "距离", newest: "最新" };
-        showNotification(`已按${labels[key] || key}排序（${state.sortDirection === "asc" ? "升序" : "降序"}）。`, "info");
+        const labelsEn = { price: "price", rating: "rating", distance: "distance", newest: "newest" };
+        showNotification(
+          mcIsEn()
+            ? `Sorted by ${labelsEn[key] || key} (${state.sortDirection === "asc" ? "ascending" : "descending"}).`
+            : `已按${labels[key] || key}排序（${state.sortDirection === "asc" ? "升序" : "降序"}）。`,
+          "info"
+        );
       });
     });
 
@@ -786,7 +811,12 @@
           if (action === "add") addToCart(id);
           if (action === "contact") {
             const product = getProduct(id);
-            showNotification(`已记录对“${product?.seller || "商家"}”的联系意向。演示模式不会发送真实消息。`, "info");
+            showNotification(
+              mcIsEn()
+                ? `Recorded your interest in “${product?.seller || "this seller"}”. The demo does not send real messages.`
+                : `已记录对“${product?.seller || "商家"}”的联系意向。演示模式不会发送真实消息。`,
+              "info"
+            );
           }
           if (action === "detail") openDetail(id);
           return;
@@ -921,4 +951,13 @@
   } else {
     initialize();
   }
+
+  // 语言切换后重渲染分页等由本脚本生成的文案
+  window.addEventListener("languageChanged", () => {
+    try {
+      render();
+    } catch (error) {
+      /* 初始化未完成时忽略 */
+    }
+  });
 })();
