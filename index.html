@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN" data-lang="zh-CN">
+<html lang="zh-CN" data-lang="zh-CN" data-theme="light">
 
 <head>
   <link rel="icon" type="image/png" href="images/logo.png" />
@@ -2520,44 +2520,50 @@
   <link rel="stylesheet" href="cn-i18n.css" />
   <!-- 演示优化：平台能力（Our Platform Benefits）区块浅色化 + 标题去重影特效 -->
   <style>
-    /* 标题恢复为常规字号（.serif 原本是 3.5rem 超大标题，会撑爆卡片） */
+    /* 标题恢复为常规字号（.serif 原本是 3.5rem 超大标题，会撑爆卡片）——两种主题通用 */
     .features-title.serif {
       font-size: 2.5rem;
       letter-spacing: 0;
-      color: #14532d;
     }
     .feature-title.serif {
       font-size: 1.5rem;
       letter-spacing: 0;
-      color: #166534;
     }
 
-    /* 区块背景改为浅色，适合演示展示 */
-    .features {
+    /* ===== 浅色主题下的「平台能力」区块：浅底 + 白卡片 + 深绿标题 ===== */
+    /* 深色主题下不应用这些，自动回到原来的深色设计 */
+    [data-theme="light"] .features {
       background: linear-gradient(180deg, #f0fdf4 0%, #f7fef9 55%, #ecfdf5 100%);
     }
-    .features-title {
+    [data-theme="light"] .features-title {
       color: #14532d;
     }
-    .feature-intro {
+    [data-theme="light"] .feature-intro {
       color: #475569;
     }
-
-    /* 卡片改为白底浅边，文字用深色保证对比度 */
-    .feature-card {
+    [data-theme="light"] .feature-card {
       background: #ffffff;
       border: 1px solid #d1fae5;
       box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
     }
-    .feature-card:hover {
+    [data-theme="light"] .feature-card:hover {
       border-color: #22c55e;
       box-shadow: 0 14px 34px rgba(16, 185, 129, 0.18);
     }
-    .feature-title {
+    [data-theme="light"] .feature-title {
       color: #166534;
     }
-    .feature-description {
+    [data-theme="light"] .feature-description {
       color: #475569;
+    }
+
+    /* 浅色主题下首屏大标题：原渐变偏白，在白底上会发白看不清，改为深绿渐变 */
+    [data-theme="light"] .hero-content h2 {
+      background: linear-gradient(110deg, #14532d 0%, #15803d 35%, #166534 65%, #14532d 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
     }
 
     @media (max-width: 768px) {
@@ -2804,7 +2810,7 @@
 
     // Theme Toggle Function - Fixed to change entire page
     function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
+      const currentTheme = document.documentElement.getAttribute("data-theme") || "light";
       const nextTheme = currentTheme === "light" ? "dark" : "light";
 
       // Change entire page theme
@@ -3693,45 +3699,11 @@
     animate();
   </script>
 
-  <script type="module" src="index.js"></script>
+  <script type="module" src="index.js?v=20261026"></script>
 
-  <script src="theme.js"></script>
+  <script src="theme.js?v=20261026"></script>
   <script>
-    // Theme Toggle - Unified function
-    (function () {
-      const THEME_KEY = "agritech-theme";
-
-      function applyTheme(theme) {
-        document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem(THEME_KEY, theme);
-
-        document.querySelectorAll('.theme-toggle, #themeToggle, #mobileThemeToggle').forEach(btn => {
-          const label = theme === 'light' ? 'Switch to Dark Mode (🌙)' : 'Switch to Light Mode (☀️)';
-          btn.setAttribute('aria-label', label);
-          btn.setAttribute('title', label);
-          btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
-        });
-      }
-
-      function initTheme() {
-        const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
-        applyTheme(savedTheme);
-
-        document.querySelectorAll('#themeToggle, #mobileThemeToggle').forEach(btn => {
-          btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const current = document.documentElement.getAttribute('data-theme') || 'dark';
-            applyTheme(current === 'light' ? 'dark' : 'light');
-          });
-        });
-      }
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initTheme);
-      } else {
-        initTheme();
-      }
-    })();
+    // 主题初始化与切换统一由 theme.js 负责（此处不再重复绑定，避免点击时切换两次而失效）
     // Services Dropdown
     const servicesToggle = document.querySelector(".services-toggle");
     const servicesDropdown = document.querySelector(".services-dropdown");
@@ -3911,29 +3883,8 @@
       });
     }
 
-    // Mobile Theme Toggle
-    const mobileThemeToggle = document.getElementById("mobileThemeToggle");
-    const mobileThemeText = document.querySelector(".mobile-theme-text");
-    const mobileSunIcon = document.querySelector(".mobile-sun-icon");
-    const mobileMoonIcon = document.querySelector(".mobile-moon-icon");
-
-    if (mobileThemeToggle) {
-      mobileThemeToggle.addEventListener("click", () => {
-        const current = document.documentElement.getAttribute("data-theme");
-        const next = current === "light" ? "dark" : "light";
-        applyTheme(next);
-
-        if (next === "dark") {
-          mobileThemeText.textContent = "Light Mode";
-          mobileMoonIcon.style.display = "none";
-          mobileSunIcon.style.display = "inline-block";
-        } else {
-          mobileThemeText.textContent = "Dark Mode";
-          mobileMoonIcon.style.display = "inline-block";
-          mobileSunIcon.style.display = "none";
-        }
-      });
-    }
+    // Mobile Theme Toggle：同样由 theme.js 统一绑定
+    // （原代码这里调用了 IIFE 内未暴露的 applyTheme，点击会抛 ReferenceError）
   </script>
   <script>
     if (
@@ -4116,7 +4067,7 @@
       // Restore theme
       const applyTheme = (theme) => {
         document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("theme", theme);
+        localStorage.setItem("agritech-theme", theme);
 
         if (themeText)
           themeText.textContent = theme === "dark" ? "Dark" : "Light";
@@ -4126,9 +4077,8 @@
           sunIcon.style.display = theme === "dark" ? "inline-block" : "none";
       };
 
-      // Initialize
-      const savedTheme = localStorage.getItem("theme") || "dark";
-      applyTheme(savedTheme);
+      // Initialize —— 初始一律浅色（深色由 theme.js 的开关切换，此处不再读取旧偏好）
+      applyTheme("light");
 
       // Toggle on Click
       if (themeText) {

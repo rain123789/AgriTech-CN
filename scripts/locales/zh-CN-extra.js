@@ -1668,7 +1668,9 @@ window.CN_EXTRA_TEXT = Object.assign(window.CN_EXTRA_TEXT || {}, {
   "toggle menu": "切换菜单",
   "connect with us on linkedin": "在 LinkedIn 上联系我们",
   "follow us on instagram": "在 Instagram 上关注我们",
-  "view our github repositories": "查看我们的 GitHub 仓库"
+  "view our github repositories": "查看我们的 GitHub 仓库",
+  "find quick answers to common questions about agritech platform, user registration, transactions, and more. we're here to help you navigate our agricultural ecosystem seamlessly.":
+    "快速获取农智云平台、用户注册、交易等常见问题的解答。我们随时帮你顺畅地使用农业生态平台。"
 });
 
 

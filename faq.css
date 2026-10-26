@@ -568,3 +568,12 @@
 .footer-wave-overlay {
   display: none;
 }
+
+/* ===== 去掉 .serif 的背景图填充文字特效，改为纯色（浅色主题下保证可读） ===== */
+.serif {
+  background-image: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  animation: none;
+  color: var(--accent-color);
+}

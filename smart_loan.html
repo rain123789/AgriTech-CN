@@ -982,7 +982,7 @@ form button:hover::before {
         // Initial theme load
         const savedTheme = localStorage.getItem('agritech-theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        const theme = savedTheme || 'light';
         setTheme(theme);
         updateThemeIcons(theme);
 

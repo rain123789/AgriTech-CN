@@ -54,15 +54,12 @@
     });
   }
 
-  // Get initial theme preference
-  let initialTheme = 'dark';
+  // 初始主题：一律浅色（演示优先）。每次加载都清掉历史深色残留，
+  // 确保首屏不会被旧偏好或系统深色设置拉回深色；页面内仍可通过开关切换为深色。
+  let initialTheme = 'light';
   try {
-    const saved = localStorage.getItem(KEY) || localStorage.getItem(LEGACY_KEY);
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    initialTheme = saved || (prefersDark ? 'dark' : 'light');
-    if (saved && !localStorage.getItem(KEY)) {
-      localStorage.setItem(KEY, saved);
-    }
+    localStorage.removeItem(KEY);
+    localStorage.removeItem(LEGACY_KEY);
   } catch (e) {}
 
   applyTheme(initialTheme);

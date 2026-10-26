@@ -335,7 +335,7 @@
 
             themeToggle.addEventListener('click', () => {
                 const root = document.documentElement;
-                const current = root.getAttribute('data-theme') || 'dark';
+                const current = root.getAttribute('data-theme') || 'light';
                 const next = current === 'light' ? 'dark' : 'light';
 
                 root.setAttribute('data-theme', next);
@@ -392,7 +392,7 @@
 
         // --- DOM Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            const savedTheme = localStorage.getItem('agritech-theme') || 'dark';
+            const savedTheme = localStorage.getItem('agritech-theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
 
             const currentYearSpan = document.getElementById("current-year");

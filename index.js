@@ -28,10 +28,8 @@ function showCachedNotice() {
 }
 
 const refreshThemeStyles = () => {
-  // Force reflow so pages like About re-read CSS variables
-  document.body.style.display = 'none';
-  document.body.offsetHeight; // trigger reflow
-  document.body.style.display = '';
+  // 主题变量由 CSS 直接生效，无需隐藏 body 强制重排
+  // （原实现 body.style.display='none' 会让页面高度瞬间塌陷，导致滚动位置跳回页面顶部）
 };
 
 
@@ -58,26 +56,9 @@ const applyTheme = (theme) => {
 
 
 
-const savedTheme = localStorage.getItem('theme') || 'dark';
-applyTheme(savedTheme);
-
-// Desktop Theme Toggle
-if (themeToggle) {
-    themeToggle.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next = current === 'light' ? 'dark' : 'light';
-        applyTheme(next);
-    });
-}
-
-// Mobile Theme Toggle
-if (mobileThemeToggle) {
-    mobileThemeToggle.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next = current === 'light' ? 'dark' : 'light';
-        applyTheme(next);
-    });
-}
+// 主题初始化与切换统一由 theme.js 负责
+// （此处原来还会 applyTheme(localStorage 'theme' || 'dark') 并重复绑定点击，
+//   会导致：初始被拉回深色、点一下切换两次而失效）
 
 // Mobile Menu Functions
 function openMobileMenu() {

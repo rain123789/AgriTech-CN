@@ -2173,7 +2173,7 @@
             const themeText = document.getElementById('themeText');
 
             // Load saved theme (default: dark)
-            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const savedTheme = localStorage.getItem('theme') || 'light';
             applyTheme(savedTheme);
 
             themeToggle.addEventListener('click', () => {

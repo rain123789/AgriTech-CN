@@ -384,12 +384,12 @@
       localStorage.setItem("theme", theme);
     }
 
-    const savedTheme = localStorage.getItem("theme") || "dark";
+    const savedTheme = localStorage.getItem("theme") || "light";
     applyTheme(savedTheme);
 
     if (themeBtn) {
       themeBtn.addEventListener("click", () => {
-        const currentTheme = document.body.getAttribute("data-theme") || "dark";
+        const currentTheme = document.body.getAttribute("data-theme") || "light";
         const newTheme = currentTheme === "dark" ? "light" : "dark";
         applyTheme(newTheme);
       });
