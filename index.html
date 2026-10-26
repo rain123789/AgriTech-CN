@@ -857,16 +857,9 @@
       font-family: "Noto Sans", sans-serif;
       margin-bottom: 1rem;
 
-      background-image: url("assets/bg.png");
-      background-size: 200% auto;
-      background-position: 0% 50;
-      background-repeat: no-repeat;
-
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-
-      animation: animate 20s linear infinite;
+      /* 去掉原来的“背景图填充文字”特效（bg.png + background-clip:text + 位移动画），
+         改为纯色文字，避免中文标题出现绿色重影/故障感，提升可读性 */
+      color: var(--accent-color);
     }
 
     @keyframes animate {
@@ -2525,6 +2518,57 @@
   </style>
   <link rel="stylesheet" href="footer.css" />
   <link rel="stylesheet" href="cn-i18n.css" />
+  <!-- 演示优化：平台能力（Our Platform Benefits）区块浅色化 + 标题去重影特效 -->
+  <style>
+    /* 标题恢复为常规字号（.serif 原本是 3.5rem 超大标题，会撑爆卡片） */
+    .features-title.serif {
+      font-size: 2.5rem;
+      letter-spacing: 0;
+      color: #14532d;
+    }
+    .feature-title.serif {
+      font-size: 1.5rem;
+      letter-spacing: 0;
+      color: #166534;
+    }
+
+    /* 区块背景改为浅色，适合演示展示 */
+    .features {
+      background: linear-gradient(180deg, #f0fdf4 0%, #f7fef9 55%, #ecfdf5 100%);
+    }
+    .features-title {
+      color: #14532d;
+    }
+    .feature-intro {
+      color: #475569;
+    }
+
+    /* 卡片改为白底浅边，文字用深色保证对比度 */
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid #d1fae5;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+    }
+    .feature-card:hover {
+      border-color: #22c55e;
+      box-shadow: 0 14px 34px rgba(16, 185, 129, 0.18);
+    }
+    .feature-title {
+      color: #166534;
+    }
+    .feature-description {
+      color: #475569;
+    }
+
+    @media (max-width: 768px) {
+      .features-title.serif {
+        font-size: 1.9rem;
+      }
+      .feature-title.serif {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
