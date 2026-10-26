@@ -16,7 +16,8 @@ html[lang="zh-CN"] .nav-link {
 
 html[lang="zh-CN"] body {
   letter-spacing: 0.01em;
-  overflow-x: hidden;
+  /* 用 clip 代替 hidden：不创建滚动容器，避免破坏 position: sticky */
+  overflow-x: clip;
 }
 
 html[lang="zh-CN"] .hero {
@@ -26,7 +27,8 @@ html[lang="zh-CN"] .hero {
 html[lang="zh-CN"],
 html[lang="zh-CN"] body {
   max-width: 100%;
-  overflow-x: hidden;
+  /* 用 clip 代替 hidden：hidden 会让 html 成为滚动容器，导致导航栏 sticky 失效 */
+  overflow-x: clip;
 }
 
 html[lang="zh-CN"] h1,

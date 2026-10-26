@@ -20,7 +20,7 @@ class FavoritesManager {
         this.favorites.push(blogData);
         this.save();
 
-        this.showNotification(`Added to favorites: ${blogData.title}`, 'success');
+        this.showNotification(`${blogIsEn() ? 'Added to favorites: ' : '已收藏：'}${blogData.title}`, 'success');
         this.dispatchEvent(blogData.id, true);
         return true;
     }
@@ -29,7 +29,7 @@ class FavoritesManager {
         this.favorites = this.favorites.filter(blog => blog.id !== blogId);
         this.save();
 
-        this.showNotification('Removed from favorites', 'error');
+        this.showNotification((blogIsEn() ? 'Removed from favorites' : '已取消收藏'), 'error');
         this.dispatchEvent(blogId, false);
         return true;
     }
@@ -92,7 +92,7 @@ if (!window.favoritesManager) {
 
             // Show notification
             const notification = document.createElement('div');
-            notification.textContent = `Added to favorites: ${blogData.title}`;
+            notification.textContent = `${blogIsEn() ? 'Added to favorites: ' : '已收藏：'}${blogData.title}`;
             notification.style.cssText = 'position:fixed;top:20px;right:20px;background:#2c5f2d;color:white;padding:12px 20px;border-radius:8px;z-index:10000;';
             document.body.appendChild(notification);
             setTimeout(() => notification.remove(), 3000);
@@ -253,7 +253,7 @@ const DEFAULT_BLOG_IMAGE = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
             <circle cx="150" cy="150" r="80" />
             <rect x="250" y="110" width="520" height="80" rx="8"/>
         </g>
-        <text x="50%" y="85%" font-family="Arial, Helvetica, sans-serif" font-size="32" fill="#2e7d32" text-anchor="middle">AgriTech — Image unavailable</text>
+        <text x="50%" y="85%" font-family="Arial, Helvetica, sans-serif" font-size="32" fill="#2e7d32" text-anchor="middle">农智云 — 图片暂不可用</text>
     </svg>
 `);
 
@@ -477,6 +477,11 @@ function filterPosts() {
 }
 
 // Display posts with favorite buttons
+function blogIsEn() {
+    var l = document.documentElement.getAttribute("data-lang") || document.documentElement.lang || "zh-CN";
+    return l === "en";
+}
+
 function displayPosts() {
     const blogGrid = document.getElementById('blogGrid');
     const startIndex = currentPage * postsPerPage;
@@ -484,11 +489,19 @@ function displayPosts() {
     const postsToShow = filteredPosts.slice(startIndex, endIndex);
 
     if (postsToShow.length === 0 && startIndex === 0) {
-        blogGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">No posts found.</div>';
+        blogGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #666;">' + (en ? 'No posts found.' : '暂无文章') + '</div>';
         document.getElementById('loadMoreBtn').style.display = 'none';
         return;
     }
 
+    const en = blogIsEn();
+    const CATEGORY_LABELS = {
+        "farming-tips": { zh: "种植技巧", en: "Farming Tips" },
+        "technology": { zh: "农业科技", en: "Technology" },
+        "sustainability": { zh: "绿色发展", en: "Sustainability" },
+        "market-trends": { zh: "市场动态", en: "Market Trends" },
+        "business": { zh: "经营与市场", en: "Business" }
+    };
     postsToShow.forEach(post => {
         const isFavorite = window.favoritesManager ? window.favoritesManager.isFavorite(post.id) : false;
         const favoriteIcon = isFavorite ? 'fas fa-heart' : 'far fa-heart';
@@ -508,17 +521,17 @@ function displayPosts() {
                 </button>
             </button>
             <div class="card-content">
-                <span class="card-category">${post.category.replace('-', ' ')}</span>
+                <span class="card-category">${CATEGORY_LABELS[post.category] ? CATEGORY_LABELS[post.category][en ? 'en' : 'zh'] : post.category}</span>
                 <h3 class="card-title">${post.title}</h3>
 
                 <p class="card-description">${post.description || ''}</p>
     
                 <div class="card-footer">
                 <div class="card-meta">
-                    <span class="card-author">By ${post.author}</span>
+                    <span class="card-author">${en ? 'By ' : '作者：'}${post.author}</span>
                     <span class="card-date">${post.date}</span>
                 </div>
-                <button class="read-more-btn"style="margin-top:16px" onclick="openModal('${post.id}')">Read More</button>
+                <button class="read-more-btn"style="margin-top:16px" onclick="openModal('${post.id}')">${en ? 'Read More' : '阅读全文'}</button>
             </div>
         `;
         blogGrid.appendChild(postElement);
@@ -614,7 +627,7 @@ function openModal(postId) {
     // Populate author and date if available
     const authorEl = document.getElementById('modal-Author');
     const dateEl = document.getElementById('modal-Date');
-    if (authorEl) authorEl.textContent = (post.author ? 'By ' + post.author : '');
+    if (authorEl) authorEl.textContent = (post.author ? (blogIsEn() ? 'By ' : '作者：') + post.author : '');
     if (dateEl) dateEl.textContent = (post.date ? post.date : '');
 
     updateModalFavoriteButton();
@@ -688,11 +701,11 @@ if (blogThemeToggle) blogThemeToggle.addEventListener('click', function () {
     if (isDark) {
         document.documentElement.removeAttribute('data-theme');
         icon.textContent = '🌙';
-        text.textContent = 'Dark Mode';
+        text.textContent = '深色模式';
     } else {
         document.documentElement.setAttribute('data-theme', 'dark');
         icon.textContent = '☀️';
-        text.textContent = 'Light Mode';
+        text.textContent = '浅色模式';
     }
 });
 

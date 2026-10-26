@@ -44,33 +44,48 @@
       container.classList.toggle("active");
     });
 
-    navbar.querySelectorAll(".lang-option").forEach(function (opt) {
-      opt.addEventListener("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var lang = opt.getAttribute("data-lang");
-        container.classList.remove("active");
-        navbar.querySelectorAll(".lang-option").forEach(function (o) {
-          o.classList.toggle("active", o === opt);
-        });
-        var label = navbar.querySelector("#current-lang-text");
-        if (label) label.textContent = lang === "en" ? "English" : "中文";
-        try {
-          if (typeof window.setLanguage === "function") {
-            window.setLanguage(lang, lang === "en" ? "English" : "简体中文");
-          } else {
-            localStorage.setItem("agritech_lang", lang);
-            document.documentElement.setAttribute("lang", lang === "en" ? "en" : "zh-CN");
-            document.documentElement.setAttribute("data-lang", lang === "en" ? "en" : "zh-CN");
-          }
-        } catch (err) {}
-      });
+    // 事件委托：即使 i18n 重新生成下拉选项（.cn-localized-option），点击也能生效
+    container.addEventListener("click", function (e) {
+      var opt = e.target.closest(".lang-option, [data-cn-lang], [data-lang]");
+      if (!opt || !container.contains(opt)) return;
+      if (opt.classList.contains("lang-trigger")) return;
+      var lang = opt.getAttribute("data-cn-lang") || opt.getAttribute("data-lang");
+      if (!lang) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+      container.classList.remove("active");
+
+      var target = lang === "en" ? "en" : "zh-CN";
+      var called = false;
+
+      // 优先调用 i18n 暴露的切换 API
+      try {
+        if (window.cnI18n && typeof window.cnI18n.setLanguage === "function") {
+          window.cnI18n.setLanguage(lang);
+          called = true;
+        } else if (typeof window.setLanguage === "function") {
+          window.setLanguage(lang);
+          called = true;
+        }
+      } catch (err) {
+        if (window.console) console.warn("[navbar] setLanguage failed:", err);
+      }
+
+      // 兜底：无论如何先保证语言状态、持久化与导航栏文案切换
+      document.documentElement.setAttribute("data-lang", target);
+      document.documentElement.setAttribute("lang", target);
+      try { localStorage.setItem("agritech_lang", target); } catch (err) {}
+      if (window.applyNavbarLanguage) window.applyNavbarLanguage(target);
+
+      // i18n 调用失败时，刷新整页以按新语言重新初始化
+      if (!called) window.location.reload();
     });
   }
 
   function initSearch(navbar) {
-    var input = navbar.querySelector("#globalSearchInput");
-    var btn = navbar.querySelector("#globalSearchButton");
+    var input = navbar.querySelector(".search-input");
+    var btn = navbar.querySelector(".search-button");
     var box = navbar.querySelector(".search-container");
     if (!input || !box) return;
     if (input.dataset.navBound) return;
@@ -155,6 +170,8 @@
   }
 
   function initTheme(navbar) {
+    // 若页面已加载 theme.js（如首页），由 theme.js 统一处理，避免重复绑定
+    if (window.themeManager) return;
     var toggle = navbar.querySelector(".theme-toggle");
     if (!toggle || toggle.dataset.navThemeBound) return;
     toggle.dataset.navThemeBound = "1";
@@ -179,6 +196,14 @@
   }
 
   function boot() {
+    // 确保导航栏中英文标签脚本已加载（共享导航栏页面统一由它管理文案）
+    if (!window.applyNavbarLanguage && !document.querySelector('script[data-navbar-labels]')) {
+      var ls = document.createElement("script");
+      ls.src = "/navbar-labels.js?v=20261026b";
+      ls.setAttribute("data-navbar-labels", "1");
+      document.head.appendChild(ls);
+    }
+
     // 导航栏通过 includeHTML 异步注入，轮询等待其出现
     var tries = 0;
     var timer = setInterval(function () {

@@ -338,21 +338,18 @@
     .services-dropdown {
       display: none;
       position: absolute;
-      top: calc(100% + 10px);
+      top: calc(100% + 8px);
       left: 0;
-      background: rgba(15, 23, 42, 0.95);
-      /* Dark Surface Token */
-      backdrop-filter: blur(15px) saturate(180%);
-      /* Premium Glassmorphism */
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      /* Subtle Visual Boundary */
-      border-radius: 12px;
-      min-width: 280px;
-      padding: 8px;
+      background: var(--surface-color);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      min-width: 235px;
+      padding: 0.4rem;
       z-index: 1100;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-      /* Pop-Out Transition Timing */
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+      transition: opacity 0.18s ease, transform 0.18s ease;
     }
 
     .services-dropdown.active {
@@ -366,24 +363,24 @@
     }
 
     .services-list li {
-      margin: 0.25rem 0;
+      margin: 0;
     }
 
     .services-list a {
-      color: #cbd5e1 !important;
+      color: var(--text-color);
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 12px 15px;
-      border-radius: 4px;
-      transition: all 0.2s ease;
+      padding: 0.5rem 0.6rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      transition: background 0.18s ease, color 0.18s ease;
     }
 
     .services-list a:hover {
-      background: rgba(34, 197, 94, 0.15);
-      /* Green Glow */
-      transform: scale(1.02) translateX(5px);
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--accent-color);
     }
 
     .services-list i {
@@ -2260,19 +2257,19 @@
       transform: translate(-50%, -50%) scale(1.8);
     }
 
-    /* Hide dropdown by default */
+    /* 下拉面板：与共享导航栏保持一致的浅色/主题样式 */
     .services-dropdown {
       display: none;
       position: absolute;
-      top: calc(100% + 12px);
-      background: rgba(15, 23, 42, 0.95);
-      /* Dark Surface */
-      backdrop-filter: blur(15px) saturate(160%);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      min-width: 280px;
-      padding: 10px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      top: calc(100% + 8px);
+      background: var(--surface-color);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      min-width: 235px;
+      padding: 0.4rem;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
     }
 
     /* Show dropdown when active */
@@ -2299,24 +2296,19 @@
     .services-list li a {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 15px;
-      color: #cbd5e1 !important;
-      /* High-Contrast Vibrant Text */
+      gap: 0.5rem;
+      padding: 0.5rem 0.6rem;
+      color: var(--text-color);
       text-decoration: none;
       border-radius: 8px;
-      transition: all 0.2s ease;
+      transition: background 0.18s ease, color 0.18s ease;
       font-weight: 500;
+      font-size: 0.85rem;
     }
 
     .services-list li a:hover {
-      background: rgba(16, 173, 74, 0.15);
-      /* Brand Green Glow */
-      color: #225504 !important;
-      /* Pure White on Hover */
-      transform: scale(1.02) translateX(5px);
-      /* Interactive Pop-Out */
-      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.1);
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--accent-color);
     }
 
     /* Make sure the container is relative */
@@ -2598,6 +2590,32 @@
 </head>
 
 <body>
+<div id="shared-navbar"></div>
+<style>
+  /* 首页统一使用共享导航栏：隐藏原有导航栏，仅显示共享导航栏 */
+  .navbar { display: none !important; }
+  #shared-navbar { position: sticky; top: 0; z-index: 999; }
+  #shared-navbar nav.navbar { display: block !important; position: static !important; }
+  /* 首页旧样式会把 .services-dropdown 设为 display:none，这里恢复共享导航栏的下拉 */
+  #shared-navbar .services-dropdown { display: block; }
+  /* 首页旧样式给 .lang-trigger 设了白色 !important（原为深色导航用），
+     在共享导航栏的白色按钮上会变成"白字白底"，这里还原为正常主题色 */
+  #shared-navbar .lang-trigger {
+    background: transparent !important;
+    color: var(--nav-text) !important;
+    border: 1px solid var(--nav-border) !important;
+    box-shadow: none !important;
+    border-radius: 8px !important;
+    padding: 0.5rem 0.8rem !important;
+    font-weight: 500 !important;
+  }
+  #shared-navbar .lang-trigger:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  #shared-navbar .lang-option { color: var(--nav-text) !important; }
+</style>
+
   <div id="weather-advisory-banner" class="weather-advisory-banner loading">
     <div class="weather-banner-left">
       <div class="weather-icon"><i class="fas fa-spinner fa-spin"></i></div>
@@ -2633,7 +2651,7 @@
 
   <canvas id="bg-canvas"></canvas>
 
-  <nav class="navbar" aria-label="Primary Navigation">
+  <nav class="navbar" data-no-i18n="true" aria-label="Primary Navigation">
     <div class="navbar-content">
       <!-- Brand -->
       <a href="index.html" class="brand">
@@ -3720,34 +3738,8 @@
 
   <script src="theme.js?v=20261026"></script>
   <script>
-    // 主题初始化与切换统一由 theme.js 负责（此处不再重复绑定，避免点击时切换两次而失效）
-    // Services Dropdown
-    const servicesToggle = document.querySelector(".services-toggle");
-    const servicesDropdown = document.querySelector(".services-dropdown");
-    const servicesArrow = document.querySelector(".services-arrow");
-
-    if (servicesToggle && servicesDropdown && servicesArrow) {
-      servicesToggle.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        servicesDropdown.classList.toggle("active");
-        servicesArrow.classList.toggle("rotated");
-      });
-
-      document.addEventListener("click", (e) => {
-        const container = document.querySelector(
-          ".services-toggle-container",
-        );
-        if (
-          container &&
-          !container.contains(e.target) &&
-          servicesDropdown.classList.contains("active")
-        ) {
-          servicesDropdown.classList.remove("active");
-          servicesArrow.classList.remove("rotated");
-        }
-      });
-    }
+    // 主题与「农业服务」下拉统一由 theme.js / index.js 负责，此处不再重复绑定
+    // （同一元素绑定两次会导致"点一下开、又立刻关"，表现为无反应）
 
     // Language Selector - Handle both .lang-btn and #langTrigger
     function setupLanguageDropdown() {
@@ -4126,9 +4118,9 @@
       });
     }
   </script>
-  <script src="translations.js"></script>
-    <script src="scripts/locales/zh-CN-extra.js" defer></script>
-<script src="scripts/i18n.js"></script>
+  <script src="translations.js" defer></script>
+  <script src="scripts/locales/zh-CN-extra.js" defer></script>
+  <script src="scripts/i18n.js" defer></script>
   <script>
     // Ensure language dropdown works after i18n.js loads
     window.addEventListener('load', function () {
@@ -4359,6 +4351,8 @@
   <script src="voice-input.js"></script>
   <script src="weather-banner.js"></script>
   <script src="footer.js"></script>
+<script src="/navbar-labels.js?v=20261026b" defer></script>
+<script src="/navbar-inject.js" defer></script>
 </body>
 
 </html>
