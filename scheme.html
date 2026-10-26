@@ -52,20 +52,8 @@
       text-align: center;
       letter-spacing: -1px;
 
-      /* Background Image */
-      background-image: url("assets/bg.png");
-      /* put your image path */
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-
-      /* Make text transparent & show bg inside */
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-
-      /* Smooth moving animation */
-      animation: moveBg 15s linear infinite;
+      /* 去掉背景图填充文字的特效（浅色下会发白看不清），改为纯色 */
+      color: var(--accent-color, #16a34a);
     }
 
     @keyframes moveBg {
@@ -961,7 +949,7 @@
 
 <body>
   <!-- Include Navbar -->
-  <div w3-include-html="navbar.html"></div>
+  <div w3-include-html="navbar.html?v=20261026-layout5"></div>
 
   <section class="hero">
     <div class="form-card">
@@ -1176,7 +1164,7 @@
 
       function updateUI(theme) {
         if (label) label.textContent = theme === 'dark' ? '深色' : '浅色';
-        if (icon) icon.classList.replace(theme === 'dark' ? 'fa-moon' : 'fa-sun', theme === 'dark' ? 'fa-sun' : 'fa-moon');
+        // 太阳/月亮图标由导航栏 CSS 控制，无需在此切换
       }
 
       const savedTheme = localStorage.getItem('agritech-theme') || 'light';
@@ -1597,6 +1585,7 @@
     <script src="translations.js" defer></script>
   <script src="scripts/locales/zh-CN-extra.js" defer></script>
 <script src="scripts/i18n.js" defer></script>
+  <script src="navbar-home.js" defer></script>
 </body>
 
 </html>

@@ -110,6 +110,15 @@
 </head>
 
 <body class="levelup-page">
+<div id="shared-navbar"></div>
+<style>
+  /* 统一共享导航栏：隐藏本页旧导航与占位间隔，仅显示共享导航栏 */
+  .navbar, .agritech-navbar { display: none !important; }
+  .agritech-navbar-spacer { display: none !important; }
+  #shared-navbar { position: sticky; top: 0; z-index: 999; }
+  #shared-navbar nav.navbar { display: block !important; position: static !important; }
+</style>
+
 
   <!-- Primary Navigation Bar -->
   <nav class="agritech-navbar" aria-label="Primary navigation">
@@ -503,6 +512,7 @@
     <script src="translations.js" defer></script>
   <script src="scripts/locales/zh-CN-extra.js" defer></script>
 <script src="scripts/i18n.js" defer></script>
+<script src="/navbar-inject.js" defer></script>
 </body>
 
 </html>

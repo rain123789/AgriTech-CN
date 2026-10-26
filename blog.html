@@ -110,7 +110,7 @@
 
 <body>
   <!-- Include Navbar -->
-  <div w3-include-html="navbar.html"></div>
+  <div w3-include-html="navbar.html?v=20261026-layout5"></div>
 
   <section class="agritech-blog">
     <div class="blog-container">
@@ -406,12 +406,7 @@
             theme === 'dark' ? 'Dark' : 'Light';
         }
 
-        if (themeIcon) {
-          themeIcon.className =
-            theme === 'dark'
-              ? 'fas fa-sun'
-              : 'fas fa-moon';
-        }
+        // 新导航栏的太阳/月亮图标由 CSS 控制，这里不再改写图标类名
       }
 
       const savedTheme =
@@ -588,6 +583,7 @@
   </script>
 
   <script src="footer.js"></script>
+  <script src="navbar-home.js" defer></script>
 </body>
 
 </html>

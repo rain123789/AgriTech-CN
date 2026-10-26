@@ -339,16 +339,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateNetworkStatus() {
     if (!navigator.onLine) {
-      statusDiv.textContent = '⚠️ Offline or poor connection';
+      statusDiv.textContent = '⚠️ 网络已断开，正在使用离线缓存';
       statusDiv.classList.remove('hidden');
     } else {
-      // Check if slow/limited connection
-      if (navigator.connection && (navigator.connection.effectiveType === '2g' || navigator.connection.effectiveType === '3g')) {
-        statusDiv.textContent = '📶 Poor/slow connection';
+      // 仅在极慢网络（2G 及以下）时提示；3G/4G 不再误报
+      const et = navigator.connection && navigator.connection.effectiveType;
+      if (et === 'slow-2g' || et === '2g') {
+        statusDiv.textContent = '📶 当前网络较慢，加载可能延迟';
         statusDiv.classList.remove('hidden');
       } else {
         statusDiv.classList.add('hidden');
-        cachedDiv.classList.add('hidden'); // clear cached notice too
+        cachedDiv.classList.add('hidden'); // 同时清除缓存提示
       }
     }
   }

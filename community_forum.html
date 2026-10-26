@@ -150,6 +150,14 @@ body.dark-mode .modal-content {
 </style>
 
 <body>
+<div id="shared-navbar"></div>
+<style>
+  /* 统一共享导航栏：隐藏各页旧导航，仅显示注入的共享导航栏 */
+  .navbar { display: none !important; }
+  #shared-navbar { position: sticky; top: 0; z-index: 999; }
+  #shared-navbar nav.navbar { display: block !important; position: static !important; }
+</style>
+
 
   <!-- AgriTech Navbar -->
   <nav class="navbar">
@@ -642,5 +650,6 @@ body.dark-mode .modal-content {
     <script src="translations.js" defer></script>
   <script src="scripts/locales/zh-CN-extra.js" defer></script>
 <script src="scripts/i18n.js" defer></script>
+<script src="/navbar-inject.js" defer></script>
 </body>
 </html>

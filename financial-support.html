@@ -76,19 +76,8 @@
   text-align: center;
   letter-spacing: -1px;
 
-  /* Background Image */
-  background-image: url("assets/bg.png"); /* put your image path */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  /* Make text transparent & show bg inside */
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-
-  /* Smooth moving animation */
-  animation: moveBg 15s linear infinite;
+  /* 去掉背景图填充文字的特效（浅色下会发白看不清），改为纯色 */
+  color: var(--accent-secondary, #16a34a);
 }
    @keyframes moveBg {
   0% {
@@ -1211,6 +1200,14 @@
 </head>
 
 <body>
+<div id="shared-navbar"></div>
+<style>
+  /* 统一共享导航栏：隐藏各页旧导航，仅显示注入的共享导航栏 */
+  .navbar { display: none !important; }
+  #shared-navbar { position: sticky; top: 0; z-index: 999; }
+  #shared-navbar nav.navbar { display: block !important; position: static !important; }
+</style>
+
   <nav class="navbar">
     <div class="navbar-content">
       <a href="index.html" class="btn btn-secondary" style="display: flex; align-items: center; gap: 0.5rem;">
@@ -1879,6 +1876,7 @@ animateCursor();
     <script src="translations.js" defer></script>
   <script src="scripts/locales/zh-CN-extra.js" defer></script>
 <script src="scripts/i18n.js" defer></script>
+<script src="/navbar-inject.js" defer></script>
 </body>
 
 </html>

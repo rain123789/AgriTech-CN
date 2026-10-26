@@ -99,3 +99,4 @@ Plant Disease Detection/plant-disease-model-complete.pth
 *.bak
 .vercel
 .env*
+.workbuddy/
