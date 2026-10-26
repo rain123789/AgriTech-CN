@@ -218,10 +218,7 @@
     // 确保导航栏中英文标签脚本已加载（共享导航栏页面统一由它管理文案）
     if (!window.applyNavbarLanguage && !document.querySelector('script[data-navbar-labels]')) {
       var ls = document.createElement("script");
-      // 复用页面已有的版本号，避免同页出现两份不同版本的标签脚本
-      var existing = document.querySelector('script[src*="navbar-labels.js"]');
-      var ver = existing ? (String(existing.getAttribute("src")).match(/[?&]v=([^&]+)/) || [])[1] : null;
-      ls.src = "/navbar-labels.js?v=" + (ver || "20261026f");
+      ls.src = "/navbar-labels.js?v=20261026c";
       ls.setAttribute("data-navbar-labels", "1");
       document.head.appendChild(ls);
     }
