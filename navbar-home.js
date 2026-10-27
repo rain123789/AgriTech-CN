@@ -218,7 +218,7 @@
     // 确保导航栏中英文标签脚本已加载（共享导航栏页面统一由它管理文案）
     if (!window.applyNavbarLanguage && !document.querySelector('script[data-navbar-labels]')) {
       var ls = document.createElement("script");
-      ls.src = "/navbar-labels.js?v=20261026c";
+      ls.src = "/navbar-labels.js?v=20261027a";
       ls.setAttribute("data-navbar-labels", "1");
       document.head.appendChild(ls);
     }

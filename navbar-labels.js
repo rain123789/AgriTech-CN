@@ -120,7 +120,11 @@
     });
   }
 
-  window.applyNavbarLanguage = apply;
+  // 允许无参调用：未显式指定语言时按当前全局语言处理，
+  // 便于导航栏注入方在 DOM 变化后主动对齐文案。
+  window.applyNavbarLanguage = function (lang) {
+    apply(lang || currentLang());
+  };
 
   // 监听 i18n 的语言切换事件（i18n 会先翻译页面，再派发事件，这里后执行覆盖导航栏）
   window.addEventListener("languageChanged", function (e) {

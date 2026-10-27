@@ -5,7 +5,7 @@
  */
 (function () {
   "use strict";
-  var VERSION = "20261026-shared11";
+  var VERSION = "20261027a";
 
   function boot() {
     var host = document.getElementById("shared-navbar");
@@ -18,6 +18,12 @@
       })
       .then(function (html) {
         host.innerHTML = html;
+        // 注入完成即按当前语言对齐文案。
+        // 不能依赖 navbar-labels 的轮询：它一旦命中页面内联的旧导航就会停止轮询，
+        // 若本次 fetch 慢于首轮轮询（线上 CDN 常见），新导航会停留在 navbar.html 的中文原文。
+        if (typeof window.applyNavbarLanguage === "function") {
+          window.applyNavbarLanguage();
+        }
         // 动态加载交互脚本（innerHTML 中的 <script> 不会执行，需单独加载）
         if (!document.querySelector('script[data-navbar-home]')) {
           var s = document.createElement("script");
