@@ -49,6 +49,14 @@
 </head>
 
 <body>
+<div id="shared-navbar"></div>
+<style>
+  /* 统一共享导航栏：隐藏本页旧导航，仅显示注入的共享导航栏（与首页一致） */
+  .navbar { display: none !important; }
+  #shared-navbar { position: sticky; top: 0; z-index: 999; }
+  #shared-navbar nav.navbar { display: block !important; position: static !important; }
+</style>
+
   <div id="weather-advisory-banner" class="weather-advisory-banner loading">
     <div class="weather-banner-left">
       <div class="weather-icon"><i class="fas fa-spinner fa-spin"></i></div>
@@ -734,6 +742,9 @@
     <script src="translations.js" defer></script>
   <script src="scripts/locales/zh-CN-extra.js" defer></script>
 <script src="scripts/i18n.js" defer></script>
+<script src="/navbar-labels.js?v=20261027a" defer></script>
+<script src="/navbar-inject.js?v=20261027a" defer></script>
+<script src="weather-banner.js"></script>
 </body>
 
 </html>
