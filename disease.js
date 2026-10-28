@@ -227,20 +227,21 @@ async function isPlantImage() {
  */
 async function simulateAIAnalysis(imageFile) {
   const dataUrl = await readPreviewDataUrl(imageFile);
+  const cropHint = document.getElementById('cropHint')?.value || '';
   const response = await fetch('/api/disease/predict', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ image: dataUrl }),
+    body: JSON.stringify({ image: dataUrl, crop_type: cropHint || undefined }),
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok || data.status !== 'ok') {
-    throw new Error(data.message || '本地病害模型暂不可用，请检查后端依赖。');
+    throw new Error(data.message || '识别服务暂不可用，请稍后再试。');
   }
 
   const prediction = data.prediction;
   const label = prediction.label || '';
   const severePattern = /(Late_blight|Yellow_Leaf_Curl_Virus|mosaic_virus|Haunglongbing|Black_rot|Esca)/i;
-  const severity = prediction.is_healthy ? 'low' : severePattern.test(label) ? 'high' : 'medium';
+  const severity = prediction.severity || (prediction.is_healthy ? 'low' : severePattern.test(label) ? 'high' : 'medium');
   return {
     disease: label,
     confidence: Math.round(Number(prediction.confidence) * 100),
@@ -808,20 +809,33 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((response) => response.ok ? response.json() : null)
     .then((status) => {
       const badge = document.getElementById('modelStatus');
-      if (!badge || !status?.plant_disease_model) return;
-      if (!status.plant_disease_model.available) {
+      if (!badge || !status) return;
+      const localReady = !!status.plant_disease_model?.available;
+      const cloudReady = !!status.vision_model?.available;
+      const button = document.getElementById('analyzeBtn');
+
+      if (!localReady && !cloudReady) {
         badge.className = 'status-indicator status-warning';
         badge.style.color = '#92400e';
         badge.style.background = '#fffbeb';
-        badge.innerHTML = '<span aria-hidden="true">⚠️</span> 本地病害模型自检失败，图片识别已禁用；请查看页面说明，不能替代田间诊断。';
-        badge.title = status.plant_disease_model.error || '模型不可用';
-        const button = document.getElementById('analyzeBtn');
+        badge.innerHTML = '<span aria-hidden="true">⚠️</span> 识别服务未就绪（本地模型与云端模型均不可用），图片识别已禁用；不能替代田间诊断。';
+        badge.title = status.plant_disease_model?.error || '识别服务不可用';
         if (button) {
           button.disabled = true;
-          button.textContent = '模型自检失败 · 暂不可识别';
+          button.textContent = '识别服务未就绪 · 暂不可识别';
         }
-      } else {
+        return;
+      }
+
+      badge.className = 'status-indicator status-success';
+      badge.style.color = '';
+      badge.style.background = '';
+      if (localReady) {
+        badge.title = '本地 PyTorch 模型已加载';
         badge.innerHTML = '<span aria-hidden="true">✅</span> 本地模型已就绪，请上传清晰叶片图片';
+      } else {
+        badge.title = `云端多模态：${status.vision_model.model}（${status.vision_model.endpoint}）`;
+        badge.innerHTML = `<span aria-hidden="true">☁️</span> 云端多模态已就绪（${status.vision_model.model}），请上传清晰叶片图片`;
       }
     })
     .catch(() => {});

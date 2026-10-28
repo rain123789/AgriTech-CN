@@ -186,6 +186,24 @@
               </div>
             </div>
             <input type="file" id="fileInput" class="file-input" accept="image/*" />
+            <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:14px 0 10px">
+              <label for="cropHint" style="font-size:0.85rem;color:#475569">作物（可选，能明显提升准确率）</label>
+              <select id="cropHint" style="padding:6px 10px;border:1px solid #cbd5e1;border-radius:8px;font-size:0.85rem;background:#fff;color:#0f172a">
+                <option value="">自动判断</option>
+                <option value="番茄">番茄</option>
+                <option value="黄瓜">黄瓜</option>
+                <option value="玉米">玉米</option>
+                <option value="小麦">小麦</option>
+                <option value="水稻">水稻</option>
+                <option value="马铃薯">马铃薯</option>
+                <option value="辣椒">辣椒</option>
+                <option value="茄子">茄子</option>
+                <option value="草莓">草莓</option>
+                <option value="葡萄">葡萄</option>
+                <option value="苹果">苹果</option>
+                <option value="柑橘">柑橘</option>
+              </select>
+            </div>
             <center>
               <button class="btn" id="analyzeBtn" disabled>
                 <span aria-hidden="true">🔍</span> 分析植物健康

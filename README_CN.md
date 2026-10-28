@@ -64,6 +64,26 @@ DEEPSEEK_MODEL=deepseek-chat
 
 密钥只存在于服务端环境变量，不会写入前端代码、示例配置或 Git 提交。
 
+### 图片病害识别的两条通道
+
+| 通道 | 条件 | 说明 |
+| --- | --- | --- |
+| 本地模型 | 容器内可 `import torch` 且存在 `Plant Disease Detection/plant-disease-model.pth` | 38 类 PlantVillage 公开数据集，离线可用、零调用成本 |
+| 云端多模态 | `.env` 配置 `DASHSCOPE_API_KEY` | 阿里云百炼 OpenAI 兼容接口，本地模型不可用时自动接管 |
+
+```ini
+DASHSCOPE_API_KEY=你的百炼密钥
+DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
+QWEN_VISION_MODEL=qwen3-vl-plus
+QWEN_VISION_TIMEOUT=45
+```
+
+- 本地优先：本地模型能出结果时不调用云端，避免产生费用；本地调试可设 `DISEASE_ENGINE=cloud` 强制走云端。
+- 作物提示：页面可选出作物，云端按该作物收窄判断范围，准确率明显提升（实测玉米锈病 3/3 命中）。
+- 自动降级：本地不可用（Vercel 容器未安装 torch）时改用云端；两条通道都不可用才报错。
+- 地域：中国站用 `dashscope.aliyuncs.com`，国际站用 `dashscope-intl.aliyuncs.com`，密钥不可跨站使用。
+- 免费额度：新用户按模型分别赠送（常见为 100 万 Token、90 天有效），仅限指定地域；用尽后按量计费，建议在控制台开启「额度用尽即停止调用」。
+
 ---
 
 ## 四、主要页面与可用状态
