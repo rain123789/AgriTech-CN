@@ -9,6 +9,11 @@ function dzIsEn() {
   }
 }
 
+// 文案取中文或英文，避免模板里反复写 dzIsEn() 三元
+const dzT = (zh, en) => (dzIsEn() ? en : zh);
+const dzSeverity = (level) =>
+  dzIsEn() ? String(level || "").toUpperCase() : ({ low: "低", medium: "中", high: "高" }[level] || level);
+
 const diseaseDatabase = {
   Tomato___Bacterial_spot: {
     name: "Tomato Bacterial Spot",
@@ -255,7 +260,7 @@ async function simulateAIAnalysis(imageFile) {
     lowConfidence: Boolean(data.low_confidence),
     disclaimer: data.disclaimer || '',
     modelScope: data.model?.scope || '',
-    source: 'local-pytorch',
+    source: data.engine === 'cloud' ? 'cloud-qwen' : 'local-pytorch',
   };
 }
 
@@ -342,8 +347,8 @@ analyzeBtn.addEventListener("click", async () => {
       analyzeBtn.disabled = false;
       resultsDiv.innerHTML = `
         <div class="result-card" style="border-left-color: #ffc107;">
-          <div class="disease-name" style="color: #ffc107;">⚠️ Invalid Image</div>
-          <div class="description">Please upload a valid plant image.</div>
+          <div class="disease-name" style="color: #ffc107;">${dzT("⚠️ 图片无效", "⚠️ Invalid Image")}</div>
+          <div class="description">${dzT("请上传一张有效的作物叶片照片。", "Please upload a valid plant image.")}</div>
         </div>`;
         document.getElementById("downloadPdfBtn").style.display = "none";
       return;
@@ -360,8 +365,8 @@ analyzeBtn.addEventListener("click", async () => {
     loading.style.display = "none";
     resultsDiv.innerHTML = `
                     <div class="result-card" style="border-left-color: #dc3545;">
-                        <div class="disease-name" style="color: #dc3545;">❌ Analysis Failed</div>
-                        <div class="description">Unable to analyze the image. Please try again with a clearer image.</div>
+                        <div class="disease-name" style="color: #dc3545;">${dzIsEn() ? "❌ Analysis Failed" : "❌ 分析失败"}</div>
+                        <div class="description">${dzIsEn() ? "Unable to analyze the image. Please try again with a clearer image." : "图片分析失败，请换一张更清晰的叶片照片重试。"}</div>
                     </div>
                 `;
           document.getElementById("downloadPdfBtn").style.display = "none";
@@ -442,7 +447,7 @@ function deleteHistoryItem(id) {
 }
 
 function clearAllHistory() {
-  if (confirm("Are you sure you want to clear all stored diagnosis history?")) {
+  if (confirm(dzIsEn() ? "Are you sure you want to clear all stored diagnosis history?" : "确定要清空全部识别历史吗？该操作不可撤销。")) {
     localStorage.removeItem(HISTORY_STORAGE_KEY);
     updateHistoryUI();
     renderHistoryList();
@@ -458,7 +463,9 @@ function updateHistoryUI() {
   }
   const totalText = document.getElementById("historyTotalText");
   if (totalText) {
-    totalText.textContent = `${history.length} scan${history.length === 1 ? "" : "s"} stored`;
+    totalText.textContent = dzIsEn()
+      ? `${history.length} scan${history.length === 1 ? "" : "s"} stored`
+      : `已保存 ${history.length} 条识别记录`;
   }
   
   const compareBtn = document.getElementById("compareBtn");
@@ -467,9 +474,13 @@ function updateHistoryUI() {
     compareBtn.disabled = !hasPrevious;
     if (hasPrevious) {
       const prev = history[1];
-      compareBtn.title = `Compare with previous diagnosis (${prev.crop} - ${prev.name})`;
+      compareBtn.title = dzIsEn()
+        ? `Compare with previous diagnosis (${prev.crop} - ${prev.name})`
+        : `与上次识别结果对比（${prev.crop} - ${prev.name}）`;
     } else {
-      compareBtn.title = "Compare will be available once you have more than 1 scan";
+      compareBtn.title = dzIsEn()
+        ? "Compare will be available once you have more than 1 scan"
+        : "累计 2 次以上识别后即可对比";
     }
   }
 }
@@ -481,7 +492,7 @@ function openComparisonModal(specificPreviousId = null) {
   }
 
   if (!currentPredictionRecord) {
-    alert("Please run a plant disease diagnosis first to compare results.");
+    alert(dzIsEn() ? "Please run a plant disease diagnosis first to compare results." : "请先完成一次识别，再进行结果对比。");
     return;
   }
 
@@ -490,7 +501,9 @@ function openComparisonModal(specificPreviousId = null) {
   );
 
   if (previousCandidates.length === 0) {
-    alert("No previous scan found in history to compare with. Please upload another plant image to see side-by-side temporal changes.");
+    alert(dzIsEn()
+      ? "No previous scan found in history to compare with. Please upload another plant image to see side-by-side temporal changes."
+      : "历史记录中还没有可对比的识别结果。再上传一张照片，就能看到两次识别的变化对比。");
     return;
   }
 
@@ -527,15 +540,21 @@ function renderComparison(curr, prev) {
   const prevSevScore = severityOrder[prev.severity] || 1;
 
   let severityDiffClass = "diff-badge same";
-  let severityDiffText = "● Unchanged";
+  let severityDiffText = dzT("● 持平", "● Unchanged");
   let severityRowClass = "";
   if (currSevScore < prevSevScore) {
     severityDiffClass = "diff-badge improved";
-    severityDiffText = `▲ Improved (${prev.severity} → ${curr.severity})`;
+    severityDiffText = dzT(
+      `▲ 好转（${dzSeverity(prev.severity)} → ${dzSeverity(curr.severity)}）`,
+      `▲ Improved (${prev.severity} → ${curr.severity})`
+    );
     severityRowClass = "diff-highlight-improved";
   } else if (currSevScore > prevSevScore) {
     severityDiffClass = "diff-badge worsened";
-    severityDiffText = `▼ Worsened (${prev.severity} → ${curr.severity})`;
+    severityDiffText = dzT(
+      `▼ 加重（${dzSeverity(prev.severity)} → ${dzSeverity(curr.severity)}）`,
+      `▼ Worsened (${prev.severity} → ${curr.severity})`
+    );
     severityRowClass = "diff-highlight-worsened";
   }
 
@@ -547,13 +566,13 @@ function renderComparison(curr, prev) {
   // Disease match
   const diseaseMatch = curr.name === prev.name;
   const diseaseDiffClass = diseaseMatch ? "diff-badge same" : "diff-badge changed";
-  const diseaseDiffText = diseaseMatch ? "✓ Same Condition" : "↔ Different Diagnosis";
+  const diseaseDiffText = diseaseMatch ? dzT("✓ 同一种病害", "✓ Same Condition") : dzT("↔ 诊断不同", "↔ Different Diagnosis");
   const diseaseRowClass = diseaseMatch ? "" : "diff-highlight-changed";
 
   // Crop match
   const cropMatch = curr.crop.toLowerCase() === prev.crop.toLowerCase();
   const cropDiffClass = cropMatch ? "diff-badge same" : "diff-badge changed";
-  const cropDiffText = cropMatch ? "✓ Same Crop" : "↔ Different Crop";
+  const cropDiffText = cropMatch ? dzT("✓ 同一种作物", "✓ Same Crop") : dzT("↔ 作物不同", "↔ Different Crop");
 
   // Smart Summary banner
   const banner = document.getElementById("comparisonSummaryBanner");
@@ -563,24 +582,24 @@ function renderComparison(curr, prev) {
       if (currSevScore < prevSevScore) {
         banner.className = "comparison-summary-banner improved";
         bannerHtml = `<i class="fas fa-check-circle" style="font-size: 1.4rem;"></i>
-          <div><strong>Positive Recovery:</strong> The ${curr.crop} plant shows reduced disease severity compared to the scan on ${prev.dateFormatted}. Continue prescribed treatments!</div>`;
+          <div>${dzT(`<strong>病情好转：</strong>与 ${prev.dateFormatted} 的识别相比，${curr.crop} 的病害严重度下降，请继续按方案管理。`, `<strong>Positive Recovery:</strong> The ${curr.crop} plant shows reduced disease severity compared to the scan on ${prev.dateFormatted}. Continue prescribed treatments!`)}</div>`;
       } else if (currSevScore > prevSevScore) {
         banner.className = "comparison-summary-banner worsened";
         bannerHtml = `<i class="fas fa-exclamation-triangle" style="font-size: 1.4rem;"></i>
-          <div><strong>Attention Required:</strong> Disease severity has progressed from <u>${prev.severity.toUpperCase()}</u> to <u>${curr.severity.toUpperCase()}</u> since ${prev.dateFormatted}. Immediate intervention advised.</div>`;
+          <div>${dzT(`<strong>需要关注：</strong>自 ${prev.dateFormatted} 起，严重度由 <u>${prev.severity.toUpperCase()}</u> 升至 <u>${curr.severity.toUpperCase()}</u>，建议尽快处理。`, `<strong>Attention Required:</strong> Disease severity has progressed from <u>${prev.severity.toUpperCase()}</u> to <u>${curr.severity.toUpperCase()}</u> since ${prev.dateFormatted}. Immediate intervention advised.`)}</div>`;
       } else {
         banner.className = "comparison-summary-banner";
         bannerHtml = `<i class="fas fa-info-circle" style="font-size: 1.4rem;"></i>
-          <div><strong>Consistent Status:</strong> Diagnosis confirmed as <strong>${curr.name}</strong> (${curr.confidence}% confidence) with stable severity level.</div>`;
+          <div>${dzT(`<strong>病情稳定：</strong>两次识别均为 <strong>${curr.name}</strong>（置信度 ${curr.confidence}%），严重度等级未变化。`, `<strong>Consistent Status:</strong> Diagnosis confirmed as <strong>${curr.name}</strong> (${curr.confidence}% confidence) with stable severity level.`)}</div>`;
       }
     } else if (cropMatch && !diseaseMatch) {
       banner.className = "comparison-summary-banner changed";
       bannerHtml = `<i class="fas fa-exchange-alt" style="font-size: 1.4rem;"></i>
-        <div><strong>Diagnosis Transition on ${curr.crop}:</strong> Previous scan detected <em>${prev.name}</em>, whereas current scan identified <em>${curr.name}</em>. Review updated treatment protocol.</div>`;
+        <div>${dzT(`<strong>${curr.crop} 的诊断变化：</strong>上次为 <em>${prev.name}</em>，本次为 <em>${curr.name}</em>，请按新的诊断调整管理方案。`, `<strong>Diagnosis Transition on ${curr.crop}:</strong> Previous scan detected <em>${prev.name}</em>, whereas current scan identified <em>${curr.name}</em>. Review updated treatment protocol.`)}</div>`;
     } else {
       banner.className = "comparison-summary-banner";
       bannerHtml = `<i class="fas fa-balance-scale" style="font-size: 1.4rem;"></i>
-        <div><strong>Cross-Crop Comparison:</strong> Comparing <strong>${curr.crop}</strong> (${curr.name}) against previously analyzed <strong>${prev.crop}</strong> (${prev.name}).</div>`;
+        <div>${dzT(`<strong>跨作物对比：</strong>本次为 <strong>${curr.crop}</strong>（${curr.name}），上次为 <strong>${prev.crop}</strong>（${prev.name}），建议分别对照管理。`, `<strong>Cross-Crop Comparison:</strong> Comparing <strong>${curr.crop}</strong> (${curr.name}) against previously analyzed <strong>${prev.crop}</strong> (${prev.name}).`)}</div>`;
     }
     banner.innerHTML = bannerHtml;
   }
@@ -588,11 +607,11 @@ function renderComparison(curr, prev) {
   // Populate Table Headers
   const prevHeader = document.getElementById("prevColHeader");
   if (prevHeader) {
-    prevHeader.innerHTML = `<i class="fas fa-history"></i> Previous (${prev.dateFormatted})`;
+    prevHeader.innerHTML = dzT(`<i class="fas fa-history"></i> 上次（${prev.dateFormatted}）`, `<i class="fas fa-history"></i> Previous (${prev.dateFormatted})`);
   }
   const currHeader = document.getElementById("currColHeader");
   if (currHeader) {
-    currHeader.innerHTML = `<i class="fas fa-camera"></i> Current (${curr.dateFormatted})`;
+    currHeader.innerHTML = dzT(`<i class="fas fa-camera"></i> 本次（${curr.dateFormatted}）`, `<i class="fas fa-camera"></i> Current (${curr.dateFormatted})`);
   }
 
   // Build Table Rows
@@ -600,54 +619,54 @@ function renderComparison(curr, prev) {
   if (tbody) {
     tbody.innerHTML = `
       <tr>
-        <td class="param-col"><i class="fas fa-image"></i> Leaf Photograph</td>
+        <td class="param-col"><i class="fas fa-image"></i> ${dzT("叶片照片", "Leaf Photograph")}</td>
         <td class="prev-col">
           <img src="${prev.thumbnail}" alt="${prev.name}" class="comparison-thumb">
         </td>
         <td class="curr-col">
           <img src="${curr.thumbnail}" alt="${curr.name}" class="comparison-thumb">
         </td>
-        <td class="diff-col"><span class="diff-badge same">Visual</span></td>
+        <td class="diff-col"><span class="diff-badge same">${dzT("照片", "Visual")}</span></td>
       </tr>
       <tr class="${cropMatch ? '' : 'diff-highlight-changed'}">
-        <td class="param-col"><i class="fas fa-seedling"></i> Plant / Crop</td>
+        <td class="param-col"><i class="fas fa-seedling"></i> ${dzT("作物", "Plant / Crop")}</td>
         <td class="prev-col"><strong>${prev.crop}</strong></td>
         <td class="curr-col"><strong>${curr.crop}</strong></td>
         <td class="diff-col"><span class="${cropDiffClass}">${cropDiffText}</span></td>
       </tr>
       <tr class="${diseaseRowClass}">
-        <td class="param-col"><i class="fas fa-stethoscope"></i> Diagnosed Disease</td>
+        <td class="param-col"><i class="fas fa-stethoscope"></i> ${dzT("识别结果", "Diagnosed Disease")}</td>
         <td class="prev-col"><strong style="color: var(--color-brand-dark);">${prev.name}</strong></td>
         <td class="curr-col"><strong style="color: var(--color-brand-dark);">${curr.name}</strong></td>
         <td class="diff-col"><span class="${diseaseDiffClass}">${diseaseDiffText}</span></td>
       </tr>
       <tr class="${severityRowClass}">
-        <td class="param-col"><i class="fas fa-shield-virus"></i> Severity Level</td>
+        <td class="param-col"><i class="fas fa-shield-virus"></i> ${dzT("严重度", "Severity Level")}</td>
         <td class="prev-col">
-          <span class="comparison-severity-tag ${prev.severity}">${prev.severity.toUpperCase()}</span>
+          <span class="comparison-severity-tag ${prev.severity}">${dzSeverity(prev.severity)}</span>
         </td>
         <td class="curr-col">
-          <span class="comparison-severity-tag ${curr.severity}">${curr.severity.toUpperCase()}</span>
+          <span class="comparison-severity-tag ${curr.severity}">${dzSeverity(curr.severity)}</span>
         </td>
         <td class="diff-col"><span class="${severityDiffClass}">${severityDiffText}</span></td>
       </tr>
       <tr class="${confDelta !== 0 ? 'diff-highlight-changed' : ''}">
-        <td class="param-col"><i class="fas fa-percentage"></i> AI Confidence</td>
+        <td class="param-col"><i class="fas fa-percentage"></i> ${dzT("模型置信度", "AI Confidence")}</td>
         <td class="prev-col"><strong>${prev.confidence}%</strong></td>
         <td class="curr-col"><strong>${curr.confidence}%</strong></td>
         <td class="diff-col"><span class="${confDiffClass}">${confDelta > 0 ? '▲ ' : confDelta < 0 ? '▼ ' : ''}${confDeltaText}</span></td>
       </tr>
       <tr>
-        <td class="param-col"><i class="fas fa-book-open"></i> Description & Symptoms</td>
+        <td class="param-col"><i class="fas fa-book-open"></i> ${dzT("症状描述", "Description & Symptoms")}</td>
         <td class="prev-col" style="font-size: 0.88rem; color: var(--text-gray);">${prev.description}</td>
         <td class="curr-col" style="font-size: 0.88rem; color: var(--text-gray);">${curr.description}</td>
-        <td class="diff-col"><span class="diff-badge same">${prev.description === curr.description ? 'Identical' : 'Updated'}</span></td>
+        <td class="diff-col"><span class="diff-badge same">${prev.description === curr.description ? dzT("相同", "Identical") : dzT("已更新", "Updated")}</span></td>
       </tr>
       <tr class="${prev.treatment !== curr.treatment ? 'diff-highlight-changed' : ''}">
-        <td class="param-col"><i class="fas fa-prescription-bottle-alt"></i> Recommended Treatment</td>
+        <td class="param-col"><i class="fas fa-prescription-bottle-alt"></i> ${dzT("防治建议", "Recommended Treatment")}</td>
         <td class="prev-col" style="font-size: 0.88rem;">${prev.treatment}</td>
         <td class="curr-col" style="font-size: 0.88rem;">${curr.treatment}</td>
-        <td class="diff-col"><span class="diff-badge ${prev.treatment === curr.treatment ? 'same' : 'changed'}">${prev.treatment === curr.treatment ? 'Match' : 'Prescription'}</span></td>
+        <td class="diff-col"><span class="diff-badge ${prev.treatment === curr.treatment ? 'same' : 'changed'}">${prev.treatment === curr.treatment ? dzT("一致", "Match") : dzT("已调整", "Prescription")}</span></td>
       </tr>
     `;
   }
@@ -662,7 +681,7 @@ function renderHistoryList() {
     container.innerHTML = `
       <div style="text-align: center; padding: 40px 20px; color: var(--text-gray);">
         <i class="fas fa-folder-open" style="font-size: 2.5rem; color: var(--border); margin-bottom: 10px;"></i>
-        <p>No diagnosis history saved yet. Scanned plants will appear here.</p>
+        <p>${dzT("还没有识别历史，完成一次识别后会显示在这里。", "No diagnosis history saved yet. Scanned plants will appear here.")}</p>
       </div>
     `;
     return;
@@ -682,10 +701,10 @@ function renderHistoryList() {
         </div>
       </div>
       <div class="history-card-actions">
-        <button class="btn-sm-primary" onclick="openComparisonWithHistorical('${item.id}')" title="Compare this scan with current">
-          <i class="fas fa-columns"></i> Compare
+        <button class="btn-sm-primary" onclick="openComparisonWithHistorical('${item.id}')" title="${dzT("与本次结果对比", "Compare this scan with current")}">
+          <i class="fas fa-columns"></i> ${dzT("对比", "Compare")}
         </button>
-        <button class="btn-icon" onclick="deleteHistoryItem('${item.id}')" title="Delete record">
+        <button class="btn-icon" onclick="deleteHistoryItem('${item.id}')" title="${dzT("删除记录", "Delete record")}">
           <i class="fas fa-trash-alt"></i>
         </button>
       </div>
@@ -859,12 +878,12 @@ function validateImage(file) {
 
   if (!validTypes.includes(file.type)) {
     throw new Error(
-      "Invalid file type. Please upload JPG, PNG, or WebP images only."
+      dzT("文件格式不支持，请上传 JPG、PNG 或 WebP 图片。", "Invalid file type. Please upload JPG, PNG, or WebP images only.")
     );
   }
 
   if (file.size > maxSize) {
-    throw new Error("File too large. Please upload images smaller than 10MB.");
+    throw new Error(dzT("图片超过 10 MB，请压缩后再上传。", "File too large. Please upload images smaller than 10MB."));
   }
 
   return true;
@@ -875,7 +894,7 @@ function readPreviewDataUrl(file) {
     const reader = new FileReader();
 
     reader.onload = (event) => resolve(event.target.result);
-    reader.onerror = () => reject(new Error("Error loading image preview."));
+    reader.onerror = () => reject(new Error(dzT("图片预览读取失败，请重试。", "Error loading image preview.")));
     reader.readAsDataURL(file);
   });
 }
@@ -906,8 +925,10 @@ async function handleFileSelect(file) {
     if (actionsBar) actionsBar.style.display = "none";
     document.getElementById("downloadPdfBtn").style.display = "none";
 
-    document.getElementById("modelStatus").innerHTML =
-      "🔍 Image loaded - Ready for analysis";
+    document.getElementById("modelStatus").innerHTML = dzT(
+      "🔍 图片已加载，可以开始分析",
+      "🔍 Image loaded - Ready for analysis"
+    );
     document.getElementById("modelStatus").className =
       "status-indicator status-warning";
 
@@ -930,38 +951,10 @@ async function handleFileSelect(file) {
   }
 }
 
-// Add some sample data for demonstration
-const sampleAnalysisResults = [
-  { disease: "Tomato___Early_blight", confidence: 89 },
-  { disease: "Potato___Late_blight", confidence: 94 },
-  { disease: "Apple___Apple_scab", confidence: 87 },
-  { disease: "Grape___Black_rot", confidence: 92 },
-  { disease: "Corn___Northern_Leaf_Blight", confidence: 85 },
-  { disease: "Tomato___healthy", confidence: 96 },
-];
-
-// Enhanced simulation function
-function simulateAIAnalysis(imageFile) {
-  return new Promise((resolve) => {
-    const randomResult =
-      sampleAnalysisResults[
-        Math.floor(Math.random() * sampleAnalysisResults.length)
-      ];
-    const diseaseInfo = diseaseDatabase[randomResult.disease];
-
-    setTimeout(() => {
-      resolve({
-        disease: randomResult.disease,
-        confidence: randomResult.confidence + Math.floor(Math.random() * 6) - 3, 
-        info: diseaseInfo,
-      });
-    }, 1500 + Math.random() * 1500);
-  });
-}
 function downloadPredictionPDF() {
   const resultsBox = document.getElementById("results");
   if (!resultsBox || resultsBox.innerText.trim() === "") {
-    alert("No result available to download!");
+    alert(dzT("当前还没有识别结果，无法导出。", "No result available to download!"));
     return;
   }
 
@@ -970,8 +963,8 @@ function downloadPredictionPDF() {
 
   document.body.innerHTML = `
     <div style="font-family: Arial; padding: 20px;">
-      <h2>AgriTech - Prediction Result</h2>
-      <p><b>Date/Time:</b> ${now}</p>
+      <h2>${dzT("农智云 · 病害识别结果", "AgriTech - Prediction Result")}</h2>
+      <p><b>${dzT("时间", "Date/Time")}：</b>${now}</p>
       <hr/>
       ${resultsBox.innerHTML}
     </div>
