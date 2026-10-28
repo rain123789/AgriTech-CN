@@ -3,10 +3,40 @@
  * Provides intelligent response matching with fuzzy search capabilities
  */
 
+// Fallback copy lives here so it follows the site language (scripts/i18n.js)
+const CHAT_TEXT = {
+  zh: {
+    offline: '当前为离线规则问答，未调用大模型。你可以问我土壤、作物、灌溉或施肥方面的问题。',
+    offlineShort: '当前为离线规则问答，请描述你的作物和具体问题。',
+    suggestions: '你还可以问：',
+    tryAsking: '可以试着问：作物推荐、灌溉、土壤健康或病害识别。'
+  },
+  en: {
+    offline: 'I’m currently running in offline mode. You can ask me about soil health, crops, irrigation, or fertilizers.',
+    offlineShort: 'I’m currently running in offline mode. Please ask about farming topics.',
+    suggestions: 'You can also ask: ',
+    tryAsking: 'Try asking about: crop recommendation, irrigation, soil health, or plant diseases.'
+  }
+};
+
+function chatLang() {
+  try {
+    if (window.cnI18n && window.cnI18n.language) return window.cnI18n.language === 'en' ? 'en' : 'zh';
+  } catch (e) {}
+  const htmlLang = (document.documentElement.getAttribute('lang') || 'zh').toLowerCase();
+  return htmlLang.startsWith('en') ? 'en' : 'zh';
+}
+
+function chatT(key) {
+  const dict = CHAT_TEXT[chatLang()] || CHAT_TEXT.zh;
+  return dict[key] !== undefined ? dict[key] : CHAT_TEXT.zh[key] || key;
+}
+
 class JSONChatbot {
   constructor() {
     this.responses = [];
     this.fallbackResponses = [];
+    this.fallbackResponsesEn = [];
     this.isLoaded = false;
     this.stopWords = new Set([
       'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from', 'how',
@@ -29,9 +59,8 @@ class JSONChatbot {
 
       const data = await response.json();
       this.responses = data.responses || [];
-      this.fallbackResponses = data.fallback_responses || [
-        "I’m currently running in offline mode. You can ask me about soil health, crops, irrigation, or fertilizers."
-      ];
+      this.fallbackResponses = data.fallback_responses || [];
+      this.fallbackResponsesEn = data.fallback_responses_en || [];
 
       this.isLoaded = true;
       console.log('Chatbot responses loaded successfully');
@@ -41,9 +70,8 @@ class JSONChatbot {
 
       // Friendly agriculture-focused fallback
       this.responses = [];
-      this.fallbackResponses = [
-        "I’m currently running in offline mode. Here’s some general advice: focus on soil health, proper irrigation, and timely crop care."
-      ];
+      this.fallbackResponses = [];
+      this.fallbackResponsesEn = [];
 
       this.isLoaded = false;
     }
@@ -53,11 +81,21 @@ class JSONChatbot {
    * Normalize user text for matching
    */
   normalizeText(text) {
+    // Keep Han characters, otherwise every Chinese query collapses to '' and matches everything
     return String(text || '')
       .toLowerCase()
-      .replace(/[^a-z0-9\s]/g, ' ')
+      .replace(/[^\p{Script=Han}a-z0-9\s]/gu, ' ')
       .replace(/\s+/g, ' ')
       .trim();
+  }
+
+  /**
+   * Pick the localized answer of a matched entry
+   */
+  pickResponse(entry) {
+    if (!entry) return '';
+    if (chatLang() === 'en') return entry.response_en || entry.response || '';
+    return entry.response || entry.response_en || '';
   }
 
   /**
@@ -203,11 +241,13 @@ class JSONChatbot {
       .map((item) => item.query)
       .filter(Boolean);
 
-    if (suggestions.length === 0) {
-      return `${base}\n\nTry asking about: crop recommendation, irrigation, soil health, or plant diseases.`;
+    // Query variants in chatbot-responses.json are English-only, so Chinese replies
+    // point at Chinese topics instead of listing English suggestions.
+    if (suggestions.length === 0 || chatLang() === 'zh') {
+      return `${base}\n\n${chatT('tryAsking')}`;
     }
 
-    return `${base}\n\nYou can also ask: ${suggestions.join(' | ')}`;
+    return `${base}\n\n${chatT('suggestions')}${suggestions.join(' | ')}`;
   }
 
   /**
@@ -223,7 +263,18 @@ class JSONChatbot {
       };
     }
 
+    // normalizeText keeps only a-z0-9, so Chinese input becomes ''. Without this guard
+    // every Chinese question scores 0.9 on the first entry via "".includes(...).
     const input = this.normalizeText(userInput);
+    if (!input) {
+      return {
+        response: this.buildFallbackResponse(input, []),
+        matched: false,
+        confidence: 0,
+        matchedQuery: null
+      };
+    }
+
     let bestMatch = null;
     let bestScore = 0;
     const threshold = 0.42;
@@ -254,7 +305,7 @@ class JSONChatbot {
 
     if (bestMatch) {
       return {
-        response: bestMatch.response,
+        response: this.pickResponse(bestMatch),
         matched: true,
         confidence: bestScore,
         matchedQuery: rankedMatches[0] ? rankedMatches[0].query : null
@@ -273,11 +324,12 @@ class JSONChatbot {
    * Get random fallback response
    */
   getRandomFallback() {
-    if (!Array.isArray(this.fallbackResponses) || this.fallbackResponses.length === 0) {
-      return "I’m currently running in offline mode. Please ask about farming topics.";
-    }
-    const randomIndex = Math.floor(Math.random() * this.fallbackResponses.length);
-    return this.fallbackResponses[randomIndex];
+    const list = chatLang() === 'en'
+      ? (this.fallbackResponsesEn.length ? this.fallbackResponsesEn : this.fallbackResponses)
+      : (this.fallbackResponses.length ? this.fallbackResponses : this.fallbackResponsesEn);
+    if (!list.length) return chatT('offlineShort');
+    const randomIndex = Math.floor(Math.random() * list.length);
+    return list[randomIndex];
   }
 
   /**

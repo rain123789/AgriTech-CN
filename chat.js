@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const resolveLocalResponse = async (input, hasImage = false) => {
     if (hasImage) {
-      return "🌾 **Crop Image Received for Analysis**\n\nI have received your crop image! To get full live AI vision diagnostics with custom treatment steps, make sure our backend server is active with Gemini API configured.\n\n🔍 **Quick Diagnostic Guidelines**:\n- **Leaf Spot / Blight**: Remove diseased foliage and spray Copper Oxychloride or Mancozeb.\n- **Powdery Mildew / Rust**: Spray Neem oil (10,000 ppm) or wettable sulfur in early morning.\n- **Pest Infestation**: Look under leaves for aphids, thrips, or whiteflies.\n\n👉 **Recommended Tools**:\n- Try our specialized **[Crop Disease Detector](Disease prediction/template/index.html)**\n- Use our **[AI Disease Scanner](ai_disease.html)** for automated leaf pathology!";
+      return "🌾 **已收到作物照片**\n\n图片已上传。若后端 AI 服务在线（DeepSeek 兼容接口），会结合图片给出更完整的诊断与处理建议；离线时只做通用提示。\n\n🔍 **初步自查要点**\n- **叶斑 / 早疫病**：摘除病叶病果，避免叶面长时间结露。\n- **白粉病 / 锈病**：发病初期按登记标签剂量用药，并注意安全间隔期。\n- **虫害**：翻看叶背，重点查蚜虫、蓟马、白粉虱。\n\n👉 **可用工具**：[作物病害识别](ai_disease.html)";
     }
 
     if (jsonChatbot) {
