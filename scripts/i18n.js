@@ -523,6 +523,7 @@
     "policy & government": "政策发布",
     "innovation": "创新实践",
     "sustainability": "绿色发展",
+    "📰 agriculture news & updates": "📰 农业资讯与动态",
     "📭 no news found": "📭 暂无资讯",
     "check back soon for latest agricultural news and updates.": "稍后再来看看最新农业资讯。",
     "load more news": "加载更多资讯",
