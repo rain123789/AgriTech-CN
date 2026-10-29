@@ -3253,7 +3253,8 @@
           list-style: none;
           padding: 0;
           margin: 0;
-          max-height: 280px;
+          /* 5 条演示数据约 547px，上限留出余量，避免末条被裁切 */
+          max-height: 600px;
           overflow-y: auto;
           scrollbar-width: thin;
           scrollbar-color: var(--accent-color) transparent;
