@@ -1,9 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-lang="zh-CN">
+<html lang="zh-CN" data-lang="zh-CN" data-theme="light">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- 首帧绘制前确定主题，避免浅色偏好下先闪深色背景 -->
+  <script>
+    (function () {
+      document.documentElement.setAttribute(
+        'data-theme',
+        localStorage.getItem('agritech-theme') === 'dark' ? 'dark' : 'light'
+      );
+    })();
+  </script>
+
   <title>Level Up - Contributor Growth Hub | AgriTech</title>
   <meta name="description"
     content="Highlighting open-source contributors, GitHub stats, merged feature impact, contribution streaks, and gamified levels for the AgriTech community." />
